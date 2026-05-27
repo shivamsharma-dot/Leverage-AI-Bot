@@ -23,6 +23,8 @@
   --f:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
 }
 html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--ink);overflow:hidden}
+/* hide vapi floating widget */
+#vapi-widget,vapi-button,.vapi-btn,[class*='vapi-']{display:none!important;visibility:hidden!important}
 
 /* ─── LOGIN PAGE ─── */
 #login-page{position:fixed;inset:0;background:#f0f3fa;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
@@ -927,15 +929,24 @@ function loadKeys(){
 let vapiInstance=null;let activeCall=null;
 
 function loadVapiSDK(cb){
-  if(window.vapiSDK){cb();return;}
+  if(window.Vapi){cb();return;}
   const s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
-  s.defer=true;s.async=true;
-  s.onload=()=>{cb();};
+  s.src='https://unpkg.com/@vapi-ai/web@latest/dist/vapi.js';
+  s.onload=()=>{
+    // unpkg exposes it as window.Vapi or window.default
+    if(!window.Vapi && window.default) window.Vapi = window.default;
+    cb();
+  };
   s.onerror=()=>{
-    showToast('Vapi SDK failed to load');
-    const el=document.getElementById('call-status-text');
-    if(el)el.textContent='SDK load failed — check your internet connection.';
+    // fallback to esm.sh via dynamic import
+    import('https://esm.sh/@vapi-ai/web@latest').then(mod=>{
+      window.Vapi = mod.default || mod.Vapi || mod;
+      cb();
+    }).catch(()=>{
+      const el=document.getElementById('call-status-text');
+      if(el)el.textContent='SDK load failed — check internet connection.';
+      showToast('Vapi SDK failed to load');
+    });
   };
   document.head.appendChild(s);
 }
@@ -978,12 +989,10 @@ async function triggerOutboundCall(){
   loadVapiSDK(async()=>{
     try{
       statusTxt.textContent='Connecting to Siya...';
-      if(!window.vapiSDK)throw new Error('Vapi SDK not loaded correctly');
-      vapiInstance=window.vapiSDK.run({
-        apiKey:vapiKey,
-        assistant:assistantId,
-        config:{},
-      });
+      let VapiClass = window.Vapi;
+      if(!VapiClass && window.default) VapiClass = window.default;
+      if(!VapiClass) throw new Error('Vapi SDK not loaded correctly. Try refreshing.');
+      vapiInstance = new VapiClass(vapiKey);
 
       vapiInstance.on('call-start',()=>{
         activeCall=true;
@@ -1029,7 +1038,13 @@ async function triggerOutboundCall(){
       vapiInstance.on('speech-start',()=>addLog('t-info','STT','Caller speaking...'));
       vapiInstance.on('speech-end',()=>addLog('t-info','LLM','Siya processing...'));
 
-      // vapiSDK.run() already initiated the call above
+      await vapiInstance.start(assistantId,{
+        variableValues:{
+          firstname:name||'there',
+          currentDate:new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
+          currentTime:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})
+        }
+      });
 
     }catch(e){
       statusIco.className='ti ti-alert-circle';
