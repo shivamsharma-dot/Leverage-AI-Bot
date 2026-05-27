@@ -282,6 +282,37 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 /* ─── SIMULATED LIVE TICKER ─── */
 .live-ticker{font-size:10px;font-family:var(--fm);color:var(--ink3);display:flex;align-items:center;gap:5px}
 .live-ticker::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+
+/* ── TRANSCRIPT MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(13,19,38,0.55);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.hidden{display:none}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:16px;width:100%;max-width:600px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:14px;font-weight:600;color:var(--ink)}
+.modal-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--line);background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--ink3)}
+.modal-close:hover{color:var(--ink);background:var(--line)}
+.modal-body{flex:1;overflow-y:auto;padding:18px 20px}
+.modal-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.mmeta{font-size:10px;font-weight:500;background:var(--surface2);border:1px solid var(--line);padding:3px 9px;border-radius:6px;color:var(--ink2)}
+.transcript-line{display:flex;gap:8px;margin-bottom:8px;font-size:12px;line-height:1.55}
+.tl-agent{color:var(--navy);font-weight:600;width:40px;flex-shrink:0}
+.tl-student{color:var(--ink2);font-weight:600;width:52px;flex-shrink:0}
+.tl-text{color:var(--ink);flex:1}
+.recording-btn{display:inline-flex;align-items:center;gap:6px;background:var(--sky);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer;text-decoration:none;margin-bottom:14px}
+.recording-btn:hover{opacity:.85}
+/* real call card */
+.rcall{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:border-color .15s}
+.rcall:hover{border-color:var(--sky-30)}
+.rcall-row{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer}
+.rcall-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.rcall-meta{flex:1;min-width:0}
+.rcall-name{font-size:12px;font-weight:600;color:var(--ink)}
+.rcall-time{font-size:10px;color:var(--ink3);margin-top:1px}
+.rcall-dur{font-family:var(--fm);font-size:11px;color:var(--ink2);margin-right:6px}
+.rcall-actions{display:flex;align-items:center;gap:6px}
+.rcall-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px}
+.empty-state{text-align:center;padding:32px 20px;color:var(--ink3);font-size:12px}
+.empty-state i{font-size:28px;display:block;margin-bottom:8px;color:var(--line2)}
 </style>
 <script type="module">
   import Vapi from 'https://esm.sh/@vapi-ai/web';
@@ -415,9 +446,9 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 
       <!-- CALL LOGS -->
       <div id="sec-calls" class="sec">
-        <div class="eyebrow">Outbound calls</div>
+        <div class="eyebrow">Outbound calls & logs</div>
         <div class="hero-h">Call a student <b>right now.</b></div>
-        <div class="hero-sub">Enter a mobile number — Siya calls them instantly using your Vapi account.</div>
+        <div class="hero-sub">Calls are saved automatically to Supabase with full transcripts and recordings.</div>
 
         <!-- DIALER CARD -->
         <div class="ctrl-card" style="margin-bottom:16px">
@@ -458,13 +489,17 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
         </div>
 
         <!-- CALL LOG -->
-        <div class="slabel">Call history</div>
-        <div class="call-wrap" id="call-list"></div>
+        <div class="slabel" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <span style="font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.09em;text-transform:uppercase">Call history <span id="call-count-badge" style="background:var(--sky);color:#fff;padding:1px 7px;border-radius:10px;font-size:9px;margin-left:6px">0</span></span>
+          <button onclick="loadRealCalls()" class="btn btn-ghost" style="padding:4px 10px;font-size:10px"><i class="ti ti-refresh"></i>Refresh</button>
+        </div>
+        <div id="real-call-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
+        <div class="call-wrap" id="call-list" style="display:none"></div>
         <div class="slabel" style="margin-top:16px">Live system log</div>
         <div class="terminal" id="terminal"></div>
         <div class="actions" style="margin-top:12px">
           <button class="btn btn-ghost" onclick="clearLog()"><i class="ti ti-trash"></i>Clear log</button>
-          <a class="btn btn-ghost" href="https://sheets.google.com" target="_blank"><i class="ti ti-table"></i>Open Sheets</a>
+          <button class="btn btn-ghost" onclick="loadRealCalls()"><i class="ti ti-refresh"></i>Reload from Supabase</button>
         </div>
       </div>
 
@@ -1102,6 +1137,175 @@ if(savedUser){try{const u=JSON.parse(savedUser);if(u&&u.email)showApp(u);}catch(
 
 /* ─── ENTER KEY ON LOGIN ─── */
 document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')handleEmailLogin();});
+
+
+/* ── REAL CALLS FROM SUPABASE VIA VERCEL ── */
+const VERCEL_URL = window.location.origin; // same domain after Vercel deploy
+
+async function loadRealCalls(){
+  const listEl = document.getElementById('real-call-list');
+  const badge = document.getElementById('call-count-badge');
+  if(!listEl) return;
+
+  listEl.innerHTML = '<div class="empty-state"><i class="ti ti-loader"></i>Loading from Supabase...</div>';
+
+  try {
+    const res = await fetch(VERCEL_URL + '/api/calls?limit=50');
+    if(!res.ok) throw new Error('API error ' + res.status);
+    const data = await res.json();
+    const calls = data.calls || [];
+
+    badge.textContent = calls.length;
+    document.getElementById('m-calls').textContent = calls.length;
+
+    if(calls.length === 0){
+      listEl.innerHTML = '<div class="empty-state"><i class="ti ti-phone-off"></i>No calls yet. Make your first call above.</div>';
+      return;
+    }
+
+    listEl.innerHTML = '';
+    calls.forEach(c => {
+      const dur = c.duration_seconds ? Math.floor(c.duration_seconds/60)+':'+String(c.duration_seconds%60).padStart(2,'0') : '—';
+      const date = new Date(c.created_at);
+      const timeStr = date.toLocaleDateString('en-IN',{day:'numeric',month:'short'}) + ' · ' + date.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+      const hasRecording = !!c.recording_url;
+      const hasTranscript = !!c.transcript;
+      const sentiment = c.sentiment;
+      const sentimentColor = sentiment === 'true' || sentiment === 'success' ? 'sc-hi' : sentiment === 'false' || sentiment === 'failure' ? 'sc-na' : 'sc-mid';
+
+      const card = document.createElement('div');
+      card.className = 'rcall';
+      card.innerHTML = `
+        <div class="rcall-row" onclick="openCallModal(${JSON.stringify(c).replace(/"/g,'&quot;')})">
+          <div class="rcall-ico ci-in"><i class="ti ti-phone-incoming"></i></div>
+          <div class="rcall-meta">
+            <div class="rcall-name">${c.student_name || c.phone_number || 'Unknown'}</div>
+            <div class="rcall-time">${timeStr} · ${c.ended_reason || c.status || '—'}</div>
+          </div>
+          <span class="rcall-dur">${dur}</span>
+          <div class="rcall-actions">
+            ${hasRecording ? '<span class="rcall-tag" style="background:rgba(5,150,105,.08);color:#064e3b;border:1px solid rgba(5,150,105,.2)"><i class="ti ti-player-play" style="font-size:9px"></i> REC</span>' : ''}
+            ${hasTranscript ? '<span class="rcall-tag" style="background:var(--sky-8);color:#0c4a6e;border:1px solid var(--sky-15)">TXT</span>' : ''}
+            <i class="ti ti-chevron-right" style="color:var(--ink3);font-size:14px"></i>
+          </div>
+        </div>
+      `;
+      listEl.appendChild(card);
+    });
+
+    // Update metrics
+    const today = new Date().toDateString();
+    const todayCalls = calls.filter(c => new Date(c.created_at).toDateString() === today);
+    document.getElementById('m-calls').textContent = todayCalls.length || calls.length;
+
+  } catch(err) {
+    listEl.innerHTML = '<div class="empty-state"><i class="ti ti-alert-circle"></i>Could not load calls: ' + err.message + '<br><small>Make sure you're on the Vercel deployment</small></div>';
+    addLog('t-err','SUPABASE','Failed to load: '+err.message);
+  }
+}
+
+function openCallModal(c){
+  if(typeof c === 'string') c = JSON.parse(c);
+  document.getElementById('transcript-modal').classList.remove('hidden');
+
+  const name = c.student_name || c.phone_number || 'Unknown';
+  document.getElementById('modal-title').textContent = 'Call with ' + name;
+
+  const dur = c.duration_seconds ? Math.floor(c.duration_seconds/60)+':'+String(c.duration_seconds%60).padStart(2,'0') : '—';
+  const date = new Date(c.created_at).toLocaleString('en-IN');
+
+  // Meta tags
+  document.getElementById('modal-meta').innerHTML = [
+    c.phone_number ? '<span class="mmeta">📞 '+c.phone_number+'</span>' : '',
+    '<span class="mmeta">⏱ '+dur+'</span>',
+    '<span class="mmeta">📅 '+date+'</span>',
+    c.ended_reason ? '<span class="mmeta">'+c.ended_reason+'</span>' : '',
+    c.cost ? '<span class="mmeta">💰 $'+Number(c.cost).toFixed(4)+'</span>' : '',
+    c.sentiment ? '<span class="mmeta">'+c.sentiment+'</span>' : '',
+  ].join('');
+
+  // Recording
+  const recEl = document.getElementById('modal-recording');
+  if(c.recording_url){
+    recEl.innerHTML = `
+      <div style="margin-bottom:14px">
+        <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Recording</div>
+        <audio controls style="width:100%;border-radius:8px" src="${c.recording_url}"></audio>
+        <a href="${c.recording_url}" target="_blank" download class="recording-btn" style="margin-top:8px"><i class="ti ti-download"></i>Download recording</a>
+      </div>`;
+  } else {
+    recEl.innerHTML = '<div style="font-size:11px;color:var(--ink3);margin-bottom:12px">No recording available for this call.</div>';
+  }
+
+  // Summary
+  const sumEl = document.getElementById('modal-summary');
+  if(c.summary){
+    sumEl.style.display='block';
+    sumEl.innerHTML = '<strong style="color:var(--navy)">AI Summary:</strong> '+c.summary;
+  } else {
+    sumEl.style.display='none';
+  }
+
+  // Transcript
+  const txEl = document.getElementById('modal-transcript');
+  if(c.transcript){
+    const lines = c.transcript.split('
+').filter(l=>l.trim());
+    txEl.innerHTML = '<div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Transcript</div>' +
+      lines.map(line => {
+        const isSiya = line.startsWith('Siya:') || line.startsWith('assistant:');
+        const isStudent = line.startsWith('Student:') || line.startsWith('user:');
+        const text = line.replace(/^(Siya|Student|assistant|user):\s*/,'');
+        if(isSiya) return `<div class="transcript-line"><span class="tl-agent">Siya</span><span class="tl-text">${text}</span></div>`;
+        if(isStudent) return `<div class="transcript-line"><span class="tl-student">Student</span><span class="tl-text">${text}</span></div>`;
+        return `<div class="transcript-line"><span class="tl-text" style="color:var(--ink3)">${line}</span></div>`;
+      }).join('');
+  } else {
+    txEl.innerHTML = '<div style="font-size:11px;color:var(--ink3)">No transcript available for this call.</div>';
+  }
+}
+
+function closeModal(){
+  document.getElementById('transcript-modal').classList.add('hidden');
+  // Pause any playing audio
+  document.querySelectorAll('#transcript-modal audio').forEach(a=>a.pause());
+}
+
+// Close modal on overlay click
+document.getElementById('transcript-modal').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+// Auto-load real calls when navigating to calls section
+const origGoTo = goTo;
+goTo = function(name){
+  origGoTo(name);
+  if(name === 'calls') loadRealCalls();
+};
+
+// Auto-load on home too
+const origShowApp = showApp;
+showApp = function(user){
+  origShowApp(user);
+  setTimeout(loadRealCalls, 500);
+};
+
 </script>
+
+<!-- TRANSCRIPT MODAL -->
+<div class="modal-overlay hidden" id="transcript-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Call transcript</div>
+      <div class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-meta" id="modal-meta"></div>
+      <div id="modal-recording"></div>
+      <div id="modal-summary" style="background:var(--sky-8);border:1px solid var(--sky-15);border-radius:8px;padding:10px 13px;font-size:11px;color:var(--ink2);line-height:1.6;margin-bottom:14px;display:none"></div>
+      <div id="modal-transcript"></div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
