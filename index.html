@@ -315,9 +315,13 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 .empty-state i{font-size:28px;display:block;margin-bottom:8px;color:var(--line2)}
 </style>
 <script type="module">
-  import Vapi from 'https://esm.sh/@vapi-ai/web';
-  window.__VapiClass = Vapi;
-  window.dispatchEvent(new Event('vapi-ready'));
+  try {
+    const mod = await import('https://esm.sh/@vapi-ai/web');
+    window.__VapiClass = mod.default || mod.Vapi || mod;
+    window.dispatchEvent(new Event('vapi-ready'));
+  } catch(e) {
+    console.warn('Vapi SDK load error:', e);
+  }
 </script>
 </head>
 <body>
@@ -1279,6 +1283,28 @@ showApp = function(user){
   origShowApp(user);
   setTimeout(loadRealCalls, 500);
 };
+
+
+/* ── EXPOSE FUNCTIONS GLOBALLY for onclick handlers ── */
+window.handleEmailLogin = handleEmailLogin;
+window.handleGoogleLogin = handleGoogleLogin;
+window.logout = logout;
+window.goTo = goTo;
+window.saveAgent = saveAgent;
+window.exportAgent = exportAgent;
+window.resetAgent = resetAgent;
+window.saveKeys = saveKeys;
+window.clearKeys = clearKeys;
+window.saveGoogleClientId = saveGoogleClientId;
+window.saveSettings = saveSettings;
+window.triggerOutboundCall = triggerOutboundCall;
+window.triggerBulkCalls = triggerBulkCalls;
+window.triggerSimulatedCall = triggerSimulatedCall;
+window.simulateCall = simulateCall;
+window.clearLog = clearLog;
+window.loadRealCalls = loadRealCalls;
+window.openCallModal = openCallModal;
+window.closeModal = closeModal;
 
 </script>
 
