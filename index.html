@@ -219,6 +219,8 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 .form-lbl{font-size:9px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
 .form-input{background:var(--surface2);border:1px solid var(--line);border-radius:7px;padding:8px 11px;font-size:12px;font-family:var(--f);color:var(--ink);outline:none;transition:border-color .15s;width:100%}
 .form-input:focus{border-color:var(--sky)}
+.warn{display:flex;gap:8px;background:var(--amber-8);border:1px solid rgba(217,119,6,.2);border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:11px;color:#78350f;line-height:1.55;align-items:flex-start}
+.warn i{font-size:13px;color:var(--amber);flex-shrink:0;margin-top:1px}
 .form-textarea{resize:vertical;min-height:76px;line-height:1.5}
 .form-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238891aa' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
 .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
@@ -406,14 +408,54 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 
       <!-- CALL LOGS -->
       <div id="sec-calls" class="sec">
-        <div class="eyebrow">Call logs</div>
-        <div class="hero-h"><b id="calls-count">14 calls</b> today.</div>
-        <div class="hero-sub">Click any call to see the transcript. Simulated data — connect Vapi to go live.</div>
+        <div class="eyebrow">Outbound calls</div>
+        <div class="hero-h">Call a student <b>right now.</b></div>
+        <div class="hero-sub">Enter a mobile number — Siya calls them instantly using your Vapi account.</div>
+
+        <!-- DIALER CARD -->
+        <div class="ctrl-card" style="margin-bottom:16px">
+          <div class="ctrl-title"><i class="ti ti-phone-outgoing"></i>Outbound dialer</div>
+          <div id="vapi-missing-warn" style="display:none" class="warn" style="margin-bottom:10px"><i class="ti ti-alert-triangle"></i>Vapi Public Key not set. Go to <b>Integrations</b> and paste your key first.</div>
+          <div id="assistant-missing-warn" style="display:none" class="warn"><i class="ti ti-alert-triangle"></i>Vapi Assistant ID not set. Go to <b>Integrations</b> and paste your Assistant ID.</div>
+          <div class="form-row-2" style="margin-bottom:10px">
+            <div class="form-row">
+              <label class="form-lbl">Student name</label>
+              <input class="form-input" id="dial-name" placeholder="e.g. Rahul Sharma">
+            </div>
+            <div class="form-row">
+              <label class="form-lbl">Mobile number (with country code)</label>
+              <input class="form-input" id="dial-number" placeholder="+91 98765 43210" type="tel">
+            </div>
+          </div>
+          <div class="form-row" style="margin-bottom:12px">
+            <label class="form-lbl">Notes (optional)</label>
+            <input class="form-input" id="dial-notes" placeholder="e.g. Interested in UK MBA, came via Facebook ad">
+          </div>
+          <div id="call-status-bar" style="display:none;margin-bottom:12px" class="tip"><i class="ti ti-loader" id="call-status-icon"></i><span id="call-status-text">Initiating call...</span></div>
+          <div class="actions" style="margin-top:0">
+            <button class="btn btn-sky" id="call-btn" onclick="triggerOutboundCall()"><i class="ti ti-phone-outgoing"></i>Call now with Siya</button>
+            <button class="btn btn-ghost" onclick="triggerSimulatedCall()"><i class="ti ti-player-play"></i>Simulate (demo)</button>
+          </div>
+        </div>
+
+        <!-- BULK DIALER -->
+        <div class="ctrl-card" style="margin-bottom:16px">
+          <div class="ctrl-title"><i class="ti ti-list"></i>Bulk call list</div>
+          <div class="hero-sub" style="margin-bottom:12px;font-size:11px">Paste multiple numbers below — one per line with name. Format: <code style="background:var(--surface2);padding:1px 5px;border-radius:4px;font-family:var(--fm);font-size:10px">+91XXXXXXXXXX, Name</code></div>
+          <textarea class="form-input form-textarea" id="bulk-numbers" placeholder="+91 98765 43210, Rahul Sharma&#10;+91 77654 32100, Priya Singh&#10;+91 88012 45671, Arjun Mehta" style="min-height:90px;font-family:var(--fm);font-size:11px"></textarea>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn btn-navy" onclick="triggerBulkCalls()"><i class="ti ti-phone-call"></i>Start bulk calling</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('bulk-numbers').value=''"><i class="ti ti-trash"></i>Clear</button>
+          </div>
+          <div id="bulk-status" style="display:none;margin-top:10px;font-size:11px;color:var(--ink2);font-family:var(--fm)"></div>
+        </div>
+
+        <!-- CALL LOG -->
+        <div class="slabel">Call history</div>
         <div class="call-wrap" id="call-list"></div>
-        <div class="slabel">Live system log</div>
+        <div class="slabel" style="margin-top:16px">Live system log</div>
         <div class="terminal" id="terminal"></div>
-        <div class="actions">
-          <button class="btn btn-sky" onclick="simulateCall()"><i class="ti ti-phone-plus"></i>Simulate incoming call</button>
+        <div class="actions" style="margin-top:12px">
           <button class="btn btn-ghost" onclick="clearLog()"><i class="ti ti-trash"></i>Clear log</button>
           <a class="btn btn-ghost" href="https://sheets.google.com" target="_blank"><i class="ti ti-table"></i>Open Sheets</a>
         </div>
@@ -542,10 +584,12 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 
         <div class="int-card">
           <div class="int-ico ico-sky"><i class="ti ti-phone"></i></div>
-          <div class="int-info"><div class="int-name">Vapi.ai</div><div class="int-desc">Phone number + voice orchestration · 10 min/day free</div>
-          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-vapi" placeholder="Paste Vapi API key…" type="password">
+          <div class="int-info"><div class="int-name">Vapi.ai</div><div class="int-desc">Outbound voice calls · Public Key + Assistant ID both required</div>
+          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-vapi" placeholder="Paste Vapi Public Key…" type="password">
+          <input class="form-input" style="margin-top:6px;font-family:var(--fm);font-size:11px" id="key-vapi-assistant" placeholder="Paste Vapi Assistant ID (from Assistants page)…" type="text">
+          <div style="font-size:10px;color:var(--ink3);margin-top:5px">Find Assistant ID: Vapi Dashboard → Assistants → click your assistant → copy the ID from the URL or details panel</div>
           </div>
-          <div class="int-status"><span class="int-badge ib-pending" id="status-vapi">Not set</span><a class="int-link" href="https://vapi.ai" target="_blank">Sign up <i class="ti ti-external-link" style="font-size:10px"></i></a></div>
+          <div class="int-status"><span class="int-badge ib-pending" id="status-vapi">Not set</span><a class="int-link" href="https://dashboard.vapi.ai" target="_blank">Open Vapi <i class="ti ti-external-link" style="font-size:10px"></i></a></div>
         </div>
 
         <div class="int-card">
@@ -860,10 +904,14 @@ function saveKeys(){
     const v=document.getElementById('key-'+k).value.trim();
     if(v){localStorage.setItem('voxpath-key-'+k,v);document.getElementById('status-'+k).textContent='Connected';document.getElementById('status-'+k).className='int-badge ib-connected';}
   });
+  const aid=document.getElementById('key-vapi-assistant').value.trim();
+  if(aid)localStorage.setItem('voxpath-vapi-assistant-id',aid);
   showToast('API keys saved locally');
 }
 function clearKeys(){
   ['deepgram','gemini','vapi','sheets'].forEach(k=>{localStorage.removeItem('voxpath-key-'+k);document.getElementById('key-'+k).value='';document.getElementById('status-'+k).textContent='Not set';document.getElementById('status-'+k).className='int-badge ib-pending';});
+  localStorage.removeItem('voxpath-vapi-assistant-id');
+  document.getElementById('key-vapi-assistant').value='';
   showToast('All keys cleared');
 }
 function loadKeys(){
@@ -871,6 +919,112 @@ function loadKeys(){
     const v=localStorage.getItem('voxpath-key-'+k);
     if(v){document.getElementById('key-'+k).value=v;document.getElementById('status-'+k).textContent='Connected';document.getElementById('status-'+k).className='int-badge ib-connected';}
   });
+  const aid=localStorage.getItem('voxpath-vapi-assistant-id');
+  if(aid)document.getElementById('key-vapi-assistant').value=aid;
+}
+
+/* ─── OUTBOUND CALL ─── */
+async function triggerOutboundCall(){
+  const vapiKey=localStorage.getItem('voxpath-key-vapi');
+  const assistantId=localStorage.getItem('voxpath-vapi-assistant-id');
+  const number=document.getElementById('dial-number').value.trim().replace(/\s/g,'');
+  const name=document.getElementById('dial-name').value.trim();
+  const notes=document.getElementById('dial-notes').value.trim();
+
+  const vw=document.getElementById('vapi-missing-warn');
+  const aw=document.getElementById('assistant-missing-warn');
+  vw.style.display='none';aw.style.display='none';
+
+  if(!vapiKey){vw.style.display='flex';return;}
+  if(!assistantId){aw.style.display='flex';return;}
+  if(!number){showToast('Enter a mobile number first');return;}
+
+  const btn=document.getElementById('call-btn');
+  const bar=document.getElementById('call-status-bar');
+  const statusTxt=document.getElementById('call-status-text');
+  const statusIco=document.getElementById('call-status-icon');
+
+  btn.disabled=true;btn.style.opacity='.6';
+  bar.style.display='flex';
+  statusIco.className='ti ti-loader';
+  statusTxt.textContent='Connecting to Vapi...';
+
+  try{
+    const payload={
+      assistantId,
+      customer:{number,name:name||'Student'},
+      assistantOverrides:{
+        variableValues:{
+          firstname:name||'there',
+          currentDate:new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
+          currentTime:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})
+        }
+      }
+    };
+    if(notes)payload.metadata={notes};
+
+    const res=await fetch('https://api.vapi.ai/call/phone',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+vapiKey,'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    const data=await res.json();
+
+    if(res.ok&&data.id){
+      statusIco.className='ti ti-circle-check';
+      statusTxt.textContent='Call initiated! Siya is calling '+number+' now.';
+      bar.style.background='var(--green-8)';bar.style.borderColor='var(--green-20)';bar.style.color='#064e3b';
+      addLog('t-ok','CALL_START','Outbound → '+(name||number)+' · ID: '+data.id.slice(0,8)+'...');
+      addLog('t-info','SIYA','Connecting via Vapi · assistant: '+assistantId.slice(0,8)+'...');
+      callsData.unshift({num:number,time:'Just now',dur:'—',score:0,type:'in',transcript:[],tags:['Outbound','Live']});
+      buildCallList();
+      document.getElementById('m-calls').textContent=callsData.length;
+      showToast('Siya is calling '+number);
+    }else{
+      const errMsg=data.message||data.error||'Unknown error';
+      statusIco.className='ti ti-alert-circle';
+      statusTxt.textContent='Failed: '+errMsg;
+      bar.style.background='var(--rose-8)';bar.style.borderColor='rgba(220,38,38,.2)';bar.style.color='#7f1d1d';
+      addLog('t-err','ERROR','Vapi call failed: '+errMsg);
+      showToast('Call failed — check your keys');
+    }
+  }catch(e){
+    statusIco.className='ti ti-alert-circle';
+    statusTxt.textContent='Network error: '+e.message;
+    bar.style.background='var(--rose-8)';bar.style.color='#7f1d1d';
+    addLog('t-err','ERROR',e.message);
+  }finally{
+    btn.disabled=false;btn.style.opacity='1';
+    setTimeout(()=>{bar.style.display='none';bar.style.background='';bar.style.borderColor='';bar.style.color='';},6000);
+  }
+}
+
+async function triggerBulkCalls(){
+  const raw=document.getElementById('bulk-numbers').value.trim();
+  if(!raw){showToast('Paste some numbers first');return;}
+  const lines=raw.split('\n').filter(l=>l.trim());
+  const statusEl=document.getElementById('bulk-status');
+  statusEl.style.display='block';
+  statusEl.textContent='Starting '+lines.length+' calls...';
+  let done=0;
+  for(const line of lines){
+    const parts=line.split(',');
+    const num=parts[0].trim().replace(/\s/g,'');
+    const name=(parts[1]||'').trim();
+    document.getElementById('dial-number').value=num;
+    document.getElementById('dial-name').value=name;
+    await triggerOutboundCall();
+    done++;
+    statusEl.textContent=done+' of '+lines.length+' calls initiated...';
+    await new Promise(r=>setTimeout(r,2000));
+  }
+  statusEl.textContent='All '+lines.length+' calls initiated.';
+  showToast('Bulk calling done — '+lines.length+' calls');
+}
+
+function triggerSimulatedCall(){
+  simulateCall();
+  showToast('Demo call simulated');
 }
 function saveGoogleClientId(){
   const v=document.getElementById('google-client-id').value.trim();
