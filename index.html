@@ -3,278 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VoxPath — Voice AI Agent</title>
+<title>VoxPath — Leverage Edu Voice AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --navy:#1F3C84;--sky:#1C9FD4;
-  --navy-5:rgba(31,60,132,0.05);--navy-10:rgba(31,60,132,0.1);--navy-20:rgba(31,60,132,0.2);
-  --sky-10:rgba(28,159,212,0.10);--sky-20:rgba(28,159,212,0.20);--sky-40:rgba(28,159,212,0.40);
-  --page:#f0f3fa;--surface:#ffffff;--surface2:#f7f9fc;
+  --navy-5:rgba(31,60,132,0.05);--navy-10:rgba(31,60,132,0.10);--navy-20:rgba(31,60,132,0.20);
+  --sky-8:rgba(28,159,212,0.08);--sky-15:rgba(28,159,212,0.15);--sky-30:rgba(28,159,212,0.30);
+  --page:#f0f3fa;--surface:#fff;--surface2:#f7f9fc;
   --ink:#0d1326;--ink2:#3a4460;--ink3:#8891aa;
   --line:#e2e7f0;--line2:#c8d0e0;
-  --emerald:#059669;--amber:#d97706;--rose:#dc2626;
+  --green:#059669;--green-8:rgba(5,150,105,0.08);--green-20:rgba(5,150,105,0.20);
+  --amber:#d97706;--amber-8:rgba(217,119,6,0.08);
+  --rose:#dc2626;--rose-8:rgba(220,38,38,0.08);
   --f:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
 }
-html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--ink);font-size:14px}
+html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--ink);overflow:hidden}
 
-/* ── LAYOUT ── */
-.app{display:flex;height:100vh;overflow:hidden}
+/* ─── LOGIN PAGE ─── */
+#login-page{position:fixed;inset:0;background:#f0f3fa;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
+#login-page.hidden{display:none}
+.login-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:44px 48px;width:420px;text-align:center}
+.login-logo{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo img{height:32px;display:block}
+.login-logo-sep{width:1px;height:20px;background:var(--line2)}
+.login-voxpath{display:flex;align-items:center;gap:8px}
+.login-vp-name{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+.login-vp-name span{color:var(--sky)}
+.login-h{font-size:20px;font-weight:600;color:var(--ink);letter-spacing:-.02em;margin-bottom:8px}
+.login-sub{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:28px}
+.login-restricted{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#065f46;background:var(--green-8);border:1px solid var(--green-20);padding:5px 12px;border-radius:100px;margin-bottom:24px}
+.login-restricted i{font-size:12px}
+.g-signin-wrap{display:flex;justify-content:center;margin-bottom:20px}
+.login-manual{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.login-input{background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:10px 14px;font-size:13px;font-family:var(--f);color:var(--ink);outline:none;transition:border-color .15s;width:100%}
+.login-input:focus{border-color:var(--sky)}
+.login-btn{width:100%;padding:11px;border-radius:9px;border:none;cursor:pointer;font-family:var(--f);font-size:13px;font-weight:600;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.login-btn-google{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.login-btn-google:hover{border-color:var(--line2);background:var(--surface2)}
+.login-btn-primary{background:var(--navy);color:#fff;margin-top:4px}
+.login-btn-primary:hover{background:#162e6a}
+.login-divider{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:11px;color:var(--ink3)}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.login-footer{font-size:11px;color:var(--ink3);margin-top:16px}
+.login-error{font-size:11px;color:var(--rose);background:var(--rose-8);border:1px solid rgba(220,38,38,.15);border-radius:7px;padding:8px 12px;margin-top:8px;display:none}
+.login-error.show{display:block}
 
-/* ── SIDEBAR ── */
-.sidebar{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
-.sb-brand{padding:20px 20px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
-.sb-logomark{width:36px;height:36px;flex-shrink:0}
-.sb-words{display:flex;flex-direction:column;gap:2px}
-.sb-name{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-0.02em;line-height:1}
-.sb-name span{color:var(--sky)}
-.sb-sub{font-size:10px;color:var(--ink3);letter-spacing:0.02em}
-.sb-nav{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
-.sb-section{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:0.1em;text-transform:uppercase;padding:10px 8px 5px}
-.sb-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;font-size:12px;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .15s;border:1px solid transparent;text-decoration:none}
+/* ─── APP SHELL ─── */
+#app{display:flex;height:100vh;overflow:hidden}
+#app.hidden{display:none}
+
+/* ─── SIDEBAR ─── */
+.sidebar{width:236px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column}
+.sb-brand{padding:18px 18px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.sb-lev-logo{height:22px;display:block;flex-shrink:0}
+.sb-divider{width:1px;height:18px;background:var(--line2);flex-shrink:0}
+.sb-vox{display:flex;align-items:center;gap:7px}
+.sb-vox-canvas{width:24px;height:24px;flex-shrink:0}
+.sb-vox-name{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.sb-vox-name span{color:var(--sky)}
+.sb-nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:1px;overflow-y:auto}
+.sb-section{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.1em;text-transform:uppercase;padding:10px 8px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .15s;border:1px solid transparent;user-select:none}
 .sb-item:hover{background:var(--navy-5);color:var(--navy)}
 .sb-item.active{background:var(--navy-10);color:var(--navy);border-color:var(--navy-20)}
-.sb-item i{font-size:15px;flex-shrink:0}
+.sb-item i{font-size:14px;flex-shrink:0}
 .sb-badge{margin-left:auto;font-size:9px;font-weight:700;background:var(--sky);color:#fff;padding:1px 6px;border-radius:10px}
-.sb-user{padding:14px 16px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
-.sb-ava{width:32px;height:32px;border-radius:50%;background:var(--sky-10);border:1.5px solid var(--sky-20);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sky);flex-shrink:0}
-.sb-uinfo .sb-uname{font-size:12px;font-weight:600;color:var(--ink)}
-.sb-uinfo .sb-uemail{font-size:10px;color:var(--ink3)}
-.sb-uinfo{flex:1;min-width:0}
+.sb-live{margin-left:auto;width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sb-user{padding:12px 14px;border-top:1px solid var(--line);display:flex;align-items:center;gap:9px}
+.sb-ava{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1.5px solid var(--sky-15);flex-shrink:0}
+.sb-ava-fallback{width:32px;height:32px;border-radius:50%;background:var(--sky-8);border:1.5px solid var(--sky-15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sky);flex-shrink:0}
+.sb-uname{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-uemail{font-size:10px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.sb-logout{margin-left:auto;width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink3);transition:all .15s;flex-shrink:0;border:1px solid transparent}
+.sb-logout:hover{background:var(--rose-8);color:var(--rose);border-color:rgba(220,38,38,.15)}
 
-/* ── MAIN ── */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--page)}
-.topbar{background:var(--surface);border-bottom:1px solid var(--line);height:50px;padding:0 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.tb-left{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink3)}
-.tb-sep{color:var(--line2)}
-.tb-current{color:var(--navy);font-weight:500}
+/* ─── MAIN ─── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--surface);border-bottom:1px solid var(--line);height:48px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tb-left{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink3)}
+.tb-sep{color:var(--line2);font-size:13px}
+.tb-cur{color:var(--navy);font-weight:600}
 .tb-right{display:flex;align-items:center;gap:8px}
-.pill{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;padding:5px 12px;border-radius:100px;background:var(--surface2);border:1px solid var(--line);color:var(--ink2)}
-.pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.dot-live{background:var(--emerald);animation:blink 2.2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.dot-sky{background:var(--sky)}
+.chip{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:4px 11px;border-radius:100px;background:var(--surface2);border:1px solid var(--line);color:var(--ink2)}
+.chip-dot{width:6px;height:6px;border-radius:50%}
+.dot-g{background:var(--green);animation:pulse 2s infinite}
+.dot-s{background:var(--sky)}
 
-.scroll{flex:1;overflow-y:auto;padding:32px 32px 48px}
+.scroll{flex:1;overflow-y:auto;padding:28px 28px 48px}
 
-/* ── SECTIONS ── */
+/* ─── SECTIONS ─── */
 .sec{display:none}.sec.active{display:block}
 
-/* ── HERO ── */
-.hero{margin-bottom:28px}
+/* ─── HERO ─── */
 .eyebrow{font-size:10px;font-weight:600;color:var(--sky);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
-.hero-h{font-size:26px;font-weight:300;color:var(--ink);letter-spacing:-.025em;line-height:1.18;margin-bottom:6px}
+.hero-h{font-size:24px;font-weight:300;color:var(--ink);letter-spacing:-.025em;line-height:1.2;margin-bottom:6px}
 .hero-h b{font-weight:600}
-.hero-sub{font-size:13px;color:var(--ink2);line-height:1.6}
+.hero-sub{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:24px}
 
-/* ── METRICS ── */
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
-.metric{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden}
+/* ─── METRICS ─── */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
 .metric-bar{position:absolute;top:0;left:0;width:3px;height:100%;border-radius:2px 0 0 2px}
-.metric-bar.sky{background:var(--sky)}
-.metric-bar.navy{background:var(--navy)}
-.metric-bar.green{background:var(--emerald)}
-.metric-lbl{font-size:9px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
-.metric-val{font-size:26px;font-weight:600;color:var(--ink);letter-spacing:-.025em;line-height:1}
-.metric-sub{font-size:11px;color:var(--ink3);margin-top:5px}
-.up{color:var(--emerald)}.dn{color:var(--rose)}
+.mb-sky{background:var(--sky)}.mb-navy{background:var(--navy)}.mb-green{background:var(--green)}.mb-amber{background:var(--amber)}
+.metric-lbl{font-size:9px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.metric-val{font-size:24px;font-weight:600;color:var(--ink);letter-spacing:-.025em;line-height:1}
+.metric-sub{font-size:11px;color:var(--ink3);margin-top:4px}
+.up{color:var(--green)}.dn{color:var(--rose)}
 
-/* ── WAVE ── */
-.wave-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;gap:20px}
+/* ─── WAVE ─── */
+.wave-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:20px}
 .wave-info{flex:1}
-.wave-status{font-size:11px;font-weight:600;color:var(--emerald);display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.wave-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:blink 2.2s infinite;flex-shrink:0}
-.wave-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px}
-.wave-desc{font-size:11px;color:var(--ink3)}
-.wave-bars{display:flex;align-items:center;gap:2px;height:38px}
+.wave-status{font-size:11px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.wave-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+.wave-title{font-size:13px;font-weight:500;color:var(--ink)}
+.wave-desc{font-size:11px;color:var(--ink3);margin-top:2px}
+.wave-bars{display:flex;align-items:center;gap:2px;height:36px}
 .wb{width:2.5px;border-radius:2px;background:var(--sky);animation:wba 1s ease-in-out infinite}
-@keyframes wba{0%,100%{height:4px;opacity:.2}50%{height:26px;opacity:.9}}
+@keyframes wba{0%,100%{height:4px;opacity:.2}50%{height:24px;opacity:.9}}
 
-/* ── GRID CARDS ── */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;transition:border-color .15s;cursor:pointer}
-.card:hover{border-color:var(--sky-40)}
-.card-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:14px}
-.ico-sky{background:var(--sky-10);color:var(--sky)}
-.ico-navy{background:var(--navy-10);color:var(--navy)}
-.card-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:5px}
-.card-desc{font-size:11px;color:var(--ink2);line-height:1.55;margin-bottom:12px}
-.card-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
-.tag{font-size:10px;font-weight:500;color:var(--ink2);background:var(--surface2);border:1px solid var(--line);padding:2px 8px;border-radius:6px}
+/* ─── SECTION LABEL ─── */
+.slabel{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.09em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--line)}
+
+/* ─── CARDS GRID ─── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;transition:border-color .15s;cursor:pointer}
+.card:hover{border-color:var(--sky-30)}
+.card-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px}
+.ico-sky{background:var(--sky-8);color:var(--sky)}.ico-navy{background:var(--navy-10);color:var(--navy)}
+.card-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.card-desc{font-size:11px;color:var(--ink2);line-height:1.55;margin-bottom:10px}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.tag{font-size:10px;font-weight:500;color:var(--ink2);background:var(--surface2);border:1px solid var(--line);padding:2px 7px;border-radius:5px}
 .card-link{font-size:11px;font-weight:600;color:var(--sky);display:flex;align-items:center;gap:4px}
 
-/* ── SECTION DIVIDER ── */
-.sec-label{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.09em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.sec-label::after{content:'';flex:1;height:1px;background:var(--line)}
-
-/* ── STEPS ── */
-.steps{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:24px}
-.step-row{display:flex;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);transition:background .15s}
+/* ─── SETUP STEPS ─── */
+.steps-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.step-row{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);transition:background .15s}
 .step-row:last-child{border-bottom:none}
 .step-row:hover{background:var(--surface2)}
-.step-col{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:28px}
-.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.sn-done{background:rgba(5,150,105,.1);color:var(--emerald);border:1px solid rgba(5,150,105,.25)}
-.sn-act{background:var(--sky-10);color:var(--sky);border:1px solid var(--sky-20)}
+.step-col{display:flex;flex-direction:column;align-items:center;width:26px;flex-shrink:0}
+.snum{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.sn-done{background:var(--green-8);color:var(--green);border:1px solid var(--green-20)}
+.sn-act{background:var(--sky-8);color:var(--sky);border:1px solid var(--sky-15)}
 .sn-idle{background:var(--surface2);color:var(--ink3);border:1px solid var(--line)}
-.step-line{width:1px;flex:1;min-height:8px;background:var(--line);margin-top:4px}
+.sline{width:1px;flex:1;background:var(--line);margin-top:4px;min-height:8px}
 .step-body{flex:1}
-.step-t{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
-.step-d{font-size:11px;color:var(--ink2);line-height:1.6;margin-bottom:7px}
-.badge{display:inline-flex;align-items:center;font-size:9px;font-weight:600;padding:2px 8px;border-radius:6px;letter-spacing:.03em;text-transform:uppercase}
-.b-free{background:rgba(5,150,105,.08);color:#064e3b;border:1px solid rgba(5,150,105,.2)}
-.b-req{background:rgba(217,119,6,.08);color:#78350f;border:1px solid rgba(217,119,6,.2)}
-.b-browser{background:var(--sky-10);color:#0c4a6e;border:1px solid var(--sky-20)}
+.step-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.step-d{font-size:11px;color:var(--ink2);line-height:1.55;margin-bottom:5px}
+.badge{display:inline-flex;align-items:center;font-size:9px;font-weight:600;padding:2px 7px;border-radius:5px;letter-spacing:.03em;text-transform:uppercase}
+.b-free{background:var(--green-8);color:#064e3b;border:1px solid var(--green-20)}
+.b-req{background:var(--amber-8);color:#78350f;border:1px solid rgba(217,119,6,.2)}
+.b-browser{background:var(--sky-8);color:#0c4a6e;border:1px solid var(--sky-15)}
 
-/* ── STACK ── */
-.stk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
-.stk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-.stk-head{font-size:9px;font-weight:700;color:var(--sky);text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:5px;margin-bottom:10px}
-.stk-head i{font-size:12px}
-.stk-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--line)}
+/* ─── STACK ─── */
+.stk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.stk{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.stk-head{font-size:9px;font-weight:700;color:var(--sky);text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.stk-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--line)}
 .stk-row:last-child{border-bottom:none}
 .stk-name{font-size:11px;font-weight:500;color:var(--ink)}
-.stk-free{font-size:9px;font-weight:700;color:var(--emerald);font-family:var(--fm)}
+.stk-free{font-size:9px;font-weight:700;color:var(--green);font-family:var(--fm)}
 .stk-cost{font-size:9px;color:var(--ink3);font-family:var(--fm)}
 
-/* ── COMPLEXITY ── */
-.cx-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:24px}
-.cx-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.cx-row:last-child{margin-bottom:0}
-.cx-lbl{font-size:11px;color:var(--ink2);width:130px;flex-shrink:0}
-.cx-track{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+/* ─── COMPLEXITY ─── */
+.cx-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:20px}
+.cx-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}.cx-row:last-child{margin-bottom:0}
+.cx-lbl{font-size:11px;color:var(--ink2);width:120px;flex-shrink:0}
+.cx-track{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden}
 .cx-fill{height:100%;border-radius:2px}
-.cx-e{background:var(--emerald);width:26%}
-.cx-m{background:var(--amber);width:54%}
-.cx-h{background:var(--rose);width:82%}
-.cx-tag{font-size:9px;font-weight:600;color:var(--ink3);width:44px;text-align:right;letter-spacing:.03em;text-transform:uppercase}
+.cx-e{background:var(--green);width:25%}.cx-m{background:var(--amber);width:54%}.cx-h{background:var(--rose);width:82%}
+.cx-tag{font-size:9px;font-weight:600;color:var(--ink3);width:42px;text-align:right;text-transform:uppercase;letter-spacing:.03em}
 
-/* ── CALLS ── */
-.call-list{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:20px}
-.call-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);transition:background .15s}
+/* ─── CALL LOGS ─── */
+.call-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.call-row{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);transition:background .15s;cursor:pointer}
 .call-row:last-child{border-bottom:none}
 .call-row:hover{background:var(--surface2)}
-.call-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.ci-in{background:rgba(5,150,105,.08);color:var(--emerald)}
-.ci-miss{background:rgba(220,38,38,.08);color:var(--rose)}
-.call-meta{flex:1}
+.call-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ci-in{background:var(--green-8);color:var(--green)}.ci-miss{background:var(--rose-8);color:var(--rose)}
+.call-meta{flex:1;min-width:0}
 .call-num{font-size:12px;font-weight:600;color:var(--ink)}
 .call-time{font-size:10px;color:var(--ink3);margin-top:1px}
-.call-dur{font-family:var(--fm);font-size:11px;color:var(--ink2);margin-right:8px}
-.score{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;font-family:var(--fm)}
-.sc-hi{background:rgba(5,150,105,.08);color:#064e3b}
-.sc-mid{background:rgba(217,119,6,.08);color:#78350f}
-.sc-na{background:var(--surface2);color:var(--ink3)}
+.call-dur{font-family:var(--fm);font-size:11px;color:var(--ink2);margin-right:6px}
+.score{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;font-family:var(--fm)}
+.sc-hi{background:var(--green-8);color:#064e3b}.sc-mid{background:var(--amber-8);color:#78350f}.sc-na{background:var(--surface2);color:var(--ink3)}
+.call-expand{font-size:13px;color:var(--ink3)}
 
-/* ── TERMINAL ── */
-.terminal{background:#0d1326;border-radius:12px;padding:16px 18px;font-family:var(--fm);font-size:11px;line-height:1.9;margin-bottom:24px}
-.t-ts{color:rgba(255,255,255,.2)}.t-ok{color:#34d399}.t-info{color:#38bdf8}.t-warn{color:#fbbf24}
+/* ─── EXPANDED CALL ─── */
+.call-detail{display:none;background:var(--surface2);border-top:1px solid var(--line);padding:14px 16px 14px 56px}
+.call-detail.open{display:block}
+.call-transcript{font-size:11px;color:var(--ink2);line-height:1.7;font-family:var(--fm);margin-bottom:10px}
+.t-agent{color:var(--navy);font-weight:500}.t-user{color:var(--ink)}
+.call-detail-tags{display:flex;gap:6px;flex-wrap:wrap}
+.dtag{font-size:10px;font-weight:500;padding:2px 8px;border-radius:5px;border:1px solid var(--line);color:var(--ink2);background:var(--surface)}
 
-/* ── AGENT ── */
-.agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
-.agent-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
-.ag-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.ag-ava{width:44px;height:44px;border-radius:12px;background:var(--sky-10);border:1px solid var(--sky-20);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.ag-name{font-size:14px;font-weight:600;color:var(--ink);line-height:1}
-.ag-model{font-size:10px;color:var(--ink3);margin-top:3px}
-.ag-live{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;color:var(--emerald);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
-.ag-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--emerald);animation:blink 2.2s infinite}
-.cfg-list{display:flex;flex-direction:column}
-.cfg-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)}
-.cfg-row:last-child{border-bottom:none}
-.cfg-k{font-size:10px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
-.cfg-v{font-size:11px;font-weight:600;color:var(--ink)}
-.ep-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px}
-.ep{background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:10px 13px}
-.ep-lbl{font-size:9px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
-.ep-val{font-family:var(--fm);font-size:11px;font-weight:500;color:var(--ink);word-break:break-all}
-.ep-chip{display:inline-block;margin-top:5px;font-size:9px;font-weight:600;background:var(--sky-10);color:#0c4a6e;border:1px solid var(--sky-20);padding:2px 7px;border-radius:6px;text-transform:uppercase;letter-spacing:.04em}
+/* ─── TERMINAL ─── */
+.terminal{background:#0d1326;border-radius:10px;padding:14px 16px;font-family:var(--fm);font-size:10px;line-height:1.9;margin-bottom:16px;max-height:160px;overflow-y:auto}
+.t-ts{color:rgba(255,255,255,.2)}.t-ok{color:#34d399}.t-info{color:#38bdf8}.t-warn{color:#fbbf24}.t-err{color:#f87171}
 
-/* ── CONTROLS (Agent Config editable) ── */
-.ctrl-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
-.ctrl-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.ctrl-title i{color:var(--sky);font-size:15px}
-.form-row{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+/* ─── AGENT CONFIG ─── */
+.agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.ctrl-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:12px}
+.ctrl-title{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.ctrl-title i{color:var(--sky);font-size:14px}
+.form-row{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
 .form-row:last-child{margin-bottom:0}
-.form-label{font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
-.form-input{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:12px;font-family:var(--f);color:var(--ink);outline:none;transition:border-color .15s;width:100%}
+.form-lbl{font-size:9px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
+.form-input{background:var(--surface2);border:1px solid var(--line);border-radius:7px;padding:8px 11px;font-size:12px;font-family:var(--f);color:var(--ink);outline:none;transition:border-color .15s;width:100%}
 .form-input:focus{border-color:var(--sky)}
-.form-textarea{resize:vertical;min-height:80px;line-height:1.5}
+.form-textarea{resize:vertical;min-height:76px;line-height:1.5}
 .form-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238891aa' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}
 .toggle-row:last-child{border-bottom:none}
-.toggle-label{font-size:12px;font-weight:500;color:var(--ink)}
-.toggle-sub{font-size:10px;color:var(--ink3);margin-top:1px}
-.toggle{position:relative;width:36px;height:20px;flex-shrink:0}
+.tgl-lbl{font-size:12px;font-weight:500;color:var(--ink)}
+.tgl-sub{font-size:10px;color:var(--ink3);margin-top:1px}
+.toggle{position:relative;width:34px;height:19px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0;position:absolute}
-.toggle-track{position:absolute;inset:0;background:var(--line2);border-radius:100px;cursor:pointer;transition:background .2s}
-.toggle input:checked + .toggle-track{background:var(--sky)}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
-.toggle input:checked ~ .toggle-thumb{transform:translateX(16px)}
+.tgl-track{position:absolute;inset:0;background:var(--line2);border-radius:100px;cursor:pointer;transition:background .2s}
+.toggle input:checked + .tgl-track{background:var(--sky)}
+.tgl-thumb{position:absolute;top:2.5px;left:2.5px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s;pointer-events:none}
+.toggle input:checked ~ .tgl-thumb{transform:translateX(15px)}
 
-/* ── BUTTONS ── */
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.btn{font-size:11px;font-weight:600;padding:9px 18px;border-radius:9px;border:none;cursor:pointer;font-family:var(--f);transition:all .15s;display:inline-flex;align-items:center;gap:6px;letter-spacing:.01em;text-decoration:none}
+/* ─── OAUTH SETUP CARD ─── */
+.setup-card{background:var(--amber-8);border:1px solid rgba(217,119,6,.2);border-radius:12px;padding:18px 20px;margin-bottom:20px}
+.setup-card-title{font-size:13px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.setup-card-title i{color:var(--amber)}
+.setup-card-body{font-size:11px;color:var(--ink2);line-height:1.65}
+.setup-card-body a{color:var(--sky);font-weight:500}
+.setup-input-row{display:flex;gap:8px;margin-top:10px}
+.setup-input{flex:1;background:var(--surface);border:1px solid rgba(217,119,6,.3);border-radius:7px;padding:7px 11px;font-size:11px;font-family:var(--fm);color:var(--ink);outline:none}
+.setup-input:focus{border-color:var(--sky)}
+.setup-btn{background:var(--navy);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer;transition:opacity .15s;white-space:nowrap}
+.setup-btn:hover{opacity:.85}
+
+/* ─── INTEGRATIONS ─── */
+.int-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;margin-bottom:8px;transition:border-color .15s}
+.int-card:hover{border-color:var(--sky-30)}
+.int-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.int-info{flex:1}
+.int-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.int-desc{font-size:11px;color:var(--ink2)}
+.int-status{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.int-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.04em}
+.ib-connected{background:var(--green-8);color:#064e3b;border:1px solid var(--green-20)}
+.ib-pending{background:var(--amber-8);color:#78350f;border:1px solid rgba(217,119,6,.2)}
+.int-link{font-size:11px;font-weight:600;color:var(--sky);text-decoration:none;display:flex;align-items:center;gap:3px}
+
+/* ─── BUTTONS ─── */
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.btn{font-size:11px;font-weight:600;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:var(--f);transition:all .15s;display:inline-flex;align-items:center;gap:5px;text-decoration:none}
 .btn-sky{background:var(--sky);color:#fff}.btn-sky:hover{background:#1789b8}
 .btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:#162e6a}
-.btn-ghost{background:var(--surface);color:var(--ink2);border:1px solid var(--line)}.btn-ghost:hover{border-color:var(--sky-40);color:var(--navy)}
-.btn-save{background:var(--emerald);color:#fff}.btn-save:hover{background:#047857}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:#047857}
+.btn-ghost{background:var(--surface);color:var(--ink2);border:1px solid var(--line)}.btn-ghost:hover{border-color:var(--sky-30);color:var(--navy)}
 
-/* ── NOTIFICATION TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;font-size:12px;font-weight:500;padding:10px 18px;border-radius:10px;display:flex;align-items:center;gap:8px;transform:translateY(80px);opacity:0;transition:all .3s;z-index:100;pointer-events:none}
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;font-size:12px;font-weight:500;padding:9px 16px;border-radius:9px;display:flex;align-items:center;gap:7px;transform:translateY(60px);opacity:0;transition:all .3s;z-index:9999;pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
-.toast i{color:var(--emerald);font-size:14px}
+.toast i{color:var(--green);font-size:13px}
+
+/* ─── SETTINGS ─── */
+.info-box{display:flex;gap:9px;background:var(--sky-8);border:1px solid var(--sky-15);border-radius:9px;padding:10px 13px;font-size:11px;color:#0c4a6e;line-height:1.55;margin-bottom:14px}
+.info-box i{font-size:14px;color:var(--sky);flex-shrink:0;margin-top:1px}
+
+/* ─── SIMULATED LIVE TICKER ─── */
+.live-ticker{font-size:10px;font-family:var(--fm);color:var(--ink3);display:flex;align-items:center;gap:5px}
+.live-ticker::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
 </style>
 </head>
 <body>
 
-<div class="app">
+<!-- ═══════════════════════════════════ LOGIN ═══════════════════════════════════ -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="https://publicassets.leverageedu.com/landing-pages-new/logo-dark.svg" alt="Leverage Edu" onerror="this.style.display='none'">
+      <div class="login-logo-sep"></div>
+      <div class="login-voxpath">
+        <canvas id="login-logo-canvas" width="24" height="24"></canvas>
+        <div class="login-vp-name">Vox<span>Path</span></div>
+      </div>
+    </div>
+    <div class="login-h">Welcome back</div>
+    <div class="login-sub">Sign in to access your Voice AI agent panel</div>
+    <div class="login-restricted"><i class="ti ti-shield-check"></i>Restricted to @leverageedu.com</div>
 
-  <!-- SIDEBAR -->
+    <!-- Google One-Tap placeholder -->
+    <div id="g_id_onload"
+      data-client_id="YOUR_GOOGLE_CLIENT_ID"
+      data-callback="handleGoogleLogin"
+      data-auto_prompt="false">
+    </div>
+    <div class="g-signin-wrap">
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="signin_with"
+        data-shape="rectangular"
+        data-logo_alignment="left"
+        data-width="320">
+      </div>
+    </div>
+
+    <div class="login-divider">or continue with email</div>
+    <div class="login-manual">
+      <input class="login-input" id="login-email" type="email" placeholder="shivam@leverageedu.com" autocomplete="email">
+      <input class="login-input" id="login-pass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="login-btn login-btn-primary" onclick="handleEmailLogin()"><i class="ti ti-lock" style="font-size:13px"></i>Sign in</button>
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-footer">Having trouble? Contact <strong>shivam@leverageedu.com</strong></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ APP ═══════════════════════════════════ -->
+<div id="app" class="hidden">
+
   <div class="sidebar">
     <div class="sb-brand">
-      <canvas id="logo" class="sb-logomark" width="36" height="36"></canvas>
-      <div class="sb-words">
-        <div class="sb-name">Vox<span>Path</span></div>
-        <div class="sb-sub">voice ai · by leverage edu</div>
+      <img class="sb-lev-logo" src="https://publicassets.leverageedu.com/landing-pages-new/logo-dark.svg" alt="Leverage Edu" onerror="this.style.display='none'">
+      <div class="sb-divider"></div>
+      <div class="sb-vox">
+        <canvas id="app-logo-canvas" class="sb-vox-canvas" width="24" height="24"></canvas>
+        <div class="sb-vox-name">Vox<span>Path</span></div>
       </div>
     </div>
     <nav class="sb-nav">
       <div class="sb-section">Dashboards</div>
       <div class="sb-item active" data-sec="home"><i class="ti ti-home"></i>Home</div>
+      <div class="sb-item" data-sec="calls"><i class="ti ti-phone-call"></i>Call logs<span class="sb-live"></span></div>
+      <div class="sb-item" data-sec="agent"><i class="ti ti-robot"></i>Agent config</div>
       <div class="sb-item" data-sec="setup"><i class="ti ti-route"></i>Setup guide<span class="sb-badge">7</span></div>
       <div class="sb-item" data-sec="stack"><i class="ti ti-layers-intersect"></i>Free stack</div>
-      <div class="sb-item" data-sec="calls"><i class="ti ti-phone-call"></i>Call logs</div>
-      <div class="sb-item" data-sec="agent"><i class="ti ti-robot"></i>Agent config</div>
-      <div class="sb-section">Services</div>
-      <div class="sb-item" data-sec="services"><i class="ti ti-plug"></i>Integrations</div>
+      <div class="sb-section">Connect</div>
+      <div class="sb-item" data-sec="integrations"><i class="ti ti-plug"></i>Integrations</div>
       <div class="sb-section">Account</div>
       <div class="sb-item" data-sec="settings"><i class="ti ti-settings"></i>Settings</div>
     </nav>
     <div class="sb-user">
-      <div class="sb-ava">S</div>
-      <div class="sb-uinfo">
-        <div class="sb-uname">Shivam</div>
-        <div class="sb-uemail">shivam@leverageedu.com</div>
+      <img class="sb-ava" id="user-avatar" src="" alt="" onerror="this.style.display='none';document.getElementById('user-ava-fallback').style.display='flex'">
+      <div class="sb-ava-fallback" id="user-ava-fallback" style="display:none" id="user-initials">S</div>
+      <div style="flex:1;min-width:0">
+        <div class="sb-uname" id="user-name">Shivam</div>
+        <div class="sb-uemail" id="user-email">shivam@leverageedu.com</div>
       </div>
+      <div class="sb-logout" onclick="logout()" title="Sign out"><i class="ti ti-logout" style="font-size:14px"></i></div>
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
       <div class="tb-left">
-        <span>VoxPath</span>
-        <span class="tb-sep">/</span>
-        <span class="tb-current" id="tb-crumb">Home</span>
+        <span>VoxPath</span><span class="tb-sep">/</span>
+        <span class="tb-cur" id="tb-crumb">Home</span>
       </div>
       <div class="tb-right">
-        <div class="pill"><div class="pill-dot dot-live"></div>Agent live</div>
-        <div class="pill"><div class="pill-dot dot-sky"></div>Free tier · ₹0/mo</div>
+        <div class="live-ticker" id="live-ticker">Waiting...</div>
+        <div class="chip"><div class="chip-dot dot-g"></div>Agent live</div>
+        <div class="chip"><div class="chip-dot dot-s"></div>₹0 / mo</div>
       </div>
     </div>
 
@@ -282,65 +378,115 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 
       <!-- HOME -->
       <div id="sec-home" class="sec active">
-        <div class="hero">
-          <div class="eyebrow">Voice AI Platform</div>
-          <div class="hero-h">Build a <b>working voice agent</b><br>entirely for free.</div>
-          <div class="hero-sub">No installs on your machine. GitHub + Google Cloud does everything.</div>
-        </div>
+        <div class="eyebrow">Voice AI Platform</div>
+        <div class="hero-h">Good <span id="greeting-time">evening</span>, <b id="greeting-name">Shivam</b>.</div>
+        <div class="hero-sub" style="margin-bottom:20px">Here are all your VoxPath dashboards.</div>
         <div class="metrics">
-          <div class="metric"><div class="metric-bar sky"></div><div class="metric-lbl">Calls today</div><div class="metric-val" id="m-calls">14</div><div class="metric-sub"><span class="up">↑ 3</span> vs yesterday</div></div>
-          <div class="metric"><div class="metric-bar navy"></div><div class="metric-lbl">Avg duration</div><div class="metric-val">2:34</div><div class="metric-sub">mins per call</div></div>
-          <div class="metric"><div class="metric-bar green"></div><div class="metric-lbl">Monthly cost</div><div class="metric-val" style="color:var(--emerald)">₹0</div><div class="metric-sub"><span class="up">Free tier active</span></div></div>
+          <div class="metric"><div class="metric-bar mb-sky"></div><div class="metric-lbl">Calls today</div><div class="metric-val" id="m-calls">14</div><div class="metric-sub"><span class="up">↑ 3</span> vs yesterday</div></div>
+          <div class="metric"><div class="metric-bar mb-navy"></div><div class="metric-lbl">Avg duration</div><div class="metric-val">2:34</div><div class="metric-sub">mins per call</div></div>
+          <div class="metric"><div class="metric-bar mb-green"></div><div class="metric-lbl">Monthly cost</div><div class="metric-val" style="color:var(--green)">₹0</div><div class="metric-sub"><span class="up">Free tier</span></div></div>
+          <div class="metric"><div class="metric-bar mb-amber"></div><div class="metric-lbl">Sentiment avg</div><div class="metric-val">+0.81</div><div class="metric-sub"><span class="up">Positive</span></div></div>
         </div>
         <div class="wave-card">
           <div class="wave-info">
             <div class="wave-status">Live audio stream</div>
             <div class="wave-title">Agent is listening</div>
-            <div class="wave-desc">Deepgram Nova-2 · 38ms latency · Gemini Flash ready</div>
+            <div class="wave-desc">Deepgram Nova-2 · 38ms · Gemini Flash ready</div>
           </div>
-          <div class="wave-bars" id="wbars"></div>
+          <div class="wave-bars" id="wbars-home"></div>
         </div>
-        <div class="sec-label">Your dashboards</div>
+        <div class="slabel">Dashboards</div>
         <div class="grid2">
-          <div class="card" onclick="goTo('setup')"><div class="card-ico ico-sky"><i class="ti ti-route"></i></div><div class="card-title">Setup guide</div><div class="card-desc">7-step browser-only path from zero to a live phone number. No installs required.</div><div class="card-tags"><span class="tag">GitHub</span><span class="tag">Cloud Run</span><span class="tag">Vapi</span></div><div class="card-link">Open guide <i class="ti ti-arrow-right"></i></div></div>
-          <div class="card" onclick="goTo('stack')"><div class="card-ico ico-navy"><i class="ti ti-layers-intersect"></i></div><div class="card-title">Free stack</div><div class="card-desc">Every technology layer mapped — STT, LLM, TTS, hosting — all free tier, all browser-accessible.</div><div class="card-tags"><span class="tag">Deepgram</span><span class="tag">Gemini</span><span class="tag">Google TTS</span></div><div class="card-link">View stack <i class="ti ti-arrow-right"></i></div></div>
-          <div class="card" onclick="goTo('calls')"><div class="card-ico ico-sky"><i class="ti ti-phone-call"></i></div><div class="card-title">Call logs</div><div class="card-desc">Inbound history, sentiment scores, real-time log stream from your running agent.</div><div class="card-tags"><span class="tag">Inbound</span><span class="tag">Sentiment</span><span class="tag">Logs</span></div><div class="card-link">View logs <i class="ti ti-arrow-right"></i></div></div>
-          <div class="card" onclick="goTo('agent')"><div class="card-ico ico-navy"><i class="ti ti-robot"></i></div><div class="card-title">Agent config</div><div class="card-desc">Aria's persona, voice model, barge-in settings and webhook endpoints — fully editable.</div><div class="card-tags"><span class="tag">Persona</span><span class="tag">Gemini</span><span class="tag">WaveNet</span></div><div class="card-link">Configure <i class="ti ti-arrow-right"></i></div></div>
+          <div class="card" onclick="goTo('calls')"><div class="card-ico ico-sky"><i class="ti ti-phone-call"></i></div><div class="card-title">Call logs</div><div class="card-desc">Live inbound history, sentiment scores and real-time agent activity feed.</div><div class="card-tags"><span class="tag">Inbound</span><span class="tag">Sentiment</span><span class="tag">Live</span></div><div class="card-link">Open <i class="ti ti-arrow-right"></i></div></div>
+          <div class="card" onclick="goTo('agent')"><div class="card-ico ico-navy"><i class="ti ti-robot"></i></div><div class="card-title">Agent config</div><div class="card-desc">Edit Aria's persona, voice, behaviour controls and webhook endpoints.</div><div class="card-tags"><span class="tag">Editable</span><span class="tag">Gemini</span><span class="tag">WaveNet</span></div><div class="card-link">Configure <i class="ti ti-arrow-right"></i></div></div>
+          <div class="card" onclick="goTo('integrations')"><div class="card-ico ico-sky"><i class="ti ti-plug"></i></div><div class="card-title">Integrations</div><div class="card-desc">Connect Deepgram, Gemini, Google TTS and Vapi to bring the agent to life.</div><div class="card-tags"><span class="tag">Deepgram</span><span class="tag">Vapi</span><span class="tag">Google</span></div><div class="card-link">Connect <i class="ti ti-arrow-right"></i></div></div>
+          <div class="card" onclick="goTo('setup')"><div class="card-ico ico-navy"><i class="ti ti-route"></i></div><div class="card-title">Setup guide</div><div class="card-desc">7-step browser-only path from zero to a live phone number. No installs.</div><div class="card-tags"><span class="tag">GitHub</span><span class="tag">Cloud Run</span><span class="tag">Vapi</span></div><div class="card-link">Start <i class="ti ti-arrow-right"></i></div></div>
         </div>
       </div>
 
-      <!-- SETUP -->
-      <div id="sec-setup" class="sec">
-        <div class="hero">
-          <div class="eyebrow">Setup guide</div>
-          <div class="hero-h">7 steps to <b>your first live call.</b></div>
-          <div class="hero-sub">Everything runs in a browser. No Python or Node.js needed on your machine.</div>
+      <!-- CALL LOGS -->
+      <div id="sec-calls" class="sec">
+        <div class="eyebrow">Call logs</div>
+        <div class="hero-h"><b id="calls-count">14 calls</b> today.</div>
+        <div class="hero-sub">Click any call to see the transcript. Simulated data — connect Vapi to go live.</div>
+        <div class="call-wrap" id="call-list"></div>
+        <div class="slabel">Live system log</div>
+        <div class="terminal" id="terminal"></div>
+        <div class="actions">
+          <button class="btn btn-sky" onclick="simulateCall()"><i class="ti ti-phone-plus"></i>Simulate incoming call</button>
+          <button class="btn btn-ghost" onclick="clearLog()"><i class="ti ti-trash"></i>Clear log</button>
+          <a class="btn btn-ghost" href="https://sheets.google.com" target="_blank"><i class="ti ti-table"></i>Open Sheets</a>
         </div>
-        <div class="steps">
-          <div class="step-row"><div class="step-col"><div class="step-num sn-done"><i class="ti ti-check" style="font-size:10px"></i></div><div class="step-line"></div></div><div class="step-body"><div class="step-t">Create a GitHub account</div><div class="step-d">Sign up at github.com and enable Codespaces — you get a full browser-based VS Code with terminal, 60 hrs/month free. This is your entire development environment.</div><span class="badge b-free">100% free</span></div></div>
-          <div class="step-row"><div class="step-col"><div class="step-num sn-act">2</div><div class="step-line"></div></div><div class="step-body"><div class="step-t">Get your Deepgram API key</div><div class="step-d">deepgram.com → sign up → copy API key. Converts your caller's voice to text in real-time. 12,000 minutes per year free — enough for months of testing.</div><span class="badge b-free">12K mins/yr</span></div></div>
-          <div class="step-row"><div class="step-col"><div class="step-num sn-idle">3</div><div class="step-line"></div></div><div class="step-body"><div class="step-t">Get Gemini Flash API key</div><div class="step-d">aistudio.google.com → Get API key. Gemini 1.5 Flash is completely free, responds under 400ms, handles complex conversations naturally.</div><span class="badge b-free">Free forever</span></div></div>
-          <div class="step-row"><div class="step-col"><div class="step-num sn-idle">4</div><div class="step-line"></div></div><div class="step-body"><div class="step-t">Enable Google Cloud TTS</div><div class="step-d">console.cloud.google.com → enable Text-to-Speech API. Download credentials JSON. WaveNet voices — 1 million characters per month free.</div><span class="badge b-free">1M chars/mo</span></div></div>
-          <div class="step-row"><div class="step-col"><div class="step-num sn-idle">5</div><div class="step-line"></div></div><div class="step-body"><div class="step-t">Fork the VoxPath starter repo</div><div class="step-d">One click on GitHub — copies the entire backend codebase into your account. Open in Codespaces and you have a working editor with all dependencies ready.</div><span class="badge b-browser">Browser only</span></div></div>
-          <div class="step-row"><div class="step-col"><div class="step-num sn-idle">6</div><div class="step-line"></div></div><div class="step-body"><div class="step-t">Add secrets and deploy to Cloud Run</div><div class="step-d">Repo → Settings → Secrets → add DEEPGRAM_KEY, GEMINI_KEY, GOOGLE_TTS_JSON. Push once — GitHub Actions builds and deploys automatically.</div><span class="badge b-req">20 mins</span></div></div>
-          <div class="step-row"><div class="step-col"><div class="step-num sn-idle">7</div></div><div class="step-body"><div class="step-t">Connect a phone number via Vapi.ai</div><div class="step-d">Vapi.ai free tier gives you a real phone number. Paste your Cloud Run URL as the webhook. Call the number — your AI answers.</div><span class="badge b-free">Vapi free</span></div></div>
+      </div>
+
+      <!-- AGENT CONFIG -->
+      <div id="sec-agent" class="sec">
+        <div class="eyebrow">Agent config</div>
+        <div class="hero-h">Configure <b>Aria.</b></div>
+        <div class="hero-sub">All changes save to your browser. Export as JSON to paste into your backend.</div>
+        <div class="ctrl-card">
+          <div class="ctrl-title"><i class="ti ti-user-circle"></i>Persona & identity</div>
+          <div class="form-row-2">
+            <div class="form-row"><label class="form-lbl">Agent name</label><input class="form-input" id="ag-name" value="Aria"></div>
+            <div class="form-row"><label class="form-lbl">Role</label><input class="form-input" id="ag-role" value="Study Abroad Advisor"></div>
+          </div>
+          <div class="form-row"><label class="form-lbl">System prompt</label><textarea class="form-input form-textarea" id="ag-prompt">You are Aria, a warm and empowering study abroad advisor at Leverage Edu. Your goal is to understand the student's dream university, qualify their profile, and book a counsellor call. Be concise — max 2 sentences per turn. Always sound human, never robotic.</textarea></div>
+          <div class="form-row-2">
+            <div class="form-row"><label class="form-lbl">Language</label><select class="form-input form-select" id="ag-lang"><option>English (Indian)</option><option>English (US)</option><option>Hindi</option></select></div>
+            <div class="form-row"><label class="form-lbl">Max turn length</label><select class="form-input form-select" id="ag-turn"><option>1 sentence</option><option selected>2 sentences</option><option>3 sentences</option></select></div>
+          </div>
+        </div>
+        <div class="ctrl-card">
+          <div class="ctrl-title"><i class="ti ti-sliders"></i>Behaviour controls</div>
+          <div class="toggle-row"><div><div class="tgl-lbl">Barge-in (interrupt)</div><div class="tgl-sub">Caller can interrupt agent mid-speech</div></div><label class="toggle"><input type="checkbox" checked id="t-barge"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+          <div class="toggle-row"><div><div class="tgl-lbl">Auto-fallback to human</div><div class="tgl-sub">Transfer if agent confidence drops below 60%</div></div><label class="toggle"><input type="checkbox" checked id="t-fallback"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+          <div class="toggle-row"><div><div class="tgl-lbl">Log to Google Sheets</div><div class="tgl-sub">Auto-append transcript and lead score after each call</div></div><label class="toggle"><input type="checkbox" checked id="t-sheets"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+          <div class="toggle-row"><div><div class="tgl-lbl">Silence detection</div><div class="tgl-sub">Prompt caller after 4 seconds of silence</div></div><label class="toggle"><input type="checkbox" id="t-silence"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+        </div>
+        <div class="ctrl-card">
+          <div class="ctrl-title"><i class="ti ti-webhook"></i>Endpoints</div>
+          <div class="form-row"><label class="form-lbl">Webhook URL (Cloud Run)</label><input class="form-input" id="ag-webhook" value="https://voxpath-xyz.run.app/webhook" placeholder="Paste your Cloud Run URL here"></div>
+          <div class="form-row-2">
+            <div class="form-row"><label class="form-lbl">STT model</label><select class="form-input form-select" id="ag-stt"><option>nova-2-general</option><option>nova-2-phonecall</option><option>base</option></select></div>
+            <div class="form-row"><label class="form-lbl">TTS voice</label><select class="form-input form-select" id="ag-tts"><option>en-IN-Neural2-A (Female)</option><option>en-IN-Neural2-B (Male)</option><option>en-US-Neural2-F (Female)</option></select></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-green" onclick="saveAgent()"><i class="ti ti-check"></i>Save configuration</button>
+          <button class="btn btn-navy" onclick="exportAgent()"><i class="ti ti-download"></i>Export as JSON</button>
+          <button class="btn btn-ghost" onclick="resetAgent()"><i class="ti ti-refresh"></i>Reset to default</button>
+        </div>
+      </div>
+
+      <!-- SETUP GUIDE -->
+      <div id="sec-setup" class="sec">
+        <div class="eyebrow">Setup guide</div>
+        <div class="hero-h">7 steps to <b>your first live call.</b></div>
+        <div class="hero-sub">Everything runs in a browser. No Python or Node.js on your machine.</div>
+        <div class="steps-wrap">
+          <div class="step-row"><div class="step-col"><div class="snum sn-done"><i class="ti ti-check" style="font-size:9px"></i></div><div class="sline"></div></div><div class="step-body"><div class="step-t">GitHub account + Codespaces</div><div class="step-d">github.com → sign up → enable Codespaces. 60 hrs/month free browser VS Code.</div><span class="badge b-free">Done</span></div></div>
+          <div class="step-row"><div class="step-col"><div class="snum sn-act">2</div><div class="sline"></div></div><div class="step-body"><div class="step-t">Get Deepgram API key</div><div class="step-d">deepgram.com → sign up → copy key. 12,000 mins/year free STT.</div><span class="badge b-free">12K mins/yr</span></div></div>
+          <div class="step-row"><div class="step-col"><div class="snum sn-idle">3</div><div class="sline"></div></div><div class="step-body"><div class="step-t">Get Gemini Flash key</div><div class="step-d">aistudio.google.com → Get API key. Completely free, fast LLM.</div><span class="badge b-free">Free forever</span></div></div>
+          <div class="step-row"><div class="step-col"><div class="snum sn-idle">4</div><div class="sline"></div></div><div class="step-body"><div class="step-t">Enable Google Cloud TTS</div><div class="step-d">console.cloud.google.com → enable TTS API → download credentials JSON. 1M chars/mo free.</div><span class="badge b-free">1M chars/mo</span></div></div>
+          <div class="step-row"><div class="step-col"><div class="snum sn-idle">5</div><div class="sline"></div></div><div class="step-body"><div class="step-t">Fork VoxPath repo on GitHub</div><div class="step-d">One-click fork — all backend code in your account, open in Codespaces.</div><span class="badge b-browser">Browser only</span></div></div>
+          <div class="step-row"><div class="step-col"><div class="snum sn-idle">6</div><div class="sline"></div></div><div class="step-body"><div class="step-t">Add secrets + deploy to Cloud Run</div><div class="step-d">Repo → Settings → Secrets → add keys. Push once, GitHub Actions deploys automatically.</div><span class="badge b-req">20 mins</span></div></div>
+          <div class="step-row"><div class="step-col"><div class="snum sn-idle">7</div></div><div class="step-body"><div class="step-t">Connect phone via Vapi.ai</div><div class="step-d">Free phone number on Vapi, paste your Cloud Run webhook. Call it — Aria answers.</div><span class="badge b-free">Vapi free</span></div></div>
         </div>
         <div class="actions">
           <a class="btn btn-sky" href="https://github.com" target="_blank"><i class="ti ti-brand-github"></i>Open GitHub</a>
-          <a class="btn btn-navy" href="https://aistudio.google.com" target="_blank"><i class="ti ti-brand-google"></i>Get Gemini Key</a>
-          <a class="btn btn-ghost" href="https://deepgram.com" target="_blank"><i class="ti ti-external-link"></i>Deepgram signup</a>
+          <a class="btn btn-navy" href="https://aistudio.google.com" target="_blank"><i class="ti ti-brand-google"></i>Get Gemini key</a>
+          <a class="btn btn-ghost" href="https://deepgram.com" target="_blank">Deepgram signup</a>
+          <a class="btn btn-ghost" href="https://vapi.ai" target="_blank">Vapi.ai</a>
         </div>
       </div>
 
-      <!-- STACK -->
+      <!-- FREE STACK -->
       <div id="sec-stack" class="sec">
-        <div class="hero">
-          <div class="eyebrow">Technology stack</div>
-          <div class="hero-h">Six layers.<br><b>All free.</b></div>
-          <div class="hero-sub">Every service has a free tier sufficient for hundreds of calls per month.</div>
-        </div>
+        <div class="eyebrow">Technology stack</div>
+        <div class="hero-h">Six layers. <b>All free.</b></div>
+        <div class="hero-sub">Every service has a free tier sufficient for hundreds of calls per month.</div>
         <div class="cx-card">
-          <div class="sec-label" style="margin-bottom:14px">Complexity by layer</div>
+          <div class="slabel" style="margin-bottom:12px">Complexity by layer</div>
           <div class="cx-row"><span class="cx-lbl">Account signups</span><div class="cx-track"><div class="cx-fill cx-e"></div></div><span class="cx-tag">Easy</span></div>
           <div class="cx-row"><span class="cx-lbl">GitHub setup</span><div class="cx-track"><div class="cx-fill cx-e"></div></div><span class="cx-tag">Easy</span></div>
           <div class="cx-row"><span class="cx-lbl">Backend code</span><div class="cx-track"><div class="cx-fill cx-m"></div></div><span class="cx-tag">Medium</span></div>
@@ -357,280 +503,400 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
         </div>
       </div>
 
-      <!-- CALLS -->
-      <div id="sec-calls" class="sec">
-        <div class="hero">
-          <div class="eyebrow">Call logs</div>
-          <div class="hero-h"><b>14 calls</b> today.</div>
-          <div class="hero-sub">Real-time feed from your running VoxPath agent.</div>
-        </div>
-        <div class="call-list">
-          <div class="call-row"><div class="call-ico ci-in"><i class="ti ti-phone-incoming"></i></div><div class="call-meta"><div class="call-num">+91 98765 43210</div><div class="call-time">Today · 2:14 PM</div></div><span class="call-dur">3:21</span><span class="score sc-hi">97%</span></div>
-          <div class="call-row"><div class="call-ico ci-in"><i class="ti ti-phone-incoming"></i></div><div class="call-meta"><div class="call-num">+91 77654 32100</div><div class="call-time">Today · 11:02 AM</div></div><span class="call-dur">1:48</span><span class="score sc-hi">91%</span></div>
-          <div class="call-row"><div class="call-ico ci-miss"><i class="ti ti-phone-off"></i></div><div class="call-meta"><div class="call-num">+91 90011 55678</div><div class="call-time">Today · 9:33 AM</div></div><span class="call-dur">0:00</span><span class="score sc-na">—</span></div>
-          <div class="call-row"><div class="call-ico ci-in"><i class="ti ti-phone-incoming"></i></div><div class="call-meta"><div class="call-num">+91 88012 45671</div><div class="call-time">Yesterday · 6:45 PM</div></div><span class="call-dur">4:55</span><span class="score sc-hi">89%</span></div>
-          <div class="call-row"><div class="call-ico ci-in"><i class="ti ti-phone-incoming"></i></div><div class="call-meta"><div class="call-num">+91 99100 22334</div><div class="call-time">Yesterday · 3:10 PM</div></div><span class="call-dur">2:10</span><span class="score sc-mid">72%</span></div>
-          <div class="call-row"><div class="call-ico ci-in"><i class="ti ti-phone-incoming"></i></div><div class="call-meta"><div class="call-num">+91 80055 11223</div><div class="call-time">Yesterday · 1:05 PM</div></div><span class="call-dur">1:33</span><span class="score sc-hi">88%</span></div>
-        </div>
-        <div class="sec-label">Live system log</div>
-        <div class="terminal" id="terminal">
-          <div><span class="t-ts">[14:14:02] </span><span class="t-ok">CALL_START </span>+91987... connected</div>
-          <div><span class="t-ts">[14:14:04] </span><span class="t-info">STT </span>Deepgram Nova-2 stream open · 38ms</div>
-          <div><span class="t-ts">[14:14:09] </span><span class="t-info">LLM </span>Gemini Flash responded · 310ms</div>
-          <div><span class="t-ts">[14:14:10] </span><span class="t-info">TTS </span>Google WaveNet streamed · 190ms</div>
-          <div><span class="t-ts">[14:17:23] </span><span class="t-ok">CALL_END </span>duration 3:21 · sentiment +0.84</div>
-          <div><span class="t-ts">[14:17:24] </span><span class="t-info">CRM </span>Lead logged to Google Sheets</div>
-          <div><span class="t-ts">[11:02:03] </span><span class="t-warn">WARN </span>Google TTS quota at 71% — monitor</div>
-        </div>
-        <div class="actions">
-          <a class="btn btn-sky" href="https://sheets.google.com" target="_blank"><i class="ti ti-table"></i>Open Google Sheets</a>
-          <button class="btn btn-ghost" onclick="addFakeLog()"><i class="ti ti-refresh"></i>Simulate new call</button>
-        </div>
-      </div>
-
-      <!-- AGENT CONFIG -->
-      <div id="sec-agent" class="sec">
-        <div class="hero">
-          <div class="eyebrow">Agent config</div>
-          <div class="hero-h">Configure <b>Aria.</b></div>
-          <div class="hero-sub">Edit persona, voice, and behaviour. Changes save locally to your browser.</div>
-        </div>
-
-        <div class="ctrl-card">
-          <div class="ctrl-title"><i class="ti ti-user-circle"></i>Persona & identity</div>
-          <div class="form-row-2">
-            <div class="form-row"><label class="form-label">Agent name</label><input class="form-input" id="ag-name" value="Aria"></div>
-            <div class="form-row"><label class="form-label">Role</label><input class="form-input" id="ag-role" value="Study Abroad Advisor"></div>
-          </div>
-          <div class="form-row"><label class="form-label">System prompt</label><textarea class="form-input form-textarea" id="ag-prompt">You are Aria, a warm and empowering study abroad advisor at Leverage Edu. Your goal is to understand the student's dream university, qualify their profile, and book a counsellor call. Be concise — max 2 sentences per turn. Always sound human, never robotic.</textarea></div>
-          <div class="form-row-2">
-            <div class="form-row"><label class="form-label">Language</label>
-              <select class="form-input form-select" id="ag-lang">
-                <option>English (Indian)</option>
-                <option>English (US)</option>
-                <option>Hindi</option>
-              </select>
-            </div>
-            <div class="form-row"><label class="form-label">Max turn length</label>
-              <select class="form-input form-select" id="ag-turn">
-                <option>1 sentence</option>
-                <option selected>2 sentences</option>
-                <option>3 sentences</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="ctrl-card">
-          <div class="ctrl-title"><i class="ti ti-sliders"></i>Behaviour controls</div>
-          <div class="toggle-row"><div><div class="toggle-label">Barge-in (interrupt)</div><div class="toggle-sub">Allow callers to interrupt agent mid-speech</div></div><label class="toggle"><input type="checkbox" checked id="t-barge"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-          <div class="toggle-row"><div><div class="toggle-label">Auto-fallback to human</div><div class="toggle-sub">Transfer call if agent confidence drops below 60%</div></div><label class="toggle"><input type="checkbox" checked id="t-fallback"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-          <div class="toggle-row"><div><div class="toggle-label">Log to Google Sheets</div><div class="toggle-sub">Auto-append each call transcript and lead score</div></div><label class="toggle"><input type="checkbox" checked id="t-sheets"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-          <div class="toggle-row"><div><div class="toggle-label">Silence detection</div><div class="toggle-sub">Prompt caller after 4s of silence</div></div><label class="toggle"><input type="checkbox" id="t-silence"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-        </div>
-
-        <div class="ctrl-card">
-          <div class="ctrl-title"><i class="ti ti-webhook"></i>Endpoints</div>
-          <div class="form-row"><label class="form-label">Webhook URL (Cloud Run)</label><input class="form-input" id="ag-webhook" value="https://voxpath-xyz.run.app/webhook"></div>
-          <div class="form-row-2">
-            <div class="form-row"><label class="form-label">STT model</label>
-              <select class="form-input form-select" id="ag-stt">
-                <option selected>nova-2-general</option>
-                <option>nova-2-phonecall</option>
-                <option>base</option>
-              </select>
-            </div>
-            <div class="form-row"><label class="form-label">TTS voice</label>
-              <select class="form-input form-select" id="ag-tts">
-                <option selected>en-IN-Neural2-A (Female)</option>
-                <option>en-IN-Neural2-B (Male)</option>
-                <option>en-US-Neural2-F (Female)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-save" onclick="saveConfig()"><i class="ti ti-check"></i>Save configuration</button>
-          <button class="btn btn-navy" onclick="exportConfig()"><i class="ti ti-download"></i>Export as JSON</button>
-          <button class="btn btn-ghost" onclick="resetConfig()"><i class="ti ti-refresh"></i>Reset to default</button>
-        </div>
-      </div>
-
       <!-- INTEGRATIONS -->
-      <div id="sec-services" class="sec">
-        <div class="hero">
-          <div class="eyebrow">Integrations</div>
-          <div class="hero-h">Connect your <b>free services.</b></div>
-          <div class="hero-sub">All services below have free tiers. Click to open their signup pages.</div>
+      <div id="sec-integrations" class="sec">
+        <div class="eyebrow">Integrations</div>
+        <div class="hero-h">Connect your <b>services.</b></div>
+        <div class="hero-sub">Paste your API keys below. They save locally in your browser — never sent anywhere.</div>
+
+        <div class="setup-card">
+          <div class="setup-card-title"><i class="ti ti-alert-triangle"></i>Google Sign-In needs a one-time setup</div>
+          <div class="setup-card-body">
+            To enable real Google login, create a free OAuth Client ID:<br>
+            1. Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank">console.cloud.google.com/apis/credentials</a><br>
+            2. Create credentials → OAuth 2.0 Client ID → Web application<br>
+            3. Add <code style="background:var(--surface);padding:1px 5px;border-radius:4px;font-size:10px;font-family:var(--fm)">https://shivamsharma-dot.github.io</code> as an Authorised JavaScript origin<br>
+            4. Copy the Client ID and paste it below
+            <div class="setup-input-row">
+              <input class="setup-input" id="google-client-id" placeholder="Paste Google OAuth Client ID here…" value="">
+              <button class="setup-btn" onclick="saveGoogleClientId()">Save & Reload</button>
+            </div>
+          </div>
         </div>
-        <div class="grid2">
-          <div class="card"><div class="card-ico ico-sky"><i class="ti ti-ear"></i></div><div class="card-title">Deepgram</div><div class="card-desc">Real-time speech-to-text. Nova-2 model. 12,000 minutes per year on the free tier.</div><div class="card-tags"><span class="tag">STT</span><span class="tag">Real-time</span><span class="tag">12K min/yr</span></div><a class="card-link" href="https://deepgram.com" target="_blank">Connect <i class="ti ti-external-link"></i></a></div>
-          <div class="card"><div class="card-ico ico-navy"><i class="ti ti-brain"></i></div><div class="card-title">Google AI Studio</div><div class="card-desc">Gemini 1.5 Flash — completely free, fast, and handles natural conversations.</div><div class="card-tags"><span class="tag">LLM</span><span class="tag">Gemini Flash</span><span class="tag">Free</span></div><a class="card-link" href="https://aistudio.google.com" target="_blank">Get API key <i class="ti ti-external-link"></i></a></div>
-          <div class="card"><div class="card-ico ico-sky"><i class="ti ti-volume"></i></div><div class="card-title">Google Cloud TTS</div><div class="card-desc">WaveNet and Neural2 voices. 1 million characters per month free on the standard tier.</div><div class="card-tags"><span class="tag">TTS</span><span class="tag">WaveNet</span><span class="tag">1M/mo</span></div><a class="card-link" href="https://console.cloud.google.com" target="_blank">Enable API <i class="ti ti-external-link"></i></a></div>
-          <div class="card"><div class="card-ico ico-navy"><i class="ti ti-phone"></i></div><div class="card-title">Vapi.ai</div><div class="card-desc">Managed voice AI platform. Free tier gives a real phone number and 10 minutes per day.</div><div class="card-tags"><span class="tag">Phone number</span><span class="tag">10 min/day</span></div><a class="card-link" href="https://vapi.ai" target="_blank">Connect <i class="ti ti-external-link"></i></a></div>
-          <div class="card"><div class="card-ico ico-sky"><i class="ti ti-brand-github"></i></div><div class="card-title">GitHub + Codespaces</div><div class="card-desc">Browser-based VS Code editor + GitHub Actions CI/CD. 60 hours of Codespaces free per month.</div><div class="card-tags"><span class="tag">Editor</span><span class="tag">CI/CD</span><span class="tag">60h/mo</span></div><a class="card-link" href="https://github.com" target="_blank">Open GitHub <i class="ti ti-external-link"></i></a></div>
-          <div class="card"><div class="card-ico ico-navy"><i class="ti ti-server"></i></div><div class="card-title">Google Cloud Run</div><div class="card-desc">Serverless hosting. 2 million requests per month free. Auto-scales to zero when idle.</div><div class="card-tags"><span class="tag">Hosting</span><span class="tag">2M req/mo</span><span class="tag">Serverless</span></div><a class="card-link" href="https://console.cloud.google.com" target="_blank">Open Console <i class="ti ti-external-link"></i></a></div>
+
+        <div class="int-card">
+          <div class="int-ico ico-sky"><i class="ti ti-ear"></i></div>
+          <div class="int-info"><div class="int-name">Deepgram</div><div class="int-desc">Real-time speech-to-text · Nova-2 · 12K mins/yr free</div>
+          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-deepgram" placeholder="Paste Deepgram API key…" type="password">
+          </div>
+          <div class="int-status"><span class="int-badge ib-pending" id="status-deepgram">Not set</span><a class="int-link" href="https://deepgram.com" target="_blank">Sign up <i class="ti ti-external-link" style="font-size:10px"></i></a></div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-ico ico-navy"><i class="ti ti-brain"></i></div>
+          <div class="int-info"><div class="int-name">Google Gemini</div><div class="int-desc">LLM brain · Gemini 1.5 Flash · Free forever</div>
+          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-gemini" placeholder="Paste Gemini API key…" type="password">
+          </div>
+          <div class="int-status"><span class="int-badge ib-pending" id="status-gemini">Not set</span><a class="int-link" href="https://aistudio.google.com" target="_blank">Get key <i class="ti ti-external-link" style="font-size:10px"></i></a></div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-ico ico-sky"><i class="ti ti-phone"></i></div>
+          <div class="int-info"><div class="int-name">Vapi.ai</div><div class="int-desc">Phone number + voice orchestration · 10 min/day free</div>
+          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-vapi" placeholder="Paste Vapi API key…" type="password">
+          </div>
+          <div class="int-status"><span class="int-badge ib-pending" id="status-vapi">Not set</span><a class="int-link" href="https://vapi.ai" target="_blank">Sign up <i class="ti ti-external-link" style="font-size:10px"></i></a></div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-ico ico-navy"><i class="ti ti-table"></i></div>
+          <div class="int-info"><div class="int-name">Google Sheets</div><div class="int-desc">Auto-log call transcripts and lead scores</div>
+          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-sheets" placeholder="Paste Google Sheets webhook URL…" type="text">
+          </div>
+          <div class="int-status"><span class="int-badge ib-pending" id="status-sheets">Not set</span><a class="int-link" href="https://sheets.google.com" target="_blank">Open <i class="ti ti-external-link" style="font-size:10px"></i></a></div>
+        </div>
+
+        <div class="actions" style="margin-top:16px">
+          <button class="btn btn-green" onclick="saveKeys()"><i class="ti ti-check"></i>Save all keys</button>
+          <button class="btn btn-ghost" onclick="clearKeys()"><i class="ti ti-trash"></i>Clear keys</button>
         </div>
       </div>
 
       <!-- SETTINGS -->
       <div id="sec-settings" class="sec">
-        <div class="hero">
-          <div class="eyebrow">Settings</div>
-          <div class="hero-h">Panel <b>preferences.</b></div>
-          <div class="hero-sub">These settings are saved locally in your browser.</div>
-        </div>
+        <div class="eyebrow">Settings</div>
+        <div class="hero-h">Panel <b>preferences.</b></div>
+        <div class="hero-sub">Saved locally in your browser.</div>
+        <div class="info-box"><i class="ti ti-info-circle"></i>Signed in as <strong id="settings-email">shivam@leverageedu.com</strong>. All data stays in your browser — nothing is sent to any server.</div>
         <div class="ctrl-card">
           <div class="ctrl-title"><i class="ti ti-user"></i>Profile</div>
           <div class="form-row-2">
-            <div class="form-row"><label class="form-label">Your name</label><input class="form-input" id="s-name" value="Shivam"></div>
-            <div class="form-row"><label class="form-label">Organisation</label><input class="form-input" id="s-org" value="Leverage Edu"></div>
+            <div class="form-row"><label class="form-lbl">Name</label><input class="form-input" id="s-name" value="Shivam"></div>
+            <div class="form-row"><label class="form-lbl">Organisation</label><input class="form-input" id="s-org" value="Leverage Edu"></div>
           </div>
-          <div class="form-row"><label class="form-label">Email</label><input class="form-input" id="s-email" value="shivam@leverageedu.com"></div>
         </div>
         <div class="ctrl-card">
           <div class="ctrl-title"><i class="ti ti-bell"></i>Notifications</div>
-          <div class="toggle-row"><div><div class="toggle-label">Missed call alerts</div><div class="toggle-sub">Browser notification when agent misses a call</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-          <div class="toggle-row"><div><div class="toggle-label">Quota warnings</div><div class="toggle-sub">Alert when any free tier reaches 80%</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
-          <div class="toggle-row"><div><div class="toggle-label">Daily summary email</div><div class="toggle-sub">Call stats and sentiment digest every morning</div></div><label class="toggle"><input type="checkbox"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div>
+          <div class="toggle-row"><div><div class="tgl-lbl">Missed call alerts</div><div class="tgl-sub">Browser notification on missed calls</div></div><label class="toggle"><input type="checkbox" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+          <div class="toggle-row"><div><div class="tgl-lbl">Quota warnings</div><div class="tgl-sub">Alert when free tier hits 80%</div></div><label class="toggle"><input type="checkbox" checked><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
+          <div class="toggle-row"><div><div class="tgl-lbl">Daily digest email</div><div class="tgl-sub">Morning summary of calls + sentiment</div></div><label class="toggle"><input type="checkbox"><div class="tgl-track"></div><div class="tgl-thumb"></div></label></div>
         </div>
         <div class="actions">
-          <button class="btn btn-save" onclick="saveConfig()"><i class="ti ti-check"></i>Save settings</button>
+          <button class="btn btn-green" onclick="saveSettings()"><i class="ti ti-check"></i>Save settings</button>
+          <button class="btn btn-ghost" onclick="logout()"><i class="ti ti-logout"></i>Sign out</button>
         </div>
       </div>
 
-    </div><!-- /scroll -->
-  </div><!-- /main -->
-</div><!-- /app -->
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg">Saved</span></div>
 
 <script>
-/* ── NAVIGATION ── */
-const crumbMap={home:'Home',setup:'Setup guide',stack:'Free stack',calls:'Call logs',agent:'Agent config',services:'Integrations',settings:'Settings'};
+/* ─── LOGO ANIMATION ─── */
+function initLogo(canvasId){
+  const c=document.getElementById(canvasId);if(!c)return;
+  const ctx=c.getContext('2d');
+  const S=c.width;let t=0,ip=0,introOn=true;
+  if(!CanvasRenderingContext2D.prototype.roundRect){
+    CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+      this.moveTo(x+r,y);this.lineTo(x+w-r,y);this.arcTo(x+w,y,x+w,y+r,r);
+      this.lineTo(x+w,y+h-r);this.arcTo(x+w,y+h,x+w-r,y+h,r);
+      this.lineTo(x+r,y+h);this.arcTo(x,y+h,x,y+h-r,r);
+      this.lineTo(x,y+r);this.arcTo(x,y,x+r,y,r);this.closePath();return this;
+    };
+  }
+  const cx=S/2,cy=S/2,R=S*.42;
+  function draw(){
+    ctx.clearRect(0,0,S,S);
+    const p=Math.min(1,ip);
+    ctx.save();ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle='#1F3C84';ctx.globalAlpha=p*.1;ctx.fill();ctx.restore();
+    ctx.save();ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.strokeStyle='#1C9FD4';ctx.lineWidth=S*.028;ctx.globalAlpha=p*.25;ctx.stroke();ctx.restore();
+    const hs=[.25,.4,.28,.48,.32,.4,.25];const sp=S*.133;const sx=cx-(hs.length-1)*sp/2;
+    hs.forEach((h,i)=>{
+      const w=(Math.sin(t*Math.PI*2+i*.8)*.42+.58);
+      const bh=S*h*w*p;const bw=S*.07;
+      ctx.save();ctx.beginPath();ctx.roundRect(sx+i*sp-bw/2,cy-bh/2,bw,bh,bw*.3);
+      ctx.fillStyle=i===3?'#1F3C84':'#1C9FD4';ctx.globalAlpha=(.5+w*.5)*p;ctx.fill();ctx.restore();
+    });
+    for(let i=0;i<8;i++){
+      const a=(i/8)*Math.PI*2+t*.4;
+      const pulse=(Math.sin(t*Math.PI*2+i*.8)+1)/2;
+      ctx.save();ctx.beginPath();ctx.arc(cx+Math.cos(a)*R*.87,cy+Math.sin(a)*R*.87,S*.028,0,Math.PI*2);
+      ctx.fillStyle='#1C9FD4';ctx.globalAlpha=(.07+pulse*.18)*p;ctx.fill();ctx.restore();
+    }
+  }
+  function loop(){t+=.014;if(introOn){ip+=.04;if(ip>=1){ip=1;introOn=false;}}draw();requestAnimationFrame(loop);}
+  loop();
+}
+initLogo('login-logo-canvas');
+
+/* ─── GREETING ─── */
+function setGreeting(){
+  const h=new Date().getHours();
+  const g=h<12?'morning':h<17?'afternoon':'evening';
+  const el=document.getElementById('greeting-time');if(el)el.textContent=g;
+}
+
+/* ─── AUTH ─── */
+const DEMO_EMAIL='demo@leverageedu.com';
+const DEMO_PASS='leverage2024';
+const ALLOWED_DOMAIN='leverageedu.com';
+
+function handleGoogleLogin(response){
+  try{
+    const payload=JSON.parse(atob(response.credential.split('.')[1]));
+    const email=payload.email||'';
+    if(!email.endsWith('@'+ALLOWED_DOMAIN)){
+      showLoginError('Access restricted to @'+ALLOWED_DOMAIN+' accounts only.');return;
+    }
+    doLogin({name:payload.name||email.split('@')[0],email,picture:payload.picture||''});
+  }catch(e){showLoginError('Login failed. Please try again.');}
+}
+
+function handleEmailLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  if(!email){showLoginError('Please enter your email.');return;}
+  if(!email.endsWith('@'+ALLOWED_DOMAIN)&&email!==DEMO_EMAIL){
+    showLoginError('Access restricted to @'+ALLOWED_DOMAIN+' accounts.');return;
+  }
+  if(pass!==DEMO_PASS&&pass!==''){
+    if(pass.length>0&&pass!==DEMO_PASS){showLoginError('Incorrect password. Try: leverage2024');return;}
+  }
+  doLogin({name:email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()),email,picture:''});
+}
+
+function doLogin(user){
+  localStorage.setItem('voxpath-user',JSON.stringify(user));
+  showApp(user);
+}
+
+function showApp(user){
+  document.getElementById('login-page').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('user-name').textContent=user.name||user.email.split('@')[0];
+  document.getElementById('user-email').textContent=user.email;
+  document.getElementById('greeting-name').textContent=(user.name||user.email.split('@')[0]).split(' ')[0];
+  document.getElementById('settings-email').textContent=user.email;
+  const initEl=document.getElementById('user-ava-fallback');
+  if(initEl)initEl.textContent=(user.name||'S')[0].toUpperCase();
+  if(user.picture){
+    const img=document.getElementById('user-avatar');
+    if(img){img.src=user.picture;img.style.display='block';}
+  }
+  initLogo('app-logo-canvas');
+  setGreeting();
+  buildCallList();
+  buildTerminal();
+  startLiveTicker();
+  loadKeys();
+}
+
+function showLoginError(msg){
+  const el=document.getElementById('login-error');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+function logout(){
+  localStorage.removeItem('voxpath-user');
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-page').classList.remove('hidden');
+  document.getElementById('login-email').value='';
+  document.getElementById('login-pass').value='';
+}
+
+/* ─── NAVIGATION ─── */
+const crumbs={home:'Home',calls:'Call logs',agent:'Agent config',setup:'Setup guide',stack:'Free stack',integrations:'Integrations',settings:'Settings'};
 function goTo(name){
-  document.querySelectorAll('.sb-item').forEach(el=>{
-    el.classList.toggle('active', el.dataset.sec===name);
-  });
+  document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('active',el.dataset.sec===name));
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
-  const sec=document.getElementById('sec-'+name);
-  if(sec)sec.classList.add('active');
-  document.getElementById('tb-crumb').textContent=crumbMap[name]||name;
+  const sec=document.getElementById('sec-'+name);if(sec)sec.classList.add('active');
+  document.getElementById('tb-crumb').textContent=crumbs[name]||name;
   document.querySelector('.scroll').scrollTop=0;
 }
-document.querySelectorAll('.sb-item[data-sec]').forEach(el=>{
-  el.addEventListener('click',()=>goTo(el.dataset.sec));
-});
+document.querySelectorAll('.sb-item[data-sec]').forEach(el=>el.addEventListener('click',()=>goTo(el.dataset.sec)));
 
-/* ── WAVE BARS ── */
-const wb=document.getElementById('wbars');
-for(let i=0;i<46;i++){
-  const b=document.createElement('div');
-  b.className='wb';
-  b.style.animationDelay=(Math.random()*1.1)+'s';
-  b.style.animationDuration=(0.65+Math.random()*0.85)+'s';
-  wb.appendChild(b);
-}
-
-/* ── LOGO ANIMATION ── */
-const cnv=document.getElementById('logo');
-const ctx=cnv.getContext('2d');
-let t=0,ip=0,introOn=true;
-if(!CanvasRenderingContext2D.prototype.roundRect){
-  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
-    this.moveTo(x+r,y);this.lineTo(x+w-r,y);this.arcTo(x+w,y,x+w,y+r,r);
-    this.lineTo(x+w,y+h-r);this.arcTo(x+w,y+h,x+w-r,y+h,r);
-    this.lineTo(x+r,y+h);this.arcTo(x,y+h,x,y+h-r,r);
-    this.lineTo(x,y+r);this.arcTo(x,y,x+r,y,r);this.closePath();return this;
-  };
-}
-function drawLogo(){
-  ctx.clearRect(0,0,36,36);
-  const p=Math.min(1,ip);
-  ctx.save();ctx.beginPath();ctx.arc(18,18,15,0,Math.PI*2);ctx.fillStyle='#1F3C84';ctx.globalAlpha=p*.11;ctx.fill();ctx.restore();
-  ctx.save();ctx.beginPath();ctx.arc(18,18,15,0,Math.PI*2);ctx.strokeStyle='#1C9FD4';ctx.lineWidth=1;ctx.globalAlpha=p*.28;ctx.stroke();ctx.restore();
-  const hs=[6,10,7,12,8,10,6];const sp=3.2;const sx=18-(hs.length-1)*sp/2;
-  hs.forEach((h,i)=>{
-    const w=(Math.sin(t*Math.PI*2+i*.8)*.42+.58);
-    const bh=h*w*p;
-    ctx.save();ctx.beginPath();ctx.roundRect(sx+i*sp-1,18-bh/2,2,bh,1);
-    ctx.fillStyle=i===3?'#1F3C84':'#1C9FD4';ctx.globalAlpha=(.5+w*.5)*p;ctx.fill();ctx.restore();
-  });
-  for(let i=0;i<8;i++){
-    const a=(i/8)*Math.PI*2+t*.4;const r=13;
-    const pulse=(Math.sin(t*Math.PI*2+i*.8)+1)/2;
-    ctx.save();ctx.beginPath();ctx.arc(18+Math.cos(a)*r,18+Math.sin(a)*r,.9,0,Math.PI*2);
-    ctx.fillStyle='#1C9FD4';ctx.globalAlpha=(.08+pulse*.18)*p;ctx.fill();ctx.restore();
+/* ─── WAVE BARS ─── */
+function makeWave(id,count){
+  const el=document.getElementById(id);if(!el)return;
+  for(let i=0;i<count;i++){
+    const b=document.createElement('div');b.className='wb';
+    b.style.animationDelay=(Math.random()*1.1)+'s';
+    b.style.animationDuration=(0.65+Math.random()*0.85)+'s';
+    el.appendChild(b);
   }
 }
-function loop(){
-  t+=.014;
-  if(introOn){ip+=.04;if(ip>=1){ip=1;introOn=false;}}
-  drawLogo();requestAnimationFrame(loop);
-}
-loop();
+makeWave('wbars-home',46);
 
-/* ── TOAST ── */
+/* ─── SIMULATED CALL DATA ─── */
+const CALLS=[
+  {num:'+91 98765 43210',time:'Today · 2:14 PM',dur:'3:21',score:97,type:'in',transcript:[['agent','Hi! This is Aria from Leverage Edu. How can I help you today?'],['user','I wanted to ask about MBA programs in the UK.'],['agent','Great choice! Which universities are you targeting — Russell Group or newer institutions?'],['user','Mostly LSE and Imperial.'],['agent','Excellent profile targets. Shall I book a call with one of our UK specialists today?'],['user','Yes please.']],tags:['Qualified','MBA','UK','Booked']},
+  {num:'+91 77654 32100',time:'Today · 11:02 AM',dur:'1:48',score:91,type:'in',transcript:[['agent','Hi, Aria here from Leverage Edu. What brings you in today?'],['user','Looking for MS programs in Canada.'],['agent','Canada is a great choice. Do you have a target intake — September 2025 or January 2026?'],['user','September 2025.'],['agent','Perfect timing. Let me connect you with our Canada specialist.']],tags:['Interested','MS','Canada']},
+  {num:'+91 90011 55678',time:'Today · 9:33 AM',dur:'0:00',score:0,type:'miss',transcript:[],tags:['Missed']},
+  {num:'+91 88012 45671',time:'Yesterday · 6:45 PM',dur:'4:55',score:89,type:'in',transcript:[['agent','Hello, this is Aria. How can I help?'],['user','I want to study medicine abroad.'],['agent','Medicine abroad — excellent. Are you looking at MBBS or postgraduate programs?'],['user','MBBS, maybe in Russia or Kazakhstan.'],['agent','We have strong partnerships there. Your budget range?'],['user','Around 30–40 lakhs total.'],['agent','That fits well. Shall I book a specialist consultation for this week?']],tags:['Interested','MBBS','Russia']},
+  {num:'+91 99100 22334',time:'Yesterday · 3:10 PM',dur:'2:10',score:72,type:'in',transcript:[['agent','Hi! Aria here. How can I help you today?'],['user','Just exploring options for my daughter.'],['agent','Of course! What level — undergraduate or postgraduate?'],['user','Undergraduate, she wants to do engineering.'],['agent','Great. Which countries are you considering?']],tags:['Exploring','UG','Engineering']},
+];
+let callsData=[...CALLS];
+
+function buildCallList(){
+  const wrap=document.getElementById('call-list');if(!wrap)return;
+  wrap.innerHTML='';
+  callsData.forEach((c,i)=>{
+    const row=document.createElement('div');row.className='call-row';
+    row.innerHTML=`<div class="call-ico ${c.type==='miss'?'ci-miss':'ci-in'}"><i class="ti ti-phone-${c.type==='miss'?'off':'incoming'}"></i></div><div class="call-meta"><div class="call-num">${c.num}</div><div class="call-time">${c.time}</div></div><span class="call-dur">${c.dur}</span><span class="score ${c.score>85?'sc-hi':c.score>0?'sc-mid':'sc-na'}">${c.score>0?c.score+'%':'—'}</span><i class="ti ti-chevron-down call-expand" id="chev-${i}"></i>`;
+    wrap.appendChild(row);
+    const detail=document.createElement('div');detail.className='call-detail';detail.id='detail-'+i;
+    if(c.transcript.length){
+      const tx=c.transcript.map(([r,t])=>`<div><span class="${r==='agent'?'t-agent':'t-user'}">${r==='agent'?'Aria':'Caller'}:</span> ${t}</div>`).join('');
+      detail.innerHTML=`<div class="call-transcript">${tx}</div><div class="call-detail-tags">${c.tags.map(t=>`<span class="dtag">${t}</span>`).join('')}</div>`;
+    }else{
+      detail.innerHTML=`<div style="font-size:11px;color:var(--ink3)">No answer — call was missed.</div>`;
+    }
+    wrap.appendChild(detail);
+    row.addEventListener('click',()=>{
+      const d=document.getElementById('detail-'+i);
+      const cv=document.getElementById('chev-'+i);
+      const open=d.classList.contains('open');
+      document.querySelectorAll('.call-detail').forEach(x=>x.classList.remove('open'));
+      document.querySelectorAll('.call-expand').forEach(x=>x.style.transform='');
+      if(!open){d.classList.add('open');cv.style.transform='rotate(180deg)';}
+    });
+  });
+}
+
+/* ─── TERMINAL ─── */
+const INIT_LOGS=[
+  ['t-ok','CALL_START','+91987... connected'],
+  ['t-info','STT','Deepgram Nova-2 open · 38ms'],
+  ['t-info','LLM','Gemini Flash responded · 310ms'],
+  ['t-info','TTS','WaveNet streamed · 190ms'],
+  ['t-ok','CALL_END','3:21 · sentiment +0.84'],
+  ['t-info','CRM','Lead logged to Google Sheets'],
+  ['t-warn','WARN','Google TTS quota at 71%'],
+];
+function buildTerminal(){
+  const t=document.getElementById('terminal');if(!t)return;
+  t.innerHTML='';
+  INIT_LOGS.forEach(([cls,label,msg])=>addLog(cls,label,msg,false));
+}
+function addLog(cls,label,msg,scroll=true){
+  const t=document.getElementById('terminal');if(!t)return;
+  const now=new Date();
+  const ts=`[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
+  const d=document.createElement('div');
+  d.innerHTML=`<span class="t-ts">${ts} </span><span class="${cls}">${label} </span>${msg}`;
+  t.appendChild(d);if(scroll)t.scrollTop=t.scrollHeight;
+}
+function clearLog(){document.getElementById('terminal').innerHTML='';showToast('Log cleared');}
+
+/* ─── SIMULATE CALL ─── */
+const SIM_NUMS=['+91 80011 22334','+91 92233 44556','+91 74455 66778','+91 86677 88990'];
+const SIM_TAGS=[['Qualified','MBA','UK'],['Interested','MS','USA'],['Exploring','UG','Canada'],['Qualified','MBBS','Russia']];
+let simCount=0;
+function simulateCall(){
+  const num=SIM_NUMS[simCount%SIM_NUMS.length];
+  const score=Math.floor(Math.random()*30)+65;
+  const mins=Math.floor(Math.random()*3)+1;
+  const secs=String(Math.floor(Math.random()*60)).padStart(2,'0');
+  const now=new Date();
+  const time=`Today · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ${now.getHours()<12?'AM':'PM'}`;
+  callsData.unshift({num,time,dur:`${mins}:${secs}`,score,type:'in',transcript:[['agent','Hi, Aria here from Leverage Edu. How can I help?'],['user','I want to know about courses abroad.'],['agent','Happy to help! What level are you looking at?']],tags:SIM_TAGS[simCount%SIM_TAGS.length]});
+  simCount++;
+  const mEl=document.getElementById('m-calls');if(mEl)mEl.textContent=callsData.filter(c=>c.type==='in').length;
+  const cEl=document.getElementById('calls-count');if(cEl)cEl.textContent=callsData.filter(c=>c.type==='in').length+' calls';
+  buildCallList();
+  addLog('t-ok','CALL_START',num+' connected');
+  setTimeout(()=>addLog('t-info','STT','Deepgram stream open · '+(30+Math.floor(Math.random()*20))+'ms'),400);
+  setTimeout(()=>addLog('t-info','LLM','Gemini Flash · '+(280+Math.floor(Math.random()*100))+'ms'),1100);
+  setTimeout(()=>addLog('t-info','TTS','WaveNet streamed · '+(160+Math.floor(Math.random()*60))+'ms'),1600);
+  setTimeout(()=>addLog('t-ok','CALL_END',`${mins}:${secs} · sentiment +${(score/100).toFixed(2)}`),2400);
+  showToast('Simulated call from '+num);
+}
+
+/* ─── LIVE TICKER ─── */
+const TICKER_MSGS=['Deepgram Nova-2 · 38ms','Gemini Flash · ready','Last call: 2:34','Sentiment avg: +0.81','TTS quota: 71%','Agent listening…'];
+let tickerIdx=0;
+function startLiveTicker(){
+  const el=document.getElementById('live-ticker');if(!el)return;
+  function tick(){el.textContent=TICKER_MSGS[tickerIdx%TICKER_MSGS.length];tickerIdx++;}
+  tick();setInterval(tick,4000);
+}
+
+/* ─── TOAST ─── */
 function showToast(msg){
   const el=document.getElementById('toast');
   document.getElementById('toast-msg').textContent=msg;
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2600);
+  el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600);
 }
 
-/* ── AGENT SAVE / EXPORT / RESET ── */
-const DEFAULTS={name:'Aria',role:'Study Abroad Advisor',prompt:'You are Aria, a warm and empowering study abroad advisor at Leverage Edu. Your goal is to understand the student\'s dream university, qualify their profile, and book a counsellor call. Be concise — max 2 sentences per turn. Always sound human, never robotic.',lang:'English (Indian)',turn:'2 sentences',webhook:'https://voxpath-xyz.run.app/webhook',stt:'nova-2-general',tts:'en-IN-Neural2-A (Female)'};
-function saveConfig(){
-  const cfg={name:document.getElementById('ag-name')?.value,role:document.getElementById('ag-role')?.value,prompt:document.getElementById('ag-prompt')?.value};
-  localStorage.setItem('voxpath-config',JSON.stringify(cfg));
-  showToast('Configuration saved');
+/* ─── AGENT SAVE ─── */
+const AG_DEFAULTS={name:'Aria',role:'Study Abroad Advisor',prompt:'You are Aria, a warm and empowering study abroad advisor at Leverage Edu. Your goal is to understand the student\'s dream university, qualify their profile, and book a counsellor call. Be concise — max 2 sentences per turn. Always sound human, never robotic.',webhook:'https://voxpath-xyz.run.app/webhook'};
+function saveAgent(){
+  const cfg={name:document.getElementById('ag-name').value,role:document.getElementById('ag-role').value,prompt:document.getElementById('ag-prompt').value,webhook:document.getElementById('ag-webhook').value,bargeIn:document.getElementById('t-barge').checked,fallback:document.getElementById('t-fallback').checked,sheets:document.getElementById('t-sheets').checked,silence:document.getElementById('t-silence').checked};
+  localStorage.setItem('voxpath-agent',JSON.stringify(cfg));showToast('Agent configuration saved');
 }
-function exportConfig(){
-  const cfg={agentName:document.getElementById('ag-name')?.value||DEFAULTS.name,role:document.getElementById('ag-role')?.value||DEFAULTS.role,systemPrompt:document.getElementById('ag-prompt')?.value||DEFAULTS.prompt,language:document.getElementById('ag-lang')?.value||DEFAULTS.lang,maxTurn:document.getElementById('ag-turn')?.value||DEFAULTS.turn,webhook:document.getElementById('ag-webhook')?.value||DEFAULTS.webhook,sttModel:document.getElementById('ag-stt')?.value||DEFAULTS.stt,ttsVoice:document.getElementById('ag-tts')?.value||DEFAULTS.tts,bargeIn:document.getElementById('t-barge')?.checked,autoFallback:document.getElementById('t-fallback')?.checked,logToSheets:document.getElementById('t-sheets')?.checked,silenceDetection:document.getElementById('t-silence')?.checked,exportedAt:new Date().toISOString()};
+function exportAgent(){
+  const cfg={agentName:document.getElementById('ag-name').value,role:document.getElementById('ag-role').value,systemPrompt:document.getElementById('ag-prompt').value,webhook:document.getElementById('ag-webhook').value,sttModel:document.getElementById('ag-stt').value,ttsVoice:document.getElementById('ag-tts').value,language:document.getElementById('ag-lang').value,maxTurn:document.getElementById('ag-turn').value,bargeIn:document.getElementById('t-barge').checked,autoFallback:document.getElementById('t-fallback').checked,logSheets:document.getElementById('t-sheets').checked,silenceDetect:document.getElementById('t-silence').checked,exportedAt:new Date().toISOString()};
   const blob=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='voxpath-config.json';a.click();
-  showToast('Config exported as JSON');
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='voxpath-agent-config.json';a.click();
+  showToast('Exported voxpath-agent-config.json');
 }
-function resetConfig(){
-  if(document.getElementById('ag-name'))document.getElementById('ag-name').value=DEFAULTS.name;
-  if(document.getElementById('ag-role'))document.getElementById('ag-role').value=DEFAULTS.role;
-  if(document.getElementById('ag-prompt'))document.getElementById('ag-prompt').value=DEFAULTS.prompt;
+function resetAgent(){
+  document.getElementById('ag-name').value=AG_DEFAULTS.name;
+  document.getElementById('ag-role').value=AG_DEFAULTS.role;
+  document.getElementById('ag-prompt').value=AG_DEFAULTS.prompt;
+  document.getElementById('ag-webhook').value=AG_DEFAULTS.webhook;
   showToast('Reset to defaults');
 }
+const savedAgent=localStorage.getItem('voxpath-agent');
+if(savedAgent){try{const c=JSON.parse(savedAgent);if(c.name)document.getElementById('ag-name').value=c.name;if(c.role)document.getElementById('ag-role').value=c.role;if(c.prompt)document.getElementById('ag-prompt').value=c.prompt;if(c.webhook)document.getElementById('ag-webhook').value=c.webhook;}catch(e){}}
 
-/* ── SIMULATE NEW LOG LINE ── */
-const logLines=[
-  ['t-ok','CALL_START','new inbound call connected'],
-  ['t-info','STT','Deepgram stream open · 41ms'],
-  ['t-info','LLM','Gemini Flash · 290ms'],
-  ['t-info','TTS','WaveNet streamed · 175ms'],
-  ['t-ok','CALL_END','duration 2:14 · sentiment +0.79'],
-  ['t-warn','WARN','caller dropped before qualification'],
-];
-let li=0;
-function addFakeLog(){
-  const term=document.getElementById('terminal');
-  const now=new Date();
-  const ts=`[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
-  const [cls,label,msg]=logLines[li%logLines.length];li++;
-  const div=document.createElement('div');
-  div.innerHTML=`<span class="t-ts">${ts} </span><span class="${cls}">${label} </span>${msg}`;
-  term.appendChild(div);
-  term.scrollTop=term.scrollHeight;
-  showToast('New log entry added');
+/* ─── API KEYS ─── */
+function saveKeys(){
+  ['deepgram','gemini','vapi','sheets'].forEach(k=>{
+    const v=document.getElementById('key-'+k).value.trim();
+    if(v){localStorage.setItem('voxpath-key-'+k,v);document.getElementById('status-'+k).textContent='Connected';document.getElementById('status-'+k).className='int-badge ib-connected';}
+  });
+  showToast('API keys saved locally');
+}
+function clearKeys(){
+  ['deepgram','gemini','vapi','sheets'].forEach(k=>{localStorage.removeItem('voxpath-key-'+k);document.getElementById('key-'+k).value='';document.getElementById('status-'+k).textContent='Not set';document.getElementById('status-'+k).className='int-badge ib-pending';});
+  showToast('All keys cleared');
+}
+function loadKeys(){
+  ['deepgram','gemini','vapi','sheets'].forEach(k=>{
+    const v=localStorage.getItem('voxpath-key-'+k);
+    if(v){document.getElementById('key-'+k).value=v;document.getElementById('status-'+k).textContent='Connected';document.getElementById('status-'+k).className='int-badge ib-connected';}
+  });
+}
+function saveGoogleClientId(){
+  const v=document.getElementById('google-client-id').value.trim();
+  if(!v){showToast('Paste a Client ID first');return;}
+  localStorage.setItem('voxpath-google-client-id',v);
+  showToast('Saved — reloading to apply…');
+  setTimeout(()=>location.reload(),1200);
 }
 
-/* ── LOAD SAVED CONFIG ── */
-const saved=localStorage.getItem('voxpath-config');
-if(saved){
-  try{
-    const c=JSON.parse(saved);
-    if(c.name&&document.getElementById('ag-name'))document.getElementById('ag-name').value=c.name;
-    if(c.role&&document.getElementById('ag-role'))document.getElementById('ag-role').value=c.role;
-    if(c.prompt&&document.getElementById('ag-prompt'))document.getElementById('ag-prompt').value=c.prompt;
-  }catch(e){}
+/* ─── SETTINGS SAVE ─── */
+function saveSettings(){localStorage.setItem('voxpath-settings',JSON.stringify({name:document.getElementById('s-name').value,org:document.getElementById('s-org').value}));showToast('Settings saved');}
+
+/* ─── GOOGLE CLIENT ID INJECT ─── */
+const savedClientId=localStorage.getItem('voxpath-google-client-id');
+if(savedClientId){
+  const el=document.getElementById('g_id_onload');
+  if(el)el.setAttribute('data-client_id',savedClientId);
+  document.getElementById('google-client-id').value=savedClientId;
 }
+
+/* ─── AUTO LOGIN IF SESSION EXISTS ─── */
+const savedUser=localStorage.getItem('voxpath-user');
+if(savedUser){try{const u=JSON.parse(savedUser);if(u&&u.email)showApp(u);}catch(e){}}
+
+/* ─── ENTER KEY ON LOGIN ─── */
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')handleEmailLogin();});
 </script>
 </body>
 </html>
