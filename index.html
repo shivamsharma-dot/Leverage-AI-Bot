@@ -937,7 +937,6 @@ async function triggerOutboundCall(){
   const aw=document.getElementById('assistant-missing-warn');
   vw.style.display='none';aw.style.display='none';
 
-  if(!vapiKey){vw.style.display='flex';return;}
   if(!assistantId){aw.style.display='flex';return;}
 
   const btn=document.getElementById('call-btn');
@@ -964,12 +963,10 @@ async function triggerOutboundCall(){
 
   try{
     // Use Vapi REST API to create a web call — returns a Daily.co URL
-    const res=await fetch('https://api.vapi.ai/call/web',{
+    const proxyUrl='https://script.google.com/macros/s/AKfycbxpGySZggRpeEGGBwJeem92hj4A1Sx2Ia5GFdtfD5cjZjR6v6imDHZL8byr8Hbp4Xua/exec';
+    const res=await fetch(proxyUrl,{
       method:'POST',
-      headers:{
-        'Authorization':'Bearer '+vapiKey,
-        'Content-Type':'application/json'
-      },
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         assistantId:assistantId,
         assistantOverrides:{
