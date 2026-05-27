@@ -926,11 +926,19 @@ function loadKeys(){
 /* ─── OUTBOUND CALL ─── */
 let vapiInstance=null;let activeCall=null;
 
+function getVapiConstructor(){
+  if(typeof window.Vapi==='function')return window.Vapi;
+  if(window.Vapi&&typeof window.Vapi.default==='function')return window.Vapi.default;
+  if(window.VapiSDK&&typeof window.VapiSDK==='function')return window.VapiSDK;
+  return null;
+}
 function loadVapiSDK(cb){
-  if(window.Vapi){cb();return;}
+  const existing=getVapiConstructor();
+  if(existing){cb();return;}
   const s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.js';
-  s.onload=cb;s.onerror=()=>{
+  s.src='https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.2.0/dist/vapi.umd.cjs';
+  s.onload=()=>cb();
+  s.onerror=()=>{
     showToast('Failed to load Vapi SDK');
     document.getElementById('call-status-text').textContent='SDK load failed. Check internet connection.';
   };
@@ -975,7 +983,9 @@ async function triggerOutboundCall(){
   loadVapiSDK(async()=>{
     try{
       statusTxt.textContent='Connecting to Siya...';
-      vapiInstance=new window.Vapi(vapiKey);
+      const VapiConstructor=getVapiConstructor();
+      if(!VapiConstructor)throw new Error('Vapi SDK not loaded correctly');
+      vapiInstance=new VapiConstructor(vapiKey);
 
       vapiInstance.on('call-start',()=>{
         activeCall=true;
