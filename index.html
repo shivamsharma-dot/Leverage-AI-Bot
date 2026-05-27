@@ -414,7 +414,7 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 
         <!-- DIALER CARD -->
         <div class="ctrl-card" style="margin-bottom:16px">
-          <div class="ctrl-title"><i class="ti ti-phone-outgoing"></i>Outbound dialer</div>
+          <div class="ctrl-title"><i class="ti ti-phone-outgoing"></i>Web call dialer — speak directly via browser</div>
           <div id="vapi-missing-warn" style="display:none" class="warn" style="margin-bottom:10px"><i class="ti ti-alert-triangle"></i>Vapi Public Key not set. Go to <b>Integrations</b> and paste your key first.</div>
           <div id="assistant-missing-warn" style="display:none" class="warn"><i class="ti ti-alert-triangle"></i>Vapi Assistant ID not set. Go to <b>Integrations</b> and paste your Assistant ID.</div>
           <div class="form-row-2" style="margin-bottom:10px">
@@ -924,12 +924,24 @@ function loadKeys(){
 }
 
 /* ─── OUTBOUND CALL ─── */
+let vapiInstance=null;let activeCall=null;
+
+function loadVapiSDK(cb){
+  if(window.Vapi){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.js';
+  s.onload=cb;s.onerror=()=>{
+    showToast('Failed to load Vapi SDK');
+    document.getElementById('call-status-text').textContent='SDK load failed. Check internet connection.';
+  };
+  document.head.appendChild(s);
+}
+
 async function triggerOutboundCall(){
   const vapiKey=localStorage.getItem('voxpath-key-vapi');
   const assistantId=localStorage.getItem('voxpath-vapi-assistant-id');
-  const number=document.getElementById('dial-number').value.trim().replace(/\s/g,'');
   const name=document.getElementById('dial-name').value.trim();
-  const notes=document.getElementById('dial-notes').value.trim();
+  const number=document.getElementById('dial-number').value.trim();
 
   const vw=document.getElementById('vapi-missing-warn');
   const aw=document.getElementById('assistant-missing-warn');
@@ -937,66 +949,97 @@ async function triggerOutboundCall(){
 
   if(!vapiKey){vw.style.display='flex';return;}
   if(!assistantId){aw.style.display='flex';return;}
-  if(!number){showToast('Enter a mobile number first');return;}
 
   const btn=document.getElementById('call-btn');
   const bar=document.getElementById('call-status-bar');
   const statusTxt=document.getElementById('call-status-text');
   const statusIco=document.getElementById('call-status-icon');
 
+  if(activeCall){
+    activeCall=false;
+    if(vapiInstance)vapiInstance.stop();
+    btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
+    btn.style.background='';
+    bar.style.display='none';
+    addLog('t-warn','CALL_END','Call ended by user');
+    showToast('Call ended');
+    return;
+  }
+
   btn.disabled=true;btn.style.opacity='.6';
   bar.style.display='flex';
   statusIco.className='ti ti-loader';
-  statusTxt.textContent='Connecting to Vapi...';
+  statusTxt.textContent='Loading Vapi SDK...';
+  bar.style.background='';bar.style.borderColor='';bar.style.color='';
 
-  try{
-    const payload={
-      assistantId,
-      customer:{number,name:name||'Student'},
-      assistantOverrides:{
+  loadVapiSDK(async()=>{
+    try{
+      statusTxt.textContent='Connecting to Siya...';
+      vapiInstance=new window.Vapi(vapiKey);
+
+      vapiInstance.on('call-start',()=>{
+        activeCall=true;
+        btn.disabled=false;btn.style.opacity='1';
+        btn.innerHTML='<i class="ti ti-phone-off"></i>End call';
+        btn.style.background='var(--rose)';
+        statusIco.className='ti ti-circle-check';
+        statusTxt.textContent='Connected — Siya is speaking'+(name?' with '+name:'')+'...';
+        bar.style.background='var(--green-8)';bar.style.borderColor='var(--green-20)';bar.style.color='#064e3b';
+        addLog('t-ok','CALL_START','Web call started'+(name?' → '+name:'')+(number?' ('+number+')':''));
+        addLog('t-info','SIYA','Vapi Web SDK connected · assistant ready');
+        callsData.unshift({num:name||number||'Web call',time:'Just now',dur:'—',score:0,type:'in',transcript:[],tags:['Web Call','Live']});
+        buildCallList();
+        document.getElementById('m-calls').textContent=callsData.length;
+        showToast('Siya is live'+(name?' with '+name:''));
+      });
+
+      vapiInstance.on('call-end',()=>{
+        activeCall=false;
+        btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
+        btn.style.background='';btn.disabled=false;btn.style.opacity='1';
+        statusIco.className='ti ti-circle-check';
+        statusTxt.textContent='Call ended.';
+        setTimeout(()=>{bar.style.display='none';},4000);
+        addLog('t-ok','CALL_END','Web call completed');
+        showToast('Call ended');
+      });
+
+      vapiInstance.on('error',(e)=>{
+        const msg=e?.message||e?.error||JSON.stringify(e)||'Unknown error';
+        statusIco.className='ti ti-alert-circle';
+        statusTxt.textContent='Error: '+msg;
+        bar.style.background='var(--rose-8)';bar.style.color='#7f1d1d';
+        btn.disabled=false;btn.style.opacity='1';
+        btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
+        btn.style.background='';
+        activeCall=false;
+        addLog('t-err','ERROR',msg);
+        showToast('Call error: '+msg);
+        setTimeout(()=>{bar.style.display='none';},6000);
+      });
+
+      vapiInstance.on('speech-start',()=>addLog('t-info','STT','Caller speaking...'));
+      vapiInstance.on('speech-end',()=>addLog('t-info','LLM','Siya processing...'));
+
+      await vapiInstance.start(assistantId,{
         variableValues:{
           firstname:name||'there',
           currentDate:new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
           currentTime:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})
         }
-      }
-    };
-    if(notes)payload.metadata={notes};
+      });
 
-    const res=await fetch('https://api.vapi.ai/call/phone',{
-      method:'POST',
-      headers:{'Authorization':'Bearer '+vapiKey,'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
-    const data=await res.json();
-
-    if(res.ok&&data.id){
-      statusIco.className='ti ti-circle-check';
-      statusTxt.textContent='Call initiated! Siya is calling '+number+' now.';
-      bar.style.background='var(--green-8)';bar.style.borderColor='var(--green-20)';bar.style.color='#064e3b';
-      addLog('t-ok','CALL_START','Outbound → '+(name||number)+' · ID: '+data.id.slice(0,8)+'...');
-      addLog('t-info','SIYA','Connecting via Vapi · assistant: '+assistantId.slice(0,8)+'...');
-      callsData.unshift({num:number,time:'Just now',dur:'—',score:0,type:'in',transcript:[],tags:['Outbound','Live']});
-      buildCallList();
-      document.getElementById('m-calls').textContent=callsData.length;
-      showToast('Siya is calling '+number);
-    }else{
-      const errMsg=data.message||data.error||'Unknown error';
+    }catch(e){
       statusIco.className='ti ti-alert-circle';
-      statusTxt.textContent='Failed: '+errMsg;
-      bar.style.background='var(--rose-8)';bar.style.borderColor='rgba(220,38,38,.2)';bar.style.color='#7f1d1d';
-      addLog('t-err','ERROR','Vapi call failed: '+errMsg);
-      showToast('Call failed — check your keys');
+      statusTxt.textContent='Failed: '+e.message;
+      bar.style.background='var(--rose-8)';bar.style.color='#7f1d1d';
+      btn.disabled=false;btn.style.opacity='1';btn.style.background='';
+      btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
+      activeCall=false;
+      addLog('t-err','ERROR',e.message);
+      setTimeout(()=>{bar.style.display='none';},6000);
     }
-  }catch(e){
-    statusIco.className='ti ti-alert-circle';
-    statusTxt.textContent='Network error: '+e.message;
-    bar.style.background='var(--rose-8)';bar.style.color='#7f1d1d';
-    addLog('t-err','ERROR',e.message);
-  }finally{
-    btn.disabled=false;btn.style.opacity='1';
-    setTimeout(()=>{bar.style.display='none';bar.style.background='';bar.style.borderColor='';bar.style.color='';},6000);
-  }
+  });
 }
 
 async function triggerBulkCalls(){
