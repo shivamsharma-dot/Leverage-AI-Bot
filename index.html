@@ -926,21 +926,16 @@ function loadKeys(){
 /* ─── OUTBOUND CALL ─── */
 let vapiInstance=null;let activeCall=null;
 
-function getVapiConstructor(){
-  if(typeof window.Vapi==='function')return window.Vapi;
-  if(window.Vapi&&typeof window.Vapi.default==='function')return window.Vapi.default;
-  if(window.VapiSDK&&typeof window.VapiSDK==='function')return window.VapiSDK;
-  return null;
-}
 function loadVapiSDK(cb){
-  const existing=getVapiConstructor();
-  if(existing){cb();return;}
+  if(window.vapiSDK){cb();return;}
   const s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.2.0/dist/vapi.umd.cjs';
-  s.onload=()=>cb();
+  s.src='https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
+  s.defer=true;s.async=true;
+  s.onload=()=>{cb();};
   s.onerror=()=>{
-    showToast('Failed to load Vapi SDK');
-    document.getElementById('call-status-text').textContent='SDK load failed. Check internet connection.';
+    showToast('Vapi SDK failed to load');
+    const el=document.getElementById('call-status-text');
+    if(el)el.textContent='SDK load failed — check your internet connection.';
   };
   document.head.appendChild(s);
 }
@@ -983,9 +978,12 @@ async function triggerOutboundCall(){
   loadVapiSDK(async()=>{
     try{
       statusTxt.textContent='Connecting to Siya...';
-      const VapiConstructor=getVapiConstructor();
-      if(!VapiConstructor)throw new Error('Vapi SDK not loaded correctly');
-      vapiInstance=new VapiConstructor(vapiKey);
+      if(!window.vapiSDK)throw new Error('Vapi SDK not loaded correctly');
+      vapiInstance=window.vapiSDK.run({
+        apiKey:vapiKey,
+        assistant:assistantId,
+        config:{},
+      });
 
       vapiInstance.on('call-start',()=>{
         activeCall=true;
@@ -1031,13 +1029,7 @@ async function triggerOutboundCall(){
       vapiInstance.on('speech-start',()=>addLog('t-info','STT','Caller speaking...'));
       vapiInstance.on('speech-end',()=>addLog('t-info','LLM','Siya processing...'));
 
-      await vapiInstance.start(assistantId,{
-        variableValues:{
-          firstname:name||'there',
-          currentDate:new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
-          currentTime:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})
-        }
-      });
+      // vapiSDK.run() already initiated the call above
 
     }catch(e){
       statusIco.className='ti ti-alert-circle';
