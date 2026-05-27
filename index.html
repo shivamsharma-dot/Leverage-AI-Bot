@@ -699,11 +699,10 @@ function startVapiCall() {
   if(!keys.vapi || !keys.asst) return;
 
   if(activeVapi) {
-    activeVapi.stop();
+    try { activeVapi.stop(); } catch(e) {}
     activeVapi = null;
-    var btn = document.getElementById('call-btn');
-    btn.innerHTML = '<i class="ti ti-phone-outgoing"></i>Call now with Siya';
-    btn.className = 'btn btn-sky';
+    document.getElementById('call-btn').innerHTML = '<i class="ti ti-phone-outgoing"></i>Call now with Siya';
+    document.getElementById('call-btn').className = 'btn btn-sky';
     document.getElementById('call-status').style.display = 'none';
     addLog('t-warn', 'CALL_END', 'Ended by user');
     showToast('Call ended');
@@ -711,79 +710,65 @@ function startVapiCall() {
   }
 
   var name = document.getElementById('dial-name').value.trim();
-  setCallStatus('info', 'ti-loader', 'Creating call...');
-  fetch('https://api.vapi.ai/call/web', {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + keys.vapi, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ assistantId: keys.asst })
-  }).then(function(r){ return r.json(); }).then(function(data) {
-    var url = data.webCallUrl || data.url;
-    if(url) { window.open(url, '_blank', 'width=520,height=720'); showToast('Siya is ready!'); }
-    else { setCallStatus('err', 'ti-alert-circle', data.message || 'No URL returned'); }
-  }).catch(function(e){ setCallStatus('err', 'ti-alert-circle', e.message); });
-}
+  setCallStatus('info', 'ti-loader', 'Connecting to Siya...');
 
-function doStartCall(keys, name) {
-  try {
-    setCallStatus('info', 'ti-loader', 'Connecting to Siya...');
-    var vapi = new window.__VapiClass(keys.vapi);
-    activeVapi = vapi;
+  function initCall() {
+    try {
+      window.vapiSDK.run({
+        apiKey: keys.vapi,
+        assistant: keys.asst,
+        config: { position: 'bottom-right', offset: '0px', width: '1px', height: '1px' }
+      });
+      activeVapi = window.vapiSDK;
 
-    vapi.on('call-start', function() {
-      var btn = document.getElementById('call-btn');
-      btn.innerHTML = '<i class="ti ti-phone-off"></i>End call';
-      btn.className = 'btn btn-red';
-      setCallStatus('ok', 'ti-circle-check', 'Connected — Siya is speaking' + (name ? ' with ' + name : '') + '...');
-      addLog('t-ok', 'CALL_START', 'Web call → ' + (name || 'student'));
-      showToast('Siya is live!');
-    });
+      window.vapiSDK.on('call-start', function() {
+        document.getElementById('call-btn').innerHTML = '<i class="ti ti-phone-off"></i>End call';
+        document.getElementById('call-btn').className = 'btn btn-red';
+        setCallStatus('ok', 'ti-circle-check', 'Connected — Siya is speaking' + (name ? ' with ' + name : '') + '...');
+        addLog('t-ok', 'CALL_START', 'Call → ' + (name || 'student'));
+        showToast('Siya is live!');
+      });
 
-    vapi.on('call-end', function() {
-      activeVapi = null;
-      var btn = document.getElementById('call-btn');
-      btn.innerHTML = '<i class="ti ti-phone-outgoing"></i>Call now with Siya';
-      btn.className = 'btn btn-sky';
-      document.getElementById('call-status').style.display = 'none';
-      addLog('t-ok', 'CALL_END', 'Call completed');
-      showToast('Call ended');
-      setTimeout(loadCalls, 3000);
-    });
+      window.vapiSDK.on('call-end', function() {
+        activeVapi = null;
+        document.getElementById('call-btn').innerHTML = '<i class="ti ti-phone-outgoing"></i>Call now with Siya';
+        document.getElementById('call-btn').className = 'btn btn-sky';
+        document.getElementById('call-status').style.display = 'none';
+        addLog('t-ok', 'CALL_END', 'Completed');
+        showToast('Call ended');
+        setTimeout(loadCalls, 5000);
+      });
 
-    vapi.on('error', function(e) {
-      activeVapi = null;
-      var msg = (e && e.message) ? e.message : JSON.stringify(e);
-      setCallStatus('err', 'ti-alert-circle', 'Error: ' + msg);
-      var btn = document.getElementById('call-btn');
-      btn.innerHTML = '<i class="ti ti-phone-outgoing"></i>Call now with Siya';
-      btn.className = 'btn btn-sky';
-      addLog('t-err', 'ERROR', msg);
-    });
+      window.vapiSDK.on('error', function(e) {
+        activeVapi = null;
+        var msg = (e && e.message) ? e.message : JSON.stringify(e);
+        setCallStatus('err', 'ti-alert-circle', 'Error: ' + msg);
+        document.getElementById('call-btn').innerHTML = '<i class="ti ti-phone-outgoing"></i>Call now with Siya';
+        document.getElementById('call-btn').className = 'btn btn-sky';
+        addLog('t-err', 'ERROR', msg);
+      });
 
-    vapi.on('speech-start', function() { addLog('t-info', 'STT', 'Caller speaking...'); });
-    vapi.on('speech-end', function() { addLog('t-info', 'LLM', 'Siya thinking...'); });
+      window.vapiSDK.on('speech-start', function() { addLog('t-info', 'STT', 'Caller speaking...'); });
+      window.vapiSDK.on('speech-end', function() { addLog('t-info', 'LLM', 'Siya thinking...'); });
 
-    vapi.start(keys.asst, {
-      variableValues: {
-        firstname: name || 'there',
-        currentDate: new Date().toLocaleDateString('en-IN', {weekday:'long',year:'numeric',month:'long',day:'numeric'}),
-        currentTime: new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',hour12:true})
-      }
-    });
-  } catch(e) {
-    setCallStatus('err', 'ti-alert-circle', 'Failed: ' + e.message);
-    activeVapi = null;
-    addLog('t-err', 'ERROR', e.message);
+    } catch(e) {
+      setCallStatus('err', 'ti-alert-circle', 'Failed: ' + e.message);
+      addLog('t-err', 'ERROR', e.message);
+    }
   }
-}
 
-function setCallStatus(type, icon, msg) {
-  var bar = document.getElementById('call-status');
-  var ico = document.getElementById('call-status-icon');
-  var txt = document.getElementById('call-status-text');
-  bar.style.display = 'flex';
-  bar.className = 'status-bar' + (type==='err'?' err-bar':type==='ok'?' ':'');
-  if(ico) ico.className = 'ti ' + icon;
-  if(txt) txt.textContent = msg;
+  if(window.vapiSDK) {
+    initCall();
+  } else {
+    (function(d, t) {
+      var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      g.src = 'https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js';
+      g.defer = true; g.async = true;
+      s.parentNode.insertBefore(g, s);
+      g.onload = function() { initCall(); };
+      g.onerror = function() { setCallStatus('err', 'ti-alert-circle', 'SDK failed. Check internet.'); };
+    })(document, 'script');
+  }
 }
 
 /* ── LOG ── */
