@@ -711,19 +711,16 @@ function startVapiCall() {
   }
 
   var name = document.getElementById('dial-name').value.trim();
-  setCallStatus('info', 'ti-loader', 'Loading Vapi SDK...');
-
-  if(window.__VapiClass) { doStartCall(keys, name); return; }
-
-  var s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.0.0/dist/vapi.umd.cjs';
-  s.onload = function() {
-    var V = window.Vapi || (window.vapiWeb && window.vapiWeb.Vapi);
-    if(V) { window.__VapiClass = V; doStartCall(keys, name); }
-    else { setCallStatus('err', 'ti-alert-circle', 'SDK loaded but Vapi class not found. Try refreshing.'); }
-  };
-  s.onerror = function() { setCallStatus('err', 'ti-alert-circle', 'Failed to load SDK. Check internet connection.'); };
-  document.head.appendChild(s);
+  setCallStatus('info', 'ti-loader', 'Creating call...');
+  fetch('https://api.vapi.ai/call/web', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + keys.vapi, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ assistantId: keys.asst })
+  }).then(function(r){ return r.json(); }).then(function(data) {
+    var url = data.webCallUrl || data.url;
+    if(url) { window.open(url, '_blank', 'width=520,height=720'); showToast('Siya is ready!'); }
+    else { setCallStatus('err', 'ti-alert-circle', data.message || 'No URL returned'); }
+  }).catch(function(e){ setCallStatus('err', 'ti-alert-circle', e.message); });
 }
 
 function doStartCall(keys, name) {
