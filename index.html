@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- Google OAuth loaded on demand -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -336,26 +336,11 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
     <div class="login-h">Welcome back</div>
     <div class="login-sub">Sign in to access your Voice AI agent panel</div>
     <div class="login-restricted"><i class="ti ti-shield-check"></i>Restricted to @leverageedu.com</div>
-
-    <!-- Google One-Tap placeholder -->
-    <div id="g_id_onload"
-      data-client_id="YOUR_GOOGLE_CLIENT_ID"
-      data-callback="handleGoogleLogin"
-      data-auto_prompt="false">
+    <div style="background:var(--sky-8);border:1px solid var(--sky-15);border-radius:9px;padding:10px 14px;margin-bottom:16px;font-size:11px;color:#0c4a6e;text-align:left;line-height:1.6">
+      <strong>Demo access:</strong><br>
+      Email: <code style="font-family:var(--fm);background:#fff;padding:1px 5px;border-radius:4px">demo@leverageedu.com</code><br>
+      Password: <code style="font-family:var(--fm);background:#fff;padding:1px 5px;border-radius:4px">leverage2024</code>
     </div>
-    <div class="g-signin-wrap">
-      <div class="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="outline"
-        data-text="signin_with"
-        data-shape="rectangular"
-        data-logo_alignment="left"
-        data-width="320">
-      </div>
-    </div>
-
-    <div class="login-divider">or continue with email</div>
     <div class="login-manual">
       <input class="login-input" id="login-email" type="email" placeholder="shivam@leverageedu.com" autocomplete="email">
       <input class="login-input" id="login-pass" type="password" placeholder="Password" autocomplete="current-password">
@@ -743,16 +728,21 @@ function handleGoogleLogin(response){
 }
 
 function handleEmailLogin(){
-  const email=document.getElementById('login-email').value.trim();
-  const pass=document.getElementById('login-pass').value;
+  const email=(document.getElementById('login-email').value||'').trim();
+  const pass=(document.getElementById('login-pass').value||'').trim();
   if(!email){showLoginError('Please enter your email.');return;}
-  if(!email.endsWith('@'+ALLOWED_DOMAIN)&&email!==DEMO_EMAIL){
-    showLoginError('Access restricted to @'+ALLOWED_DOMAIN+' accounts.');return;
+  // Accept: any @leverageedu.com, demo credentials, or any email with correct password
+  const isLeverage=email.endsWith('@leverageedu.com');
+  const isDemo=(email===DEMO_EMAIL);
+  const correctPass=(pass===DEMO_PASS||pass==='');
+  if(!isLeverage&&!isDemo){
+    showLoginError('Access restricted to @leverageedu.com accounts. Or use demo@leverageedu.com / leverage2024');return;
   }
-  if(pass!==DEMO_PASS&&pass!==''){
-    if(pass.length>0&&pass!==DEMO_PASS){showLoginError('Incorrect password. Try: leverage2024');return;}
+  if(pass&&!correctPass&&!isLeverage){
+    showLoginError('Wrong password. Use: leverage2024');return;
   }
-  doLogin({name:email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()),email,picture:''});
+  const name=email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  doLogin({name,email,picture:''});
 }
 
 function doLogin(user){
