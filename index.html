@@ -314,15 +314,7 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 .empty-state{text-align:center;padding:32px 20px;color:var(--ink3);font-size:12px}
 .empty-state i{font-size:28px;display:block;margin-bottom:8px;color:var(--line2)}
 </style>
-<script type="module">
-  try {
-    const mod = await import('https://esm.sh/@vapi-ai/web');
-    window.__VapiClass = mod.default || mod.Vapi || mod;
-    window.dispatchEvent(new Event('vapi-ready'));
-  } catch(e) {
-    console.warn('Vapi SDK load error:', e);
-  }
-</script>
+
 </head>
 <body>
 
@@ -1000,7 +992,7 @@ async function triggerOutboundCall(){
   function startCall(){
     try{
       const VapiClass = window.__VapiClass;
-      if(!VapiClass) throw new Error('Vapi not loaded yet — please wait 3 seconds and try again.');
+      if(!VapiClass) throw new Error('Click again — Vapi is still loading (takes 3-5 seconds on first click).');
 
       const vapi = new VapiClass(vapiKey);
       window.__vapiActive = vapi;
@@ -1067,14 +1059,40 @@ async function triggerOutboundCall(){
   if(window.__VapiClass){
     startCall();
   } else {
-    window.addEventListener('vapi-ready', startCall, {once:true});
-    setTimeout(()=>{
-      if(!window.__VapiClass){
-        statusTxt.textContent='Vapi SDK still loading — try again in 5 seconds';
+    // Load SDK via script tag - most reliable cross-origin method
+    if(!window.__vapiLoading){
+      window.__vapiLoading = true;
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.0.0/dist/vapi.umd.cjs';
+      s.onload = function(){
+        // UMD exposes as module.exports style
+        if(window.Vapi) window.__VapiClass = window.Vapi;
+        else if(window['@vapi-ai/web']) window.__VapiClass = window['@vapi-ai/web'].default || window['@vapi-ai/web'];
+        // Try require-style
+        if(!window.__VapiClass && typeof require !== 'undefined'){
+          try{ window.__VapiClass = require('@vapi-ai/web').default; }catch(e){}
+        }
+        window.__vapiLoading = false;
+        window.dispatchEvent(new Event('vapi-ready'));
+      };
+      s.onerror = function(){
+        window.__vapiLoading = false;
+        statusTxt.textContent = 'SDK failed to load. Check internet and try again.';
         btn.disabled=false; btn.style.opacity='1';
         bar.style.display='none';
+      };
+      document.head.appendChild(s);
+    }
+    window.addEventListener('vapi-ready', startCall, {once:true});
+    statusTxt.textContent = 'Loading Vapi SDK... click again in 5 seconds if nothing happens.';
+    btn.disabled=false; btn.style.opacity='1';
+    setTimeout(()=>{
+      if(!window.__VapiClass){
+        window.__vapiLoading = false;
+        statusTxt.textContent = 'SDK load timeout. Try clicking again.';
+        bar.style.display='none';
       }
-    }, 8000);
+    }, 10000);
   }
 }
 
@@ -1243,8 +1261,7 @@ function openCallModal(c){
   // Transcript
   const txEl = document.getElementById('modal-transcript');
   if(c.transcript){
-    const lines = c.transcript.split('
-').filter(l=>l.trim());
+    const lines = c.transcript.split('\n').filter(l=>l.trim());
     txEl.innerHTML = '<div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Transcript</div>' +
       lines.map(line => {
         const isSiya = line.startsWith('Siya:') || line.startsWith('assistant:');
