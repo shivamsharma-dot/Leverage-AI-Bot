@@ -587,9 +587,10 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
         <div class="int-card">
           <div class="int-ico ico-sky"><i class="ti ti-phone"></i></div>
           <div class="int-info"><div class="int-name">Vapi.ai</div><div class="int-desc">Outbound voice calls · Public Key + Assistant ID both required</div>
-          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-vapi" placeholder="Paste Vapi Public Key…" type="password">
-          <input class="form-input" style="margin-top:6px;font-family:var(--fm);font-size:11px" id="key-vapi-assistant" placeholder="Paste Vapi Assistant ID (from Assistants page)…" type="text">
-          <div style="font-size:10px;color:var(--ink3);margin-top:5px">Find Assistant ID: Vapi Dashboard → Assistants → click your assistant → copy the ID from the URL or details panel</div>
+          <input class="form-input" style="margin-top:7px;font-family:var(--fm);font-size:11px" id="key-vapi" placeholder="Vapi Public Key (optional)…" type="password">
+          <input class="form-input" style="margin-top:6px;font-family:var(--fm);font-size:11px" id="key-vapi-priv" placeholder="Vapi Private Key (for web calls — stays in browser only)…" type="password">
+          <input class="form-input" style="margin-top:6px;font-family:var(--fm);font-size:11px" id="key-vapi-assistant" placeholder="Vapi Assistant ID…" type="text">
+          <div style="font-size:10px;color:var(--ink3);margin-top:5px">Assistant ID: Vapi Dashboard → Assistants → click Siya → copy ID from URL</div>
           </div>
           <div class="int-status"><span class="int-badge ib-pending" id="status-vapi">Not set</span><a class="int-link" href="https://dashboard.vapi.ai" target="_blank">Open Vapi <i class="ti ti-external-link" style="font-size:10px"></i></a></div>
         </div>
@@ -902,7 +903,7 @@ if(savedAgent){try{const c=JSON.parse(savedAgent);if(c.name)document.getElementB
 
 /* ─── API KEYS ─── */
 function saveKeys(){
-  ['deepgram','gemini','vapi','sheets'].forEach(k=>{
+  ['deepgram','gemini','vapi','vapi-priv','sheets'].forEach(k=>{
     const v=document.getElementById('key-'+k).value.trim();
     if(v){localStorage.setItem('voxpath-key-'+k,v);document.getElementById('status-'+k).textContent='Connected';document.getElementById('status-'+k).className='int-badge ib-connected';}
   });
@@ -911,13 +912,13 @@ function saveKeys(){
   showToast('API keys saved locally');
 }
 function clearKeys(){
-  ['deepgram','gemini','vapi','sheets'].forEach(k=>{localStorage.removeItem('voxpath-key-'+k);document.getElementById('key-'+k).value='';document.getElementById('status-'+k).textContent='Not set';document.getElementById('status-'+k).className='int-badge ib-pending';});
+  ['deepgram','gemini','vapi','vapi-priv','sheets'].forEach(k=>{localStorage.removeItem('voxpath-key-'+k);document.getElementById('key-'+k).value='';document.getElementById('status-'+k).textContent='Not set';document.getElementById('status-'+k).className='int-badge ib-pending';});
   localStorage.removeItem('voxpath-vapi-assistant-id');
   document.getElementById('key-vapi-assistant').value='';
   showToast('All keys cleared');
 }
 function loadKeys(){
-  ['deepgram','gemini','vapi','sheets'].forEach(k=>{
+  ['deepgram','gemini','vapi','vapi-priv','sheets'].forEach(k=>{
     const v=localStorage.getItem('voxpath-key-'+k);
     if(v){document.getElementById('key-'+k).value=v;document.getElementById('status-'+k).textContent='Connected';document.getElementById('status-'+k).className='int-badge ib-connected';}
   });
@@ -963,10 +964,14 @@ async function triggerOutboundCall(){
 
   try{
     // Use Vapi REST API to create a web call — returns a Daily.co URL
-    const proxyUrl='https://script.google.com/macros/s/AKfycbxpGySZggRpeEGGBwJeem92hj4A1Sx2Ia5GFdtfD5cjZjR6v6imDHZL8byr8Hbp4Xua/exec';
-    const res=await fetch(proxyUrl,{
+    // Use Vapi private key stored separately
+    const vapiPrivKey=localStorage.getItem('voxpath-key-vapi-priv')||vapiKey;
+    const res=await fetch('https://api.vapi.ai/call/web',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{
+        'Authorization':'Bearer '+vapiPrivKey,
+        'Content-Type':'application/json'
+      },
       body:JSON.stringify({
         assistantId:assistantId,
         assistantOverrides:{
