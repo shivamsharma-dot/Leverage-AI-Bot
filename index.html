@@ -283,11 +283,6 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
 .live-ticker{font-size:10px;font-family:var(--fm);color:var(--ink3);display:flex;align-items:center;gap:5px}
 .live-ticker::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
 </style>
-<script type="module">
-  import Vapi from 'https://esm.sh/@vapi-ai/web';
-  window.__VapiClass = Vapi;
-  window.dispatchEvent(new Event('vapi-ready'));
-</script>
 </head>
 <body>
 
@@ -416,48 +411,64 @@ html,body{height:100%;font-family:var(--f);background:var(--page);color:var(--in
       <!-- CALL LOGS -->
       <div id="sec-calls" class="sec">
         <div class="eyebrow">Outbound calls</div>
-        <div class="hero-h">Call a student <b>right now.</b></div>
-        <div class="hero-sub">Enter a mobile number — Siya calls them instantly using your Vapi account.</div>
+        <div class="hero-h">Talk to <b>Siya right now.</b></div>
+        <div class="hero-sub">Uses your Gemini API key + Chrome's built-in voice. 100% free — no Vapi, no credits needed.</div>
 
-        <!-- DIALER CARD -->
         <div class="ctrl-card" style="margin-bottom:16px">
-          <div class="ctrl-title"><i class="ti ti-phone-outgoing"></i>Web call dialer — speak directly via browser</div>
-          <div id="vapi-missing-warn" style="display:none" class="warn" style="margin-bottom:10px"><i class="ti ti-alert-triangle"></i>Vapi Public Key not set. Go to <b>Integrations</b> and paste your key first.</div>
-          <div id="assistant-missing-warn" style="display:none" class="warn"><i class="ti ti-alert-triangle"></i>Vapi Assistant ID not set. Go to <b>Integrations</b> and paste your Assistant ID.</div>
-          <div class="form-row-2" style="margin-bottom:10px">
-            <div class="form-row">
-              <label class="form-lbl">Student name</label>
-              <input class="form-input" id="dial-name" placeholder="e.g. Rahul Sharma">
-            </div>
-            <div class="form-row">
-              <label class="form-lbl">Mobile number (with country code)</label>
-              <input class="form-input" id="dial-number" placeholder="+91 98765 43210" type="tel">
-            </div>
-          </div>
+          <div class="ctrl-title"><i class="ti ti-phone-outgoing"></i>Browser voice call — speak directly to Siya</div>
+          <div id="gemini-warn" style="display:none" class="warn"><i class="ti ti-alert-triangle"></i>Gemini API key not set. Go to <b>Integrations</b> and paste your Gemini key first.</div>
           <div class="form-row" style="margin-bottom:12px">
-            <label class="form-lbl">Notes (optional)</label>
-            <input class="form-input" id="dial-notes" placeholder="e.g. Interested in UK MBA, came via Facebook ad">
+            <label class="form-lbl">Student name (optional)</label>
+            <input class="form-input" id="dial-name" placeholder="e.g. Rahul Sharma">
           </div>
-          <div id="call-status-bar" style="display:none;margin-bottom:12px" class="tip"><i class="ti ti-loader" id="call-status-icon"></i><span id="call-status-text">Initiating call...</span></div>
+
+          <!-- CALL STATUS DISPLAY -->
+          <div id="call-ui" style="display:none;margin-bottom:16px">
+            <div style="background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:16px 18px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                <div id="call-avatar" style="width:40px;height:40px;border-radius:50%;background:var(--sky-8);border:1.5px solid var(--sky-15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🤖</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--ink)">Siya — Study Abroad Advisor</div>
+                  <div id="call-state-label" style="font-size:11px;color:var(--ink3)">Connecting...</div>
+                </div>
+                <div id="call-timer" style="margin-left:auto;font-family:var(--fm);font-size:13px;font-weight:600;color:var(--sky)">0:00</div>
+              </div>
+              <!-- Waveform -->
+              <div id="call-wave" style="display:flex;align-items:center;gap:2px;height:32px;margin-bottom:12px"></div>
+              <!-- Transcript -->
+              <div id="call-transcript" style="background:#0d1326;border-radius:8px;padding:12px;font-size:11px;line-height:1.8;max-height:160px;overflow-y:auto;font-family:var(--fm)">
+                <div style="color:rgba(255,255,255,0.3)">Conversation will appear here...</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="call-status-bar" style="display:none;margin-bottom:12px" class="tip">
+            <i class="ti ti-loader" id="call-status-icon"></i>
+            <span id="call-status-text">Connecting...</span>
+          </div>
+
           <div class="actions" style="margin-top:0">
-            <button class="btn btn-sky" id="call-btn" onclick="triggerOutboundCall()"><i class="ti ti-phone-outgoing"></i>Call now with Siya</button>
-            <button class="btn btn-ghost" onclick="triggerSimulatedCall()"><i class="ti ti-player-play"></i>Simulate (demo)</button>
+            <button class="btn btn-sky" id="call-btn" onclick="startBrowserCall()">
+              <i class="ti ti-phone-outgoing"></i>Call Siya now — free
+            </button>
+            <button class="btn btn-ghost" onclick="triggerSimulatedCall()">
+              <i class="ti ti-player-play"></i>Simulate (demo)
+            </button>
+          </div>
+          <div style="font-size:10px;color:var(--ink3);margin-top:8px;display:flex;align-items:center;gap:5px">
+            <i class="ti ti-info-circle" style="font-size:12px"></i>
+            Uses Chrome Speech Recognition + Gemini Flash + Chrome TTS. Works only in Chrome/Edge. Allow microphone when prompted.
           </div>
         </div>
 
         <!-- BULK DIALER -->
         <div class="ctrl-card" style="margin-bottom:16px">
           <div class="ctrl-title"><i class="ti ti-list"></i>Bulk call list</div>
-          <div class="hero-sub" style="margin-bottom:12px;font-size:11px">Paste multiple numbers below — one per line with name. Format: <code style="background:var(--surface2);padding:1px 5px;border-radius:4px;font-family:var(--fm);font-size:10px">+91XXXXXXXXXX, Name</code></div>
-          <textarea class="form-input form-textarea" id="bulk-numbers" placeholder="+91 98765 43210, Rahul Sharma&#10;+91 77654 32100, Priya Singh&#10;+91 88012 45671, Arjun Mehta" style="min-height:90px;font-family:var(--fm);font-size:11px"></textarea>
-          <div class="actions" style="margin-top:10px">
-            <button class="btn btn-navy" onclick="triggerBulkCalls()"><i class="ti ti-phone-call"></i>Start bulk calling</button>
-            <button class="btn btn-ghost" onclick="document.getElementById('bulk-numbers').value=''"><i class="ti ti-trash"></i>Clear</button>
-          </div>
-          <div id="bulk-status" style="display:none;margin-top:10px;font-size:11px;color:var(--ink2);font-family:var(--fm)"></div>
+          <div class="hero-sub" style="margin-bottom:12px;font-size:11px">Paste multiple names below — one per line. Format: <code style="background:var(--surface2);padding:1px 5px;border-radius:4px;font-family:var(--fm);font-size:10px">Name, Notes</code></div>
+          <textarea class="form-input form-textarea" id="bulk-numbers" placeholder="Rahul Sharma, UK MBA inquiry&#10;Priya Singh, Canada MS&#10;Arjun Mehta, Australia undergrad" style="min-height:80px;font-family:var(--fm);font-size:11px"></textarea>
+          <div style="font-size:10px;color:var(--ink3);margin-top:6px">Note: Browser calls are one at a time. Each call opens in sequence after you end the previous one.</div>
         </div>
 
-        <!-- CALL LOG -->
         <div class="slabel">Call history</div>
         <div class="call-wrap" id="call-list"></div>
         <div class="slabel" style="margin-top:16px">Live system log</div>
@@ -932,123 +943,286 @@ function loadKeys(){
 }
 
 /* ─── OUTBOUND CALL ─── */
-let activeCallUrl=null;
+/* ─── BROWSER VOICE ENGINE — Gemini + Web Speech API ─── */
+let callActive = false;
+let callTimer = null;
+let callSeconds = 0;
+let recognition = null;
+let conversationHistory = [];
+let isSpeaking = false;
+let callName = '';
 
-async function triggerOutboundCall(){
-  const assistantId=localStorage.getItem('voxpath-vapi-assistant-id');
-  const vapiKey=localStorage.getItem('voxpath-key-vapi'); // public key
-  const name=document.getElementById('dial-name').value.trim();
+const SIYA_PROMPT = `You are Siya, an outbound lead qualification agent for Leverage Edu, India's number one study abroad platform. Your goal is to re-engage students who have inquired about studying abroad, collect key profile details, and either qualify them for a callback with a country expert or disqualify them.
 
-  const aw=document.getElementById('assistant-missing-warn');
-  const vw=document.getElementById('vapi-missing-warn');
-  aw.style.display='none'; vw.style.display='none';
-  if(!vapiKey){vw.style.display='flex';return;}
-  if(!assistantId){aw.style.display='flex';return;}
+Keep every response SHORT — maximum 2 sentences. This is a phone call. Be warm, conversational, human. Speak in Hinglish (mix of Hindi and English) naturally.
 
-  const btn=document.getElementById('call-btn');
-  const bar=document.getElementById('call-status-bar');
-  const statusTxt=document.getElementById('call-status-text');
-  const statusIco=document.getElementById('call-status-icon');
+Start by greeting the student by name if provided, introduce yourself as Siya from Leverage Edu, and ask if they're planning to study abroad.
 
-  // End active call
-  if(window.__vapiActive){
-    window.__vapiActive.stop();
-    window.__vapiActive=null;
-    btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
-    btn.style.background='';
-    bar.style.display='none';
-    addLog('t-warn','CALL_END','Call ended by user');
-    showToast('Call ended');
-    return;
-  }
+Key questions to cover (one at a time):
+1. Are they studying or working currently?
+2. Highest qualification?
+3. Which country — UK, USA, Canada, Australia, Germany, Ireland, Dubai?
+4. Which intake — March, May, or September 2026?
+5. Which program — Bachelor's, Master's, MBA?
+6. Which field/subject?
+7. Budget (minimum 10 lakhs)?
+8. English test — IELTS, TOEFL, PTE?
+9. Valid passport?
+10. Which city?
 
-  btn.disabled=true; btn.style.opacity='.6';
-  bar.style.display='flex';
-  bar.style.background=''; bar.style.borderColor=''; bar.style.color='';
-  statusIco.className='ti ti-loader';
-  statusTxt.textContent='Connecting to Siya...';
+End by booking a counsellor callback. Be concise. Never list questions. Ask one at a time.`;
 
-  function startCall(){
-    try{
-      const VapiClass = window.__VapiClass;
-      if(!VapiClass) throw new Error('Vapi not loaded yet — please wait 3 seconds and try again.');
+function addToTranscript(role, text) {
+  const el = document.getElementById('call-transcript');
+  if(!el) return;
+  // Remove placeholder
+  const placeholder = el.querySelector('div[style*="rgba"]');
+  if(placeholder) placeholder.remove();
+  
+  const div = document.createElement('div');
+  div.style.marginBottom = '6px';
+  div.innerHTML = role === 'siya'
+    ? `<span style="color:#38bdf8;font-weight:600">Siya: </span><span style="color:#e2e8f0">${text}</span>`
+    : `<span style="color:#34d399;font-weight:600">You: </span><span style="color:#e2e8f0">${text}</span>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
 
-      const vapi = new VapiClass(vapiKey);
-      window.__vapiActive = vapi;
+function setCallState(state) {
+  const label = document.getElementById('call-state-label');
+  if(!label) return;
+  const states = {
+    connecting: '⏳ Connecting...',
+    listening: '🎤 Listening — speak now',
+    thinking: '🧠 Siya is thinking...',
+    speaking: '🔊 Siya is speaking...',
+    ended: '📵 Call ended'
+  };
+  label.textContent = states[state] || state;
+}
 
-      vapi.on('call-start', ()=>{
-        btn.disabled=false; btn.style.opacity='1';
-        btn.innerHTML='<i class="ti ti-phone-off"></i>End call';
-        btn.style.background='var(--rose)';
-        statusIco.className='ti ti-circle-check';
-        statusTxt.textContent='Connected — Siya is speaking'+(name?' with '+name:'')+'...';
-        bar.style.background='var(--green-8)'; bar.style.borderColor='var(--green-20)'; bar.style.color='#064e3b';
-        addLog('t-ok','CALL_START','Web call → '+(name||'student'));
-        callsData.unshift({num:name||'Web call',time:'Just now',dur:'—',score:0,type:'in',transcript:[],tags:['Web Call','Live']});
-        buildCallList();
-        document.getElementById('m-calls').textContent=callsData.length;
-        showToast('Siya is live!');
-      });
+function updateTimer() {
+  callSeconds++;
+  const m = Math.floor(callSeconds/60);
+  const s = String(callSeconds%60).padStart(2,'0');
+  const el = document.getElementById('call-timer');
+  if(el) el.textContent = m+':'+s;
+}
 
-      vapi.on('call-end', ()=>{
-        window.__vapiActive=null;
-        btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
-        btn.style.background=''; btn.disabled=false; btn.style.opacity='1';
-        bar.style.display='none';
-        addLog('t-ok','CALL_END','Call completed');
-        showToast('Call ended');
-      });
-
-      vapi.on('error', (e)=>{
-        const msg=e?.message||JSON.stringify(e)||'Unknown error';
-        window.__vapiActive=null;
-        statusIco.className='ti ti-alert-circle';
-        statusTxt.textContent='Error: '+msg;
-        bar.style.background='var(--rose-8)'; bar.style.color='#7f1d1d';
-        btn.disabled=false; btn.style.opacity='1';
-        btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
-        btn.style.background='';
-        addLog('t-err','ERROR',msg);
-        showToast('Error: '+msg);
-        setTimeout(()=>{bar.style.display='none'; bar.style.background=''; bar.style.color='';},8000);
-      });
-
-      vapi.on('speech-start',()=>addLog('t-info','STT','Caller speaking...'));
-      vapi.on('speech-end',()=>addLog('t-info','LLM','Siya thinking...'));
-
-      vapi.start(assistantId,{
-        variableValues:{
-          firstname:name||'there',
-          currentDate:new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'}),
-          currentTime:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true})
-        }
-      });
-
-    } catch(e){
-      statusIco.className='ti ti-alert-circle';
-      statusTxt.textContent='Failed: '+e.message;
-      bar.style.background='var(--rose-8)'; bar.style.color='#7f1d1d';
-      btn.disabled=false; btn.style.opacity='1'; btn.style.background='';
-      btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call now with Siya';
-      addLog('t-err','ERROR',e.message);
-      setTimeout(()=>{bar.style.display='none'; bar.style.background=''; bar.style.color='';},8000);
-    }
-  }
-
-  if(window.__VapiClass){
-    startCall();
-  } else {
-    window.addEventListener('vapi-ready', startCall, {once:true});
-    setTimeout(()=>{
-      if(!window.__VapiClass){
-        statusTxt.textContent='Vapi SDK still loading — try again in 5 seconds';
-        btn.disabled=false; btn.style.opacity='1';
-        bar.style.display='none';
-      }
-    }, 8000);
+function makeWaveform(id) {
+  const el = document.getElementById(id);
+  if(!el || el.children.length > 0) return;
+  for(let i=0;i<40;i++){
+    const b = document.createElement('div');
+    b.style.cssText = `width:2.5px;border-radius:2px;background:var(--sky);animation:wba ${(0.6+Math.random()*0.8).toFixed(2)}s ease-in-out ${(Math.random()*1.1).toFixed(2)}s infinite`;
+    el.appendChild(b);
   }
 }
 
+async function getSiyaResponse(userMessage) {
+  const geminiKey = localStorage.getItem('voxpath-key-gemini');
+  if(!geminiKey) throw new Error('Gemini API key not set');
+
+  conversationHistory.push({role:'user', parts:[{text: userMessage}]});
+
+  const payload = {
+    system_instruction: {parts:[{text: SIYA_PROMPT + (callName ? `
+
+Student name: ${callName}` : '')}]},
+    contents: conversationHistory,
+    generationConfig: {maxOutputTokens: 100, temperature: 0.8}
+  };
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
+    {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)}
+  );
+
+  const data = await res.json();
+  if(data.error) throw new Error(data.error.message);
+
+  const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, could you repeat that?";
+  conversationHistory.push({role:'model', parts:[{text: reply}]});
+  return reply;
+}
+
+function speakText(text, onDone) {
+  window.speechSynthesis.cancel();
+  isSpeaking = true;
+  setCallState('speaking');
+
+  const utter = new SpeechSynthesisUtterance(text);
+  // Try to find an Indian English voice
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang === 'en-IN') 
+    || voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female'))
+    || voices.find(v => v.lang.startsWith('en'))
+    || voices[0];
+  if(preferred) utter.voice = preferred;
+  utter.rate = 0.92;
+  utter.pitch = 1.05;
+  utter.volume = 1;
+
+  utter.onend = () => {
+    isSpeaking = false;
+    if(callActive) {
+      setCallState('listening');
+      if(onDone) onDone();
+    }
+  };
+  utter.onerror = () => {
+    isSpeaking = false;
+    if(callActive && onDone) onDone();
+  };
+
+  window.speechSynthesis.speak(utter);
+}
+
+function startListening() {
+  if(!callActive || isSpeaking) return;
+  
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition) {
+    showToast('Speech recognition not supported — use Chrome');
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-IN';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => setCallState('listening');
+
+  recognition.onresult = async (e) => {
+    const transcript = e.results[0][0].transcript;
+    addToTranscript('user', transcript);
+    addLog('t-info', 'STT', 'You: ' + transcript);
+    setCallState('thinking');
+
+    try {
+      const reply = await getSiyaResponse(transcript);
+      addToTranscript('siya', reply);
+      addLog('t-info', 'SIYA', reply.slice(0,60)+'...');
+      speakText(reply, () => {
+        if(callActive) startListening();
+      });
+    } catch(err) {
+      addLog('t-err', 'ERROR', err.message);
+      showToast('Error: ' + err.message);
+    }
+  };
+
+  recognition.onerror = (e) => {
+    if(e.error === 'no-speech' && callActive) {
+      setTimeout(() => { if(callActive && !isSpeaking) startListening(); }, 500);
+    }
+  };
+
+  recognition.onend = () => {
+    if(callActive && !isSpeaking) {
+      setTimeout(() => { if(callActive && !isSpeaking) startListening(); }, 300);
+    }
+  };
+
+  try { recognition.start(); } catch(e) {}
+}
+
+async function startBrowserCall() {
+  const geminiKey = localStorage.getItem('voxpath-key-gemini');
+  const warnEl = document.getElementById('gemini-warn');
+  
+  if(!geminiKey) { warnEl.style.display='flex'; return; }
+  warnEl.style.display='none';
+
+  // Check speech recognition support
+  if(!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+    showToast('Please use Chrome or Edge for voice calls');
+    return;
+  }
+
+  const btn = document.getElementById('call-btn');
+
+  // END CALL
+  if(callActive) {
+    callActive = false;
+    clearInterval(callTimer);
+    if(recognition) recognition.stop();
+    window.speechSynthesis.cancel();
+    
+    btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call Siya now — free';
+    btn.style.background='';
+    document.getElementById('call-ui').style.display='none';
+    document.getElementById('call-status-bar').style.display='none';
+    setCallState('ended');
+    
+    const dur = Math.floor(callSeconds/60)+':'+(String(callSeconds%60).padStart(2,'0'));
+    callsData.unshift({
+      num: callName||'Browser call',
+      time:'Just now',
+      dur,
+      score: conversationHistory.length > 4 ? 85 : 60,
+      type:'in',
+      transcript: conversationHistory.map(m => [m.role==='model'?'agent':'user', m.parts[0].text]),
+      tags:['Web Call','Gemini','Free']
+    });
+    buildCallList();
+    addLog('t-ok','CALL_END','Duration: '+dur+' · turns: '+Math.floor(conversationHistory.length/2));
+    showToast('Call ended — '+dur);
+    
+    conversationHistory = [];
+    callSeconds = 0;
+    callName = '';
+    return;
+  }
+
+  // START CALL
+  callName = document.getElementById('dial-name').value.trim();
+  callActive = true;
+  conversationHistory = [];
+  callSeconds = 0;
+
+  btn.innerHTML='<i class="ti ti-phone-off"></i>End call';
+  btn.style.background='var(--rose)';
+  
+  document.getElementById('call-ui').style.display='block';
+  document.getElementById('call-status-bar').style.display='none';
+  
+  makeWaveform('call-wave');
+  setCallState('connecting');
+  
+  callTimer = setInterval(updateTimer, 1000);
+  
+  addLog('t-ok','CALL_START','Browser call started'+(callName?' → '+callName:''));
+  addLog('t-info','ENGINE','Gemini Flash + Chrome Speech API · free');
+  
+  callsData.unshift({num:callName||'Browser call',time:'Just now',dur:'—',score:0,type:'in',transcript:[],tags:['Live','Gemini']});
+  buildCallList();
+  document.getElementById('m-calls').textContent=callsData.length;
+
+  // Get opening line from Gemini
+  try {
+    const opening = await getSiyaResponse(
+      callName ? `The student's name is ${callName}. Start the call with your opening greeting.`
+               : 'Start the call with your opening greeting to an unknown student.'
+    );
+    addToTranscript('siya', opening);
+    addLog('t-info','SIYA', opening.slice(0,60)+'...');
+    speakText(opening, () => { if(callActive) startListening(); });
+    showToast('Call started — Siya is speaking!');
+  } catch(err) {
+    callActive = false;
+    clearInterval(callTimer);
+    btn.innerHTML='<i class="ti ti-phone-outgoing"></i>Call Siya now — free';
+    btn.style.background='';
+    document.getElementById('call-ui').style.display='none';
+    addLog('t-err','ERROR',err.message);
+    showToast('Error: '+err.message);
+  }
+}
+
+function triggerSimulatedCall(){ simulateCall(); }
 
 async function triggerBulkCalls(){
   const raw=document.getElementById('bulk-numbers').value.trim();
