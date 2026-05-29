@@ -11,354 +11,401 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#1F3C84;--sky:#1C9FD4;--green:#3FB87B;
-  --bg:#fff;--bg2:#FAFAFA;--bg3:#F4F4F5;
-  --border:#E4E4E7;--border2:#D1D1D6;
-  --ink:#09090B;--ink2:#52525B;--ink3:#A1A1AA;--ink4:#D4D4D8;
-  --sky-bg:rgba(28,159,212,.07);--sky-border:rgba(28,159,212,.2);--sky-text:#0e7cae;
-  --navy-bg:rgba(31,60,132,.07);--green-bg:rgba(63,184,123,.08);--green-border:rgba(63,184,123,.25);
+  /* Leverage Edu brand */
+  --navy:#1F3C84;--sky:#1C9FD4;--green:#3FB87B;--rose:#E11D48;
+  /* Dark theme (Hooman-style) */
+  --bg:#0D0D0D;--bg2:#141414;--bg3:#1A1A1A;--bg4:#222222;--bg5:#2A2A2A;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.12);--border3:rgba(255,255,255,.18);
+  --ink:#F5F5F5;--ink2:#A0A0A0;--ink3:#666;--ink4:#3A3A3A;
+  --sky-glow:rgba(28,159,212,.15);--sky-border:rgba(28,159,212,.3);
+  --green-glow:rgba(63,184,123,.12);--green-border:rgba(63,184,123,.25);
+  --red-glow:rgba(225,29,72,.1);--red-border:rgba(225,29,72,.25);
   --f:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;
-  --r:8px;--r2:12px;--r3:16px;
-  --shadow-sm:0 1px 2px rgba(0,0,0,.05);
-  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
-  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --r:6px;--r2:10px;--r3:14px;
   --trans:all .15s ease;
 }
-html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:14px;overflow:hidden;-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:13px;overflow:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg5);border-radius:4px}
+a{color:inherit;text-decoration:none}
 
 /* ═══════════ LOGIN ═══════════ */
-#login-page{position:fixed;inset:0;z-index:200;background:#fff;display:flex;align-items:center;justify-content:center}
-.lcard{width:380px;padding:40px 0;text-align:center}
-.lcard-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:32px}
-.lcard-logo-mark{width:32px;height:32px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.lcard-logo-mark svg{width:18px;height:18px}
-.lcard-brand{font-size:16px;font-weight:600;color:var(--ink)}
-.lcard-h{font-size:22px;font-weight:600;color:var(--ink);margin-bottom:28px}
-.lsocial{width:100%;padding:10px 16px;border:1px solid var(--border);border-radius:var(--r);background:#fff;display:flex;align-items:center;gap:10px;font-family:var(--f);font-size:13px;font-weight:500;color:var(--ink);cursor:pointer;margin-bottom:8px;transition:var(--trans)}
-.lsocial:hover{background:var(--bg2);border-color:var(--border2)}
-.lsocial img{width:16px;height:16px}
-.ldiv{display:flex;align-items:center;gap:10px;margin:20px 0;color:var(--ink3);font-size:12px}
-.ldiv::before,.ldiv::after{content:'';flex:1;height:1px;background:var(--border)}
-.lf{text-align:left;margin-bottom:14px}
-.lfl{display:block;font-size:12px;font-weight:500;color:var(--ink2);margin-bottom:5px}
-.lfi{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);font-family:var(--f);font-size:13px;color:var(--ink);outline:none;transition:var(--trans);background:#fff}
-.lfi::placeholder{color:var(--ink3)}.lfi:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-bg)}
-.lbtn{width:100%;padding:10px 16px;background:var(--ink);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:500;cursor:pointer;transition:var(--trans);margin-top:4px}
-.lbtn:hover{background:#27272A}
-.lerr{margin-top:10px;font-size:12px;color:#EF4444;text-align:center;display:none}
-.lhint{font-size:11px;color:var(--ink3);margin-top:16px}
-.lhint b{color:var(--ink2);font-weight:500}
+#login-page{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.l-wrap{width:380px}
+.l-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center}
+.l-mark{width:34px;height:34px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.l-mark svg{width:18px;height:18px}
+.l-brand{font-size:17px;font-weight:600;color:var(--ink)}
+.l-h{font-size:22px;font-weight:600;color:var(--ink);text-align:center;margin-bottom:28px}
+.l-social{width:100%;padding:10px 16px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;font-weight:500;color:var(--ink);cursor:pointer;margin-bottom:8px;transition:var(--trans)}
+.l-social:hover{background:var(--bg4);border-color:var(--border3)}
+.l-div{display:flex;align-items:center;gap:10px;margin:18px 0;color:var(--ink3);font-size:11px}
+.l-div::before,.l-div::after{content:'';flex:1;height:1px;background:var(--border)}
+.lf{margin-bottom:12px}
+.lfl{display:block;font-size:11px;font-weight:500;color:var(--ink2);margin-bottom:5px;letter-spacing:.02em}
+.lfi{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);font-family:var(--f);font-size:13px;color:var(--ink);outline:none;transition:var(--trans)}
+.lfi::placeholder{color:var(--ink3)}.lfi:focus{border-color:var(--sky-border);box-shadow:0 0 0 3px var(--sky-glow)}
+.l-btn{width:100%;padding:10px 16px;background:var(--ink);color:#000;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:600;cursor:pointer;transition:var(--trans);margin-top:4px}
+.l-btn:hover{background:#D0D0D0}
+.l-err{margin-top:10px;font-size:12px;color:var(--rose);text-align:center;display:none}
+.l-hint{font-size:11px;color:var(--ink3);text-align:center;margin-top:14px}
+.l-hint b{color:var(--ink2);font-weight:500}
 .lgw{display:flex;justify-content:center;margin-bottom:8px}
 
 /* ═══════════ APP ═══════════ */
-#app{display:none;position:fixed;inset:0;flex-direction:column}
+#app{display:none;position:fixed;inset:0;flex-direction:row}
 #app.visible{display:flex}
 
-/* TOPBAR */
-.topbar{height:52px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:0;flex-shrink:0;background:#fff;z-index:10}
-.tb-brand{display:flex;align-items:center;gap:8px;width:220px;flex-shrink:0}
-.tb-logo{width:24px;height:24px;background:var(--navy);border-radius:6px;display:flex;align-items:center;justify-content:center}
-.tb-logo svg{width:14px;height:14px}
-.tb-name{font-size:14px;font-weight:600;color:var(--ink)}
+/* SIDEBAR */
+.sidebar{width:210px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.sb-top-header{padding:14px 14px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sb-logo{width:26px;height:26px;background:var(--navy);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logo svg{width:14px;height:14px}
+.sb-brand{font-size:13px;font-weight:600;color:var(--ink)}
+.sb-chevron{margin-left:auto;color:var(--ink3);font-size:14px}
+.sb-nav{flex:1;padding:6px 8px;overflow-y:auto}
+.sb-section-lbl{font-size:10px;font-weight:500;color:var(--ink3);padding:12px 8px 4px;letter-spacing:.06em;text-transform:uppercase;display:block}
+.sbi{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--r);font-size:12px;font-weight:400;color:var(--ink2);cursor:pointer;transition:var(--trans);user-select:none;width:100%;background:none;border:none;font-family:var(--f);position:relative}
+.sbi i{font-size:15px;color:var(--ink3);flex-shrink:0;transition:var(--trans)}
+.sbi:hover{background:var(--bg3);color:var(--ink)}.sbi:hover i{color:var(--ink2)}
+.sbi.active{background:var(--bg4);color:var(--ink);font-weight:500}.sbi.active i{color:var(--ink)}
+.sbi-badge{margin-left:auto;font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;background:var(--sky);color:#fff}
+.sbi-badge.beta{background:var(--bg5);color:var(--ink2);font-size:9px}
+.sbi-count{margin-left:auto;font-size:10px;color:var(--ink3);font-family:var(--fm)}
+.sb-bottom{padding:8px;border-top:1px solid var(--border);flex-shrink:0}
+.sb-user{display:flex;align-items:center;gap:8px;padding:8px;border-radius:var(--r);cursor:pointer;transition:var(--trans)}
+.sb-user:hover{background:var(--bg3)}
+.sb-av{width:24px;height:24px;border-radius:50%;background:var(--navy);border:1px solid var(--sky-border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sky);flex-shrink:0;overflow:hidden}
+.sb-av img{width:100%;height:100%;object-fit:cover}
+.sb-uname{font-size:12px;font-weight:500;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-uemail{font-size:10px;color:var(--ink3)}
+
+/* MAIN AREA */
+.main-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:48px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+.tb-bc{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:6px}
+.tb-bc b{color:var(--ink2);font-weight:500}
 .tb-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-.tb-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid var(--border);color:var(--ink2);background:var(--bg2)}
-.tb-pill.live::before{content:'';width:6px;height:6px;border-radius:50%;background:#22C55E;animation:blink 2s infinite}
+.tb-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid var(--border);color:var(--ink3);background:var(--bg3)}
+.tb-pill.green{color:#22C55E;background:var(--green-glow);border-color:var(--green-border)}
+.tb-pill.sky{color:var(--sky);background:var(--sky-glow);border-color:var(--sky-border)}
+.tb-pill.green::before{content:'';width:5px;height:5px;border-radius:50%;background:#22C55E;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.tb-pill.sky{color:var(--sky-text);background:var(--sky-bg);border-color:var(--sky-border)}
-.tb-user{display:flex;align-items:center;gap:6px;padding:4px 10px 4px 6px;border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:var(--trans);background:#fff}
-.tb-user:hover{background:var(--bg2)}.tb-av{width:22px;height:22px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0}
-.tb-av img{width:100%;height:100%;object-fit:cover}.tb-un{font-size:12px;font-weight:500;color:var(--ink2)}
 
-/* SHELL */
-.shell{display:flex;flex:1;overflow:hidden}
-.sidebar{width:220px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:#fff;overflow-y:auto}
-.sb-top{flex:1;padding:8px}
-.sb-section{margin-bottom:4px}
-.sb-lbl{font-size:11px;font-weight:500;color:var(--ink3);padding:8px 8px 4px;display:block;letter-spacing:.02em}
-.sbi{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;transition:var(--trans);user-select:none;text-decoration:none;border:none;background:none;width:100%;position:relative}
-.sbi i{font-size:16px;color:var(--ink3)}.sbi:hover{background:var(--bg2);color:var(--ink)}.sbi:hover i{color:var(--ink2)}
-.sbi.active{background:var(--bg3);color:var(--ink);font-weight:500}.sbi.active i{color:var(--ink)}
-.sb-badge{margin-left:auto;min-width:18px;height:18px;padding:0 5px;background:var(--sky);color:#fff;font-size:10px;font-weight:600;border-radius:9px;display:flex;align-items:center;justify-content:center}
-.sb-bot{padding:8px;border-top:1px solid var(--border)}
-.sb-user{padding:8px;border-radius:8px;margin-bottom:6px}
-.sb-uname{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:1px}
-.sb-uemail{font-size:11px;color:var(--ink3)}
-.sb-lo{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:7px;background:none;border:1px solid var(--border);border-radius:6px;font-family:var(--f);font-size:12px;font-weight:500;color:var(--ink2);cursor:pointer;transition:var(--trans)}
-.sb-lo:hover{border-color:var(--border2);color:var(--ink);background:var(--bg2)}
-
-/* MAIN */
 .main{flex:1;overflow-y:auto;background:var(--bg)}
 .sec{display:none;animation:sIn .2s ease both}
 .sec.active{display:block}
 @keyframes sIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sec-title{font-size:18px;font-weight:600;color:var(--ink)}
+.sec-desc{font-size:12px;color:var(--ink2);margin-top:3px}
+.sec-body{padding:24px}
 
-/* PAGE HEADER */
-.ph{padding:24px 28px 20px;border-bottom:1px solid var(--border)}
-.ph-t{font-size:20px;font-weight:600;color:var(--ink);margin-bottom:4px}
-.ph-d{font-size:13px;color:var(--ink2);line-height:1.5}
-.ph-row{display:flex;align-items:center;justify-content:space-between}
-.p-body{padding:24px 28px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:var(--r);font-family:var(--f);font-size:12px;font-weight:500;border:none;cursor:pointer;transition:var(--trans);white-space:nowrap}
+.btn-primary{background:var(--ink);color:#000}.btn-primary:hover{background:#D0D0D0}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--ink2)}.btn-outline:hover{background:var(--bg3);border-color:var(--border3);color:var(--ink)}
+.btn-sky{background:var(--sky);color:#fff}.btn-sky:hover{background:#1a91c2}
+.btn-danger{background:var(--red-glow);border:1px solid var(--red-border);color:var(--rose)}.btn-danger:hover{background:rgba(225,29,72,.2)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-xs{padding:3px 8px;font-size:10px}
 
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-.stat{border:1px solid var(--border);border-radius:var(--r2);padding:16px 18px;background:#fff}
-.stat-l{font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
-.stat-v{font-size:26px;font-weight:600;color:var(--ink);line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums}
-.stat-s{font-size:11px;color:var(--ink3)}
-.stat-s.up{color:#16A34A}.stat-s.dn{color:#DC2626}
+/* STAT CARDS */
+.stats-row{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:20px}
+.stat-item{flex:1;background:var(--bg2);padding:16px 20px}
+.stat-group{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.stat-label{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;font-weight:500;margin-bottom:6px}
+.stat-val{font-size:24px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.stat-sub{font-size:11px;color:var(--ink3)}
+.stat-sub.up{color:#22C55E}.stat-sub.neutral{color:var(--sky)}
 
-/* EMPTY STATE */
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
-.empty-icon{width:48px;height:48px;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--ink3);font-size:22px}
-.empty-t{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:6px}
-.empty-d{font-size:13px;color:var(--ink2);line-height:1.5;max-width:320px}
+/* CHART AREA */
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:18px;margin-bottom:20px}
+.chart-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.chart-title{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+.chart-legend{display:flex;align-items:center;gap:12px}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink2)}
+.cl-dot{width:8px;height:8px;border-radius:50%}
+canvas.chart{width:100%;height:120px;display:block}
 
-/* CALL COMMAND */
-.cmd{border:1px solid var(--border);border-radius:var(--r2);background:#fff;overflow:hidden;margin-bottom:16px}
-.cmd-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.agent-dot{width:8px;height:8px;border-radius:50%;background:#E4E4E7;flex-shrink:0}
-.agent-dot.live{background:#22C55E;box-shadow:0 0 0 3px rgba(34,197,94,.15);animation:blink 2s infinite}
-.agent-dot.speaking{background:var(--sky);box-shadow:0 0 0 3px var(--sky-bg)}
-.cmd-agent-name{font-size:13px;font-weight:600;color:var(--ink)}
-.cmd-agent-role{font-size:12px;color:var(--ink3)}
-.cmd-timer{margin-left:auto;font-family:var(--fm);font-size:13px;font-weight:500;color:var(--sky);display:none}
+/* CALL WIDGET */
+.call-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px}
+.call-card-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.agent-pulse{width:8px;height:8px;border-radius:50%;background:var(--ink4);flex-shrink:0;transition:var(--trans)}
+.agent-pulse.live{background:#22C55E;box-shadow:0 0 0 3px var(--green-glow);animation:blink 2s infinite}
+.agent-pulse.speaking{background:var(--sky);box-shadow:0 0 0 3px var(--sky-glow)}
+.agent-name-label{font-size:13px;font-weight:600;color:var(--ink)}
+.agent-role-label{font-size:11px;color:var(--ink3)}
+.call-timer{margin-left:auto;font-family:var(--fm);font-size:13px;font-weight:500;color:var(--sky);display:none}
 
-/* MODE ROW */
-.mode-row{padding:10px 20px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ink2)}
-.mode-tag{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
-.mode-tag.fsm{background:var(--green-bg);border:1px solid var(--green-border);color:#15803D}
-.mode-tag.ai{background:var(--sky-bg);border:1px solid var(--sky-border);color:var(--sky-text)}
-.mode-link{color:var(--sky-text);cursor:pointer;margin-left:auto;font-size:11px;font-weight:500}
-.mode-link:hover{text-decoration:underline}
+.mode-bar{padding:8px 18px;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;gap:10px;font-size:11px;color:var(--ink2)}
+.mode-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.mode-chip.fsm{background:var(--green-glow);border:1px solid var(--green-border);color:#22C55E}
+.mode-chip.ai{background:var(--sky-glow);border:1px solid var(--sky-border);color:var(--sky)}
+.mode-action{margin-left:auto;color:var(--sky);cursor:pointer;font-size:11px;font-weight:500}.mode-action:hover{text-decoration:underline}
 
-.cmd-body{padding:20px}
-.cmd-state{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;font-size:12px;color:var(--ink2)}
-.cmd-state-dot{width:7px;height:7px;border-radius:50%;background:var(--ink4);flex-shrink:0}
-.cmd-state-dot.on{background:var(--sky);animation:blink 1.5s infinite}
-.cmd-state-dot.speak{background:#22C55E;animation:blink 1s infinite}
+.call-body{padding:18px}
+.call-state-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;font-size:11px;color:var(--ink2)}
+.cs-dot{width:6px;height:6px;border-radius:50%;background:var(--ink4);flex-shrink:0}
+.cs-dot.listening{background:var(--sky);animation:blink 1.5s infinite}
+.cs-dot.speaking{background:#22C55E;animation:blink 1s infinite}
 
 /* WAVEFORM */
-.wf{height:48px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;display:flex;align-items:center;gap:1.5px;padding:0 10px;overflow:hidden}
-.wfb{width:2.5px;min-width:2.5px;border-radius:2px;background:var(--sky);opacity:.5;transition:height .05s ease}
-.wfb.idle{height:3px;animation:wfi var(--d,.7s) ease-in-out var(--delay,0s) infinite alternate}
-@keyframes wfi{from{height:3px}to{height:9px}}
+.wf-canvas{width:100%;height:44px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;display:flex;align-items:center;gap:1.5px;padding:0 8px;overflow:hidden}
+.wfb{width:2px;min-width:2px;border-radius:2px;background:var(--sky);opacity:.5;transition:height .05s ease}
+.wfb.idle{height:2px;animation:wfIdl var(--d,.7s) ease-in-out var(--delay,0s) infinite alternate}
+@keyframes wfIdl{from{height:2px}to{height:8px}}
 .wfb.on{opacity:.85}
 
 /* TRANSCRIPT */
-.transcript{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;max-height:160px;overflow-y:auto;font-size:12px;line-height:1.8;margin-bottom:14px;font-family:var(--fm);color:var(--ink2)}
-.ts{color:var(--sky);font-weight:600}.tu{color:var(--green);font-weight:600}
-.t-ph{color:var(--ink3);font-family:var(--f)}
+.transcript{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;max-height:150px;overflow-y:auto;font-size:11.5px;line-height:1.85;margin-bottom:12px;font-family:var(--fm);color:var(--ink2)}
+.ts-siya{color:var(--sky);font-weight:600}.ts-user{color:#22C55E;font-weight:600}
+.ts-ph{color:var(--ink3);font-family:var(--f)}
+
+/* INPUT */
+.input-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px}
+.inp{width:100%;padding:8px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);font-family:var(--f);font-size:12px;color:var(--ink);outline:none;transition:var(--trans)}
+.inp::placeholder{color:var(--ink3)}.inp:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-glow)}
+
+/* BIG CALL BUTTON */
+.call-main-btn{width:100%;padding:10px;font-size:13px;font-weight:600;background:var(--ink);color:#000;border:none;border-radius:var(--r);font-family:var(--f);cursor:pointer;transition:var(--trans);display:flex;align-items:center;justify-content:center;gap:8px}
+.call-main-btn:hover{background:#D0D0D0}
+.call-main-btn.ending{background:var(--rose);color:#fff}.call-main-btn.ending:hover{background:#BE123C}
+
+/* LOGS TABLE */
+.logs-table{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden}
+.lt-header{display:grid;padding:9px 16px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;background:var(--bg3)}
+.lt-row{display:grid;padding:11px 16px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:var(--trans)}
+.lt-row:last-child{border-bottom:none}
+.lt-row:hover{background:var(--bg3)}
+.cols-calls{grid-template-columns:1.5fr 70px 90px 60px 20px}
+.score-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;text-align:center}
+.s-hi{background:var(--green-glow);color:#22C55E;border:1px solid var(--green-border)}
+.s-mi{background:var(--sky-glow);color:var(--sky);border:1px solid var(--sky-border)}
+.s-lo{background:var(--red-glow);color:var(--rose);border:1px solid var(--red-border)}
+.row-expand{display:none;padding:12px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:11px;line-height:1.9;font-family:var(--fm);color:var(--ink2)}
+.row-expand.open{display:block}
+
+/* TERMINAL */
+.terminal{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px;height:130px;overflow-y:auto;font-family:var(--fm);font-size:11px;line-height:1.8;color:var(--ink2)}
+.tl-ok{color:#22C55E}.tl-err{color:var(--rose)}.tl-warn{color:#F59E0B}.tl-info{color:var(--sky)}
+.tl-ts{color:var(--ink3)}.tl-lbl{font-weight:700;margin:0 5px}
+
+/* GRID CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:12px}
+.card-h{padding:12px 16px;border-bottom:1px solid var(--border);font-size:12px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
+.card-h i{font-size:15px;color:var(--ink3)}
+.card-b{padding:14px 16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 /* FORM */
-.row2{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:14px}
-.inp{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r);font-family:var(--f);font-size:13px;color:var(--ink);outline:none;transition:var(--trans);background:#fff}
-.inp::placeholder{color:var(--ink3)}.inp:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-bg)}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r);font-family:var(--f);font-size:12px;font-weight:500;border:none;cursor:pointer;transition:var(--trans);white-space:nowrap}
-.btn-primary{background:var(--ink);color:#fff}.btn-primary:hover{background:#27272A}
-.btn-outline{background:#fff;border:1px solid var(--border);color:var(--ink2)}.btn-outline:hover{background:var(--bg2);border-color:var(--border2);color:var(--ink)}
-.btn-sky{background:var(--sky);color:#fff}.btn-sky:hover{background:#1a91c2}
-.btn-danger{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626}.btn-danger:hover{background:#FEE2E2}
-.btn-sm{padding:6px 10px;font-size:11px}
-
-.call-btn{width:100%;padding:11px;font-size:13px;font-weight:600;background:var(--ink);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);cursor:pointer;transition:var(--trans);display:flex;align-items:center;justify-content:center;gap:8px}
-.call-btn:hover{background:#27272A}.call-btn.ending{background:#DC2626}.call-btn.ending:hover{background:#B91C1C}
-.call-btn:disabled{opacity:.5;cursor:not-allowed}
-
-/* TABLE */
-.table-wrap{border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px}
-.table-head{display:grid;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
-.table-row{display:grid;padding:13px 16px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:var(--trans)}
-.table-row:last-child{border-bottom:none}
-.table-row:hover{background:var(--bg2)}
-.calls-cols{grid-template-columns:1fr 80px 90px 60px 24px}
-.score-pill{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;text-align:center}
-.score-hi{background:#DCFCE7;color:#15803D}.score-mi{background:var(--sky-bg);color:var(--sky-text)}.score-lo{background:#FEE2E2;color:#DC2626}
-.row-detail{display:none;padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:12px;line-height:1.8;font-family:var(--fm);color:var(--ink2)}
-.row-detail.open{display:block}
-
-/* CARDS */
-.card{border:1px solid var(--border);border-radius:var(--r2);background:#fff;overflow:hidden;margin-bottom:14px}
-.card-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink)}
-.card-head i{font-size:16px;color:var(--ink3)}
-.card-body{padding:16px 18px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-
-/* FORM FIELDS */
-.fr{margin-bottom:12px}
-.fl{display:block;font-size:12px;font-weight:500;color:var(--ink2);margin-bottom:5px}
-.fin,.fta{width:100%;padding:8px 11px;border:1px solid var(--border);border-radius:var(--r);font-family:var(--f);font-size:13px;color:var(--ink);outline:none;transition:var(--trans);background:#fff}
-.fta{min-height:80px;resize:vertical;line-height:1.6}
-.fin:focus,.fta:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-bg)}
+.fr{margin-bottom:11px}
+.fl{display:block;font-size:11px;font-weight:500;color:var(--ink2);margin-bottom:4px;letter-spacing:.01em}
+.fin,.fta{width:100%;padding:7px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);font-family:var(--f);font-size:12px;color:var(--ink);outline:none;transition:var(--trans)}
+.fta{min-height:72px;resize:vertical;line-height:1.6}
+.fin:focus,.fta:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-glow)}
 .fin::placeholder,.fta::placeholder{color:var(--ink3)}
 
 /* TOGGLE */
-.tog-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
 .tog-row:last-child{border-bottom:none}
-.tog-l{font-size:13px;font-weight:500;color:var(--ink)}.tog-d{font-size:11px;color:var(--ink3);margin-top:1px}
-.tog{position:relative;width:36px;height:20px;flex-shrink:0}
+.tog-title{font-size:12px;font-weight:500;color:var(--ink)}
+.tog-sub{font-size:10px;color:var(--ink3);margin-top:1px}
+.tog{position:relative;width:34px;height:18px;flex-shrink:0}
 .tog input{opacity:0;width:0;height:0}
-.tog-t{position:absolute;inset:0;border-radius:10px;background:var(--border2);cursor:pointer;transition:var(--trans)}
-.tog input:checked+.tog-t{background:var(--ink)}
-.tog-t::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:var(--trans)}
+.tog-t{position:absolute;inset:0;border-radius:9px;background:var(--bg5);cursor:pointer;transition:var(--trans)}
+.tog input:checked+.tog-t{background:var(--sky)}
+.tog-t::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:var(--trans)}
 .tog input:checked+.tog-t::after{transform:translateX(16px)}
 
 /* KEY FIELD */
-.krow{display:flex;gap:8px}
-.ki{flex:1;padding:8px 11px;border:1px solid var(--border);border-radius:var(--r);font-family:var(--fm);font-size:12px;color:var(--ink);outline:none;transition:var(--trans);background:#fff}
-.ki:focus{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-bg)}
+.kf{display:flex;gap:6px}
+.ki{flex:1;padding:7px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);font-family:var(--fm);font-size:11px;color:var(--sky);outline:none;transition:var(--trans)}
+.ki:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-glow)}
 
-/* TERMINAL */
-.terminal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;height:140px;overflow-y:auto;font-family:var(--fm);font-size:11px;line-height:1.8;color:var(--ink2)}
-.tl-ok{color:#16A34A}.tl-err{color:#DC2626}.tl-warn{color:#D97706}.tl-info{color:var(--sky-text)}
-.tl-ts{color:var(--ink3)}.tl-lbl{font-weight:600;margin:0 6px}
-
-/* STACK GRID */
-.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.scard{border:1px solid var(--border);border-radius:var(--r2);padding:18px;background:#fff;transition:var(--trans)}
-.scard:hover{border-color:var(--border2);box-shadow:var(--shadow)}
-.scard-icon{font-size:22px;margin-bottom:12px}
-.scard-n{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
-.scard-r{font-size:11px;color:var(--sky-text);font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
-.scard-d{font-size:12px;color:var(--ink2);line-height:1.5;margin-bottom:10px}
-.free-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;background:var(--green-bg);color:#15803D;border:1px solid var(--green-border)}
+/* STACK */
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px}
+.scard:hover{border-color:var(--border3)}
+.scard-ico{font-size:20px;margin-bottom:10px}
+.scard-n{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.scard-r{font-size:10px;color:var(--sky);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.scard-d{font-size:11px;color:var(--ink2);line-height:1.5;margin-bottom:8px}
+.free-pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:500;background:var(--green-glow);color:#22C55E;border:1px solid var(--green-border)}
 
 /* STEP */
-.step{border:1px solid var(--border);border-radius:var(--r2);padding:16px;background:#fff;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:var(--trans)}
-.step:hover{border-color:var(--border2);box-shadow:var(--shadow-sm)}
-.stepn{width:26px;height:26px;border-radius:50%;flex-shrink:0;background:var(--bg3);color:var(--ink2);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
-.step-t{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
-.step-d{font-size:12px;color:var(--ink2);line-height:1.5}
+.step{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--bg4);color:var(--ink2);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.step-d{font-size:11px;color:var(--ink2);line-height:1.5}
 
 /* NOTICE */
-.notice{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:var(--sky-bg);border:1px solid var(--sky-border);border-radius:var(--r);font-size:12px;color:var(--ink2);margin-bottom:14px;line-height:1.5}
-.notice i{flex-shrink:0;font-size:15px;color:var(--sky-text);margin-top:.5px}
+.notice{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;background:var(--sky-glow);border:1px solid var(--sky-border);border-radius:var(--r);font-size:11px;color:var(--ink2);margin-bottom:12px;line-height:1.5}
+.notice i{font-size:14px;color:var(--sky);flex-shrink:0;margin-top:.5px}
 .notice.hidden{display:none}
 
-/* EL BANNER */
-.el-banner{border:1px solid var(--border);border-radius:var(--r2);padding:16px 18px;background:#fff;margin-bottom:14px;display:flex;align-items:flex-start;gap:14px}
-.el-banner-icon{width:36px;height:36px;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.el-banner-t{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
-.el-banner-d{font-size:12px;color:var(--ink2);line-height:1.5}
-.el-steps{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
-.el-step-tag{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--bg2);border:1px solid var(--border);color:var(--ink2)}
+/* EMPTY */
+.empty{padding:48px 24px;text-align:center}
+.empty-i{width:44px;height:44px;border:1px solid var(--border);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:20px;color:var(--ink3)}
+.empty-t{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:5px}
+.empty-d{font-size:12px;color:var(--ink2);line-height:1.5}
 
 /* TOAST */
-.toast{position:fixed;bottom:20px;right:20px;z-index:999;padding:11px 16px;border-radius:var(--r);background:var(--ink);color:#fff;font-size:12px;font-weight:500;opacity:0;transform:translateY(6px);transition:all .2s ease;pointer-events:none;display:flex;align-items:center;gap:8px}
+.toast{position:fixed;bottom:18px;right:18px;z-index:999;padding:10px 14px;border-radius:var(--r);background:var(--bg4);border:1px solid var(--border2);color:var(--ink);font-size:12px;font-weight:500;opacity:0;transform:translateY(6px);transition:all .2s ease;pointer-events:none;display:flex;align-items:center;gap:7px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
 .toast.show{opacity:1;transform:none}
 
-.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
-.tag{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--bg2);border:1px solid var(--border);color:var(--ink3)}
+/* EL BANNER */
+.el-banner{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;display:flex;align-items:flex-start;gap:12px}
+.el-ico{width:34px;height:34px;border-radius:var(--r);background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.el-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.el-d{font-size:11px;color:var(--ink2);line-height:1.5}
+.el-steps{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.el-step{font-size:10px;padding:2px 7px;border-radius:3px;background:var(--bg4);border:1px solid var(--border);color:var(--ink2)}
+
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ LOGIN ═══════════ -->
+<!-- LOGIN -->
 <div id="login-page">
-  <div class="lcard">
-    <div class="lcard-logo">
-      <div class="lcard-logo-mark">
-        <svg viewBox="0 0 18 18" fill="none"><path d="M3 14V6l4 6 4-6 4 6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <span class="lcard-brand">VoxPath</span>
+  <div class="l-wrap">
+    <div class="l-logo">
+      <div class="l-mark"><svg viewBox="0 0 18 18" fill="none"><path d="M3 14V6l4 6 4-6 4 6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="l-brand">VoxPath</span>
     </div>
-    <div class="lcard-h">Welcome back</div>
-
+    <div class="l-h">Welcome back</div>
     <div class="lgw">
       <div id="g_id_onload" data-client_id="" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
-      <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="continue_with" data-shape="rectangular" data-logo_alignment="left" data-width="340"></div>
+      <div class="g_id_signin" data-type="standard" data-theme="filled_black" data-text="continue_with" data-shape="rectangular" data-logo_alignment="left" data-width="340"></div>
     </div>
-
-    <div class="ldiv">or</div>
-    <div class="lf"><label class="lfl">Email address</label><input class="lfi" id="login-email" type="email" placeholder="name@leverageedu.com" autocomplete="email"></div>
+    <div class="l-div">or</div>
+    <div class="lf"><label class="lfl">Email</label><input class="lfi" id="login-email" type="email" placeholder="name@leverageedu.com" autocomplete="email"></div>
     <div class="lf"><label class="lfl">Password</label><input class="lfi" id="login-pass" type="password" placeholder="Password" autocomplete="current-password"></div>
-    <button class="lbtn" onclick="handleEmailLogin()">Sign in</button>
-    <div class="lerr" id="lerr"><span id="lerr-msg">Invalid credentials</span></div>
-    <div class="lhint">Demo: <b>demo@leverageedu.com</b> / <b>leverage2024</b></div>
+    <button class="l-btn" onclick="handleEmailLogin()">Sign in</button>
+    <div class="l-err" id="lerr"><span id="lerr-msg"></span></div>
+    <div class="l-hint">Demo: <b>demo@leverageedu.com</b> / <b>leverage2024</b></div>
   </div>
 </div>
 
-<!-- ═══════════ APP ═══════════ -->
+<!-- APP -->
 <div id="app">
-  <div class="topbar">
-    <div class="tb-brand">
-      <div class="tb-logo"><svg viewBox="0 0 14 14" fill="none"><path d="M2 11V4l3 5 3-5 3 5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <span class="tb-name">VoxPath</span>
+
+  <!-- SIDEBAR (Hooman-style) -->
+  <nav class="sidebar">
+    <div class="sb-top-header">
+      <div class="sb-logo"><svg viewBox="0 0 14 14" fill="none"><path d="M2 11V4l3 5 3-5 3 5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span class="sb-brand">VoxPath</span>
+      <i class="ti ti-chevron-down sb-chevron"></i>
     </div>
-    <div class="tb-right">
-      <div class="tb-pill sky" id="pill-mode"><i class="ti ti-cpu" style="font-size:11px"></i><span id="pill-mode-txt">FSM</span></div>
-      <div class="tb-pill" id="pill-voice"><i class="ti ti-wavesaw-tool" style="font-size:11px"></i>Chrome TTS</div>
-      <div class="tb-pill live"><span>Active</span></div>
-      <div class="tb-user" onclick="logout()">
-        <div class="tb-av"><img id="user-avatar" style="display:none"><span id="user-av-fb">S</span></div>
-        <span class="tb-un" id="user-name-tb">Shivam</span>
-        <i class="ti ti-chevron-down" style="font-size:11px;color:var(--ink3)"></i>
+    <div class="sb-nav">
+      <span class="sb-section-lbl">Build</span>
+      <button class="sbi active" id="nav-overview" onclick="goTo('overview')"><i class="ti ti-layout-dashboard"></i>Overview</button>
+      <button class="sbi" id="nav-agents" onclick="goTo('agents')"><i class="ti ti-robot"></i>Agents</button>
+      <button class="sbi" id="nav-test" onclick="goTo('test')"><i class="ti ti-player-play"></i>Test agent<span class="sbi-badge beta">Beta</span></button>
+      <button class="sbi" id="nav-simulation" onclick="goTo('simulation')"><i class="ti ti-activity"></i>Simulation<span class="sbi-badge beta">Beta</span></button>
+      <button class="sbi" id="nav-library" onclick="goTo('library')"><i class="ti ti-books"></i>Library</button>
+      <button class="sbi" id="nav-pronunciation" onclick="goTo('pronunciation')"><i class="ti ti-abc"></i>Pronunciation</button>
+      <button class="sbi" id="nav-numbers" onclick="goTo('numbers')"><i class="ti ti-phone"></i>Numbers</button>
+
+      <span class="sb-section-lbl">Call</span>
+      <button class="sbi" id="nav-campaigns" onclick="goTo('campaigns')"><i class="ti ti-speakerphone"></i>Campaigns</button>
+
+      <span class="sb-section-lbl">Logs</span>
+      <button class="sbi" id="nav-calllogs" onclick="goTo('calllogs')"><i class="ti ti-phone-call"></i>Call logs<span class="sbi-count" id="m-calls"></span></button>
+      <button class="sbi" id="nav-executionlogs" onclick="goTo('executionlogs')"><i class="ti ti-terminal-2"></i>Execution logs</button>
+
+      <span class="sb-section-lbl">Monitor</span>
+      <button class="sbi" id="nav-insights" onclick="goTo('insights')"><i class="ti ti-chart-line"></i>Insights</button>
+      <button class="sbi" id="nav-integrations" onclick="goTo('integrations')"><i class="ti ti-plug"></i>Integrations</button>
+    </div>
+    <div class="sb-bottom">
+      <div class="sb-user" onclick="logout()">
+        <div class="sb-av"><img id="user-avatar" style="display:none"><span id="user-av-fb">S</span></div>
+        <div style="flex:1;overflow:hidden">
+          <div class="sb-uname" id="sb-name">Shivam</div>
+          <div class="sb-uemail" id="sb-email">demo@leverageedu.com</div>
+        </div>
+        <i class="ti ti-logout" style="font-size:14px;color:var(--ink3)"></i>
       </div>
     </div>
-  </div>
+  </nav>
 
-  <div class="shell">
-    <nav class="sidebar">
-      <div class="sb-top">
-        <div class="sb-section">
-          <span class="sb-lbl">Platform</span>
-          <button class="sbi active" id="nav-home" onclick="goTo('home')"><i class="ti ti-home"></i>Home</button>
-          <button class="sbi" id="nav-calls" onclick="goTo('calls')"><i class="ti ti-phone-outgoing"></i>Call logs<span class="sb-badge" id="m-calls" style="display:none">0</span></button>
-        </div>
-        <div class="sb-section">
-          <span class="sb-lbl">Configure</span>
-          <button class="sbi" id="nav-agent" onclick="goTo('agent')"><i class="ti ti-robot"></i>Agent config</button>
-          <button class="sbi" id="nav-setup" onclick="goTo('setup')"><i class="ti ti-book"></i>Setup guide</button>
-        </div>
-        <div class="sb-section">
-          <span class="sb-lbl">Connect</span>
-          <button class="sbi" id="nav-stack" onclick="goTo('stack')"><i class="ti ti-stack-2"></i>Free stack</button>
-          <button class="sbi" id="nav-integrations" onclick="goTo('integrations')"><i class="ti ti-plug"></i>Integrations</button>
-        </div>
-        <div class="sb-section">
-          <button class="sbi" id="nav-settings" onclick="goTo('settings')"><i class="ti ti-settings"></i>Settings</button>
-        </div>
+  <div class="main-wrap">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="tb-bc">VoxPath <i class="ti ti-chevron-right" style="font-size:11px"></i> <b id="tb-page">Overview</b></div>
+      <div class="tb-right">
+        <div class="tb-pill sky" id="pill-mode"><i class="ti ti-cpu" style="font-size:10px"></i><span id="pill-mode-txt">FSM</span></div>
+        <div class="tb-pill" id="pill-voice"><i class="ti ti-wavesaw-tool" style="font-size:10px"></i>Chrome TTS</div>
+        <div class="tb-pill green"><span>Active</span></div>
+        <button class="btn btn-outline btn-sm" onclick="goTo('integrations')"><i class="ti ti-settings"></i>Settings</button>
       </div>
-      <div class="sb-bot">
-        <div class="sb-user"><div class="sb-uname" id="sb-name">Shivam</div><div class="sb-uemail" id="sb-email">demo@leverageedu.com</div></div>
-        <button class="sb-lo" onclick="logout()"><i class="ti ti-logout" style="font-size:15px"></i>Sign out</button>
-      </div>
-    </nav>
+    </div>
 
-    <main class="main">
+    <div class="main">
 
-      <!-- HOME -->
-      <div id="sec-home" class="sec">
-        <div class="ph">
-          <div class="ph-row">
-            <div>
-              <div class="ph-t">Good <span id="greet-time">morning</span>, <span id="home-name">Shivam</span></div>
-              <div class="ph-d">Your VoxPath outbound voice AI panel — zero cost, works instantly.</div>
+      <!-- OVERVIEW -->
+      <div id="sec-overview" class="sec">
+        <div class="sec-header">
+          <div><div class="sec-title">Overview</div><div class="sec-desc">High-level summary of all platform activity.</div></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <select class="inp" style="width:120px;padding:5px 10px" id="date-range" onchange="redrawChart()">
+              <option value="7">Last 7 days</option>
+              <option value="14">Last 14 days</option>
+              <option value="30">Last 30 days</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="refreshOverview()"><i class="ti ti-refresh"></i>Refresh</button>
+          </div>
+        </div>
+        <div class="sec-body">
+          <div class="stats-row" id="overview-stats">
+            <div class="stat-item">
+              <div class="stat-label">Inbound · Calls</div>
+              <div class="stat-val" id="stat-in">0</div>
+              <div class="stat-sub neutral" id="stat-in-dur">—</div>
             </div>
-            <button class="btn btn-primary" onclick="goTo('calls')"><i class="ti ti-phone-outgoing"></i>Start a call</button>
+            <div class="stat-item">
+              <div class="stat-label">Outbound · Calls</div>
+              <div class="stat-val" id="stat-out">0</div>
+              <div class="stat-sub neutral" id="stat-out-dur">—</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Total duration</div>
+              <div class="stat-val" id="stat-dur">0m</div>
+              <div class="stat-sub" id="stat-cost" style="color:var(--green)">₹0 cost</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Avg sentiment</div>
+              <div class="stat-val" id="stat-sent">—</div>
+              <div class="stat-sub" id="stat-sent-sub">No data yet</div>
+            </div>
           </div>
-        </div>
-        <div class="p-body">
-          <div class="stats" id="home-stats">
-            <div class="stat"><div class="stat-l">Calls today</div><div class="stat-v" id="stat-calls">0</div><div class="stat-s">No calls yet</div></div>
-            <div class="stat"><div class="stat-l">Avg duration</div><div class="stat-v" id="stat-dur">—</div><div class="stat-s">No data yet</div></div>
-            <div class="stat"><div class="stat-l">Monthly cost</div><div class="stat-v" style="color:#16A34A">₹0</div><div class="stat-s">Free forever</div></div>
-            <div class="stat"><div class="stat-l">Sentiment avg</div><div class="stat-v" id="stat-sent">—</div><div class="stat-s">No data yet</div></div>
+
+          <div class="chart-card">
+            <div class="chart-head">
+              <span class="chart-title">Conversations & calls</span>
+              <div class="chart-legend">
+                <div class="cl-item"><div class="cl-dot" style="background:var(--sky)"></div>Outbound</div>
+                <div class="cl-item"><div class="cl-dot" style="background:#22C55E"></div>Inbound</div>
+                <div class="cl-item"><div class="cl-dot" style="background:#A78BFA"></div>Sentiment</div>
+              </div>
+            </div>
+            <canvas id="overview-chart" class="chart"></canvas>
+            <div id="chart-empty" style="display:none;text-align:center;padding:20px 0;font-size:12px;color:var(--ink3)">No call data yet — start your first call to see activity</div>
           </div>
+
           <div class="two">
             <div class="card">
-              <div class="card-head"><i class="ti ti-phone-outgoing"></i>Quick call</div>
-              <div class="card-body">
-                <div style="font-size:13px;color:var(--ink2);margin-bottom:14px;line-height:1.6">Start a live voice call with Siya — your AI study abroad advisor. Works immediately, no API key needed.</div>
-                <button class="btn btn-primary" onclick="goTo('calls')"><i class="ti ti-phone-outgoing"></i>Call Siya now</button>
+              <div class="card-h"><i class="ti ti-phone-outgoing"></i>Quick call</div>
+              <div class="card-b">
+                <div style="font-size:12px;color:var(--ink2);margin-bottom:12px;line-height:1.6">Start a live voice call with Siya, your AI study abroad advisor. Works instantly — no setup needed.</div>
+                <button class="btn btn-primary" onclick="goTo('calllogs')"><i class="ti ti-phone-outgoing"></i>Call Siya now</button>
               </div>
             </div>
             <div class="card">
-              <div class="card-head"><i class="ti ti-bolt"></i>Upgrade voice quality</div>
-              <div class="card-body">
-                <div style="font-size:13px;color:var(--ink2);margin-bottom:14px;line-height:1.6">Add a free ElevenLabs key for a natural-sounding voice. 10,000 chars/month free. No credit card.</div>
+              <div class="card-h"><i class="ti ti-bolt"></i>Upgrade AI</div>
+              <div class="card-b">
+                <div style="font-size:12px;color:var(--ink2);margin-bottom:12px;line-height:1.6">Add Groq key for Llama 3.3 70B. Add ElevenLabs key for natural voice. Both free.</div>
                 <button class="btn btn-outline" onclick="goTo('integrations')"><i class="ti ti-plug"></i>Add API keys</button>
               </div>
             </div>
@@ -366,319 +413,330 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f)
         </div>
       </div>
 
-      <!-- CALL LOGS -->
-      <div id="sec-calls" class="sec">
-        <div class="ph">
-          <div class="ph-row">
-            <div>
-              <div class="ph-t">Call logs</div>
-              <div class="ph-d">Start a live call with Siya or view your call history.</div>
-            </div>
-          </div>
-        </div>
-        <div class="p-body">
-
-          <!-- CALL COMMAND CENTER -->
-          <div class="cmd" id="cmd-card">
-            <div class="cmd-header">
-              <div class="agent-dot" id="agent-dot"></div>
-              <div>
-                <div class="cmd-agent-name">Siya — Study Abroad Advisor</div>
-                <div class="cmd-agent-role">Leverage Edu · Lead Qualification Agent</div>
-              </div>
-              <div class="cmd-timer" id="ctimer">0:00</div>
-            </div>
-
-            <div class="mode-row">
-              <div class="mode-tag fsm" id="mode-tag">⚡ Built-in</div>
-              <span id="mode-desc" style="color:var(--ink2)">Works offline — no API key needed.</span>
-              <span class="mode-link" onclick="goTo('integrations')" id="mode-link">Add Groq for smarter AI →</span>
-            </div>
-
-            <div class="cmd-body">
-              <div class="notice hidden" id="gemini-warn">
-                <i class="ti ti-info-circle"></i>
-                <span>No API keys set. Using built-in conversation engine. <span style="cursor:pointer;color:var(--sky-text);font-weight:500" onclick="goTo('integrations')">Add Groq key</span> for full AI quality.</span>
-              </div>
-
-              <div id="call-ui" style="display:none">
-                <div class="cmd-state">
-                  <div class="cmd-state-dot" id="csdot"></div>
-                  <span id="cstext" style="flex:1">Ready</span>
-                </div>
-                <div class="wf" id="waveform"></div>
-                <div class="transcript" id="transcript"><span class="t-ph">Conversation will appear here…</span></div>
-              </div>
-
-              <div class="row2">
-                <input class="inp" id="dial-name" placeholder="Student name (optional)">
-                <button class="btn btn-outline btn-sm" onclick="runDemo()"><i class="ti ti-player-play"></i>Demo</button>
-              </div>
-              <button class="call-btn" id="callbtn" onclick="toggleCall()">
-                <i class="ti ti-phone-outgoing" id="callbtn-icon"></i>Call Siya now — free
-              </button>
-              <div style="font-size:11px;color:var(--ink3);margin-top:8px;text-align:center">Chrome/Edge only · Browser microphone required</div>
-            </div>
-          </div>
-
-          <!-- CALL HISTORY -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <div style="font-size:13px;font-weight:600;color:var(--ink)">Recent calls</div>
-            <button class="btn btn-outline btn-sm" onclick="buildCallList()"><i class="ti ti-refresh"></i>Refresh</button>
-          </div>
-
-          <div id="call-list-wrap">
-            <div class="empty">
-              <div class="empty-icon"><i class="ti ti-phone-off"></i></div>
-              <div class="empty-t">No calls yet</div>
-              <div class="empty-d">Your call history will appear here after you make your first call.</div>
-            </div>
-          </div>
-
-          <div style="font-size:13px;font-weight:600;color:var(--ink);margin-top:20px;margin-bottom:8px">System log</div>
-          <div class="terminal" id="terminal"></div>
-          <div class="actions">
-            <button class="btn btn-outline btn-sm" onclick="clearLog()"><i class="ti ti-trash"></i>Clear log</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- AGENT CONFIG -->
-      <div id="sec-agent" class="sec">
-        <div class="ph"><div class="ph-t">Agent config</div><div class="ph-d">Customize Siya's persona, language and qualification flow.</div></div>
-        <div class="p-body">
-          <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--r2);margin-bottom:16px;background:#fff">
-            <div style="width:40px;height:40px;border-radius:10px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🤖</div>
-            <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--ink)" id="agent-preview-name">Siya</div><div style="font-size:12px;color:var(--ink3)">Study Abroad Advisor · Leverage Edu</div></div>
-            <button class="btn btn-primary btn-sm" onclick="saveAgent()"><i class="ti ti-device-floppy"></i>Save</button>
-            <button class="btn btn-outline btn-sm" onclick="exportAgent()"><i class="ti ti-download"></i>Export</button>
+      <!-- AGENTS -->
+      <div id="sec-agents" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Agents</div><div class="sec-desc">Build and configure your AI voice agents.</div></div><button class="btn btn-primary btn-sm" onclick="saveAgent()"><i class="ti ti-device-floppy"></i>Save config</button></div>
+        <div class="sec-body">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:14px">
+            <div style="width:40px;height:40px;border-radius:var(--r2);background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🤖</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--ink)" id="agent-preview-name">Siya</div><div style="font-size:11px;color:var(--ink3)">Study Abroad Advisor · Leverage Edu</div></div>
+            <button class="btn btn-outline btn-sm" onclick="exportAgent()"><i class="ti ti-download"></i>Export JSON</button>
+            <button class="btn btn-danger btn-sm" onclick="resetAgent()"><i class="ti ti-rotate"></i>Reset</button>
           </div>
           <div class="two">
             <div class="card">
-              <div class="card-head"><i class="ti ti-user"></i>Identity</div>
-              <div class="card-body">
+              <div class="card-h"><i class="ti ti-user"></i>Identity</div>
+              <div class="card-b">
                 <div class="fr"><label class="fl">Agent name</label><input class="fin" id="a-name" value="Siya"></div>
                 <div class="fr"><label class="fl">Role</label><input class="fin" id="a-role" value="Study Abroad Advisor"></div>
-                <div class="fr" style="margin-bottom:0"><label class="fl">Language</label><select class="fin" id="a-lang"><option value="hinglish" selected>Hinglish (Hindi + English)</option><option value="english">English</option><option value="hindi">Hindi</option></select></div>
+                <div class="fr" style="margin:0"><label class="fl">Language</label><select class="fin" id="a-lang"><option value="hinglish" selected>Hinglish (Hindi + English)</option><option value="english">English only</option><option value="hindi">Hindi only</option></select></div>
               </div>
             </div>
             <div class="card">
-              <div class="card-head"><i class="ti ti-settings-2"></i>Behaviour</div>
-              <div class="card-body">
-                <div class="tog-row"><div><div class="tog-l">Auto-qualify leads</div><div class="tog-d">Score leads 0–100 after call</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
-                <div class="tog-row"><div><div class="tog-l">Save transcripts</div><div class="tog-d">Store full call transcript</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
-                <div class="tog-row"><div><div class="tog-l">Gender-aware Hindi</div><div class="tog-d">Adapt Hindi grammar by gender</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
+              <div class="card-h"><i class="ti ti-settings-2"></i>Behaviour</div>
+              <div class="card-b">
+                <div class="tog-row"><div><div class="tog-title">Auto-qualify leads</div><div class="tog-sub">Score leads 0–100 after call ends</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
+                <div class="tog-row"><div><div class="tog-title">Save transcripts</div><div class="tog-sub">Store full call transcript in logs</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
+                <div class="tog-row"><div><div class="tog-title">Gender-aware Hindi</div><div class="tog-sub">Adapt Hindi grammar by gender</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
               </div>
             </div>
           </div>
           <div class="card">
-            <div class="card-head"><i class="ti ti-message-dots"></i>Opening line</div>
-            <div class="card-body"><input class="fin" id="a-opening" value="Namaste! Main Siya hoon, Leverage Edu se. Kya aap study abroad plan kar rahe hain?"></div>
+            <div class="card-h"><i class="ti ti-message-dots"></i>Opening line</div>
+            <div class="card-b"><input class="fin" id="a-opening" value="Namaste! Main Siya hoon, Leverage Edu se. Kya aap study abroad plan kar rahe hain?"></div>
           </div>
+        </div>
+      </div>
+
+      <!-- TEST AGENT (main call interface) -->
+      <div id="sec-test" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Test agent</div><div class="sec-desc">Have a live voice conversation with Siya. Works instantly — no API key required.</div></div></div>
+        <div class="sec-body">
+          <div class="call-card" id="call-card">
+            <div class="call-card-head">
+              <div class="agent-pulse" id="agent-pulse"></div>
+              <div>
+                <div class="agent-name-label">Siya — Study Abroad Advisor</div>
+                <div class="agent-role-label">Leverage Edu · Lead Qualification</div>
+              </div>
+              <div class="call-timer" id="ctimer">0:00</div>
+            </div>
+            <div class="mode-bar">
+              <div class="mode-chip fsm" id="mode-chip">⚡ Built-in</div>
+              <span id="mode-desc" style="color:var(--ink2);margin-left:4px">Zero-cost FSM engine — works offline</span>
+              <span class="mode-action" onclick="goTo('integrations')" id="mode-action">Add Groq AI →</span>
+            </div>
+            <div class="call-body">
+              <div id="call-ui" style="display:none">
+                <div class="call-state-bar"><div class="cs-dot" id="cs-dot"></div><span id="cs-text" style="flex:1">Ready</span></div>
+                <div class="wf-canvas" id="waveform"></div>
+                <div class="transcript" id="transcript"><span class="ts-ph">Conversation will appear here…</span></div>
+              </div>
+              <div class="input-row">
+                <input class="inp" id="dial-name" placeholder="Student name (optional — e.g. Rahul Sharma)">
+                <button class="btn btn-outline btn-sm" onclick="runDemo()"><i class="ti ti-player-play"></i>Demo</button>
+              </div>
+              <button class="call-main-btn" id="callbtn" onclick="toggleCall()">
+                <i class="ti ti-phone-outgoing" id="callbtn-ic"></i>Start call
+              </button>
+              <div style="font-size:10px;color:var(--ink3);margin-top:8px;text-align:center">Chrome or Edge only · Browser microphone required</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIMULATION -->
+      <div id="sec-simulation" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Simulation <span style="font-size:11px;color:var(--sky);background:var(--sky-glow);border:1px solid var(--sky-border);padding:2px 6px;border-radius:3px;margin-left:6px">Beta</span></div><div class="sec-desc">Run automated conversation simulations to test your agent.</div></div></div>
+        <div class="sec-body"><div class="empty"><div class="empty-i"><i class="ti ti-activity"></i></div><div class="empty-t">No simulations yet</div><div class="empty-d">Run simulations to test Siya against common conversation scenarios before going live.</div></div></div>
+      </div>
+
+      <!-- LIBRARY -->
+      <div id="sec-library" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Library</div><div class="sec-desc">Reusable prompts, templates and knowledge base documents.</div></div><button class="btn btn-outline btn-sm"><i class="ti ti-plus"></i>Add document</button></div>
+        <div class="sec-body"><div class="empty"><div class="empty-i"><i class="ti ti-books"></i></div><div class="empty-t">No documents yet</div><div class="empty-d">Upload knowledge base documents, FAQs and policy files that Siya can reference during calls.</div></div></div>
+      </div>
+
+      <!-- PRONUNCIATION -->
+      <div id="sec-pronunciation" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Pronunciation</div><div class="sec-desc">Teach the agent how to pronounce brand names, abbreviations and proper nouns.</div></div><button class="btn btn-outline btn-sm"><i class="ti ti-plus"></i>Add rule</button></div>
+        <div class="sec-body"><div class="empty"><div class="empty-i"><i class="ti ti-abc"></i></div><div class="empty-t">No pronunciation rules</div><div class="empty-d">Add rules to ensure Siya pronounces "Leverage Edu", "IELTS", "TOEFL" and other terms correctly.</div></div></div>
+      </div>
+
+      <!-- NUMBERS -->
+      <div id="sec-numbers" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Numbers</div><div class="sec-desc">Manage phone numbers for inbound and outbound calls.</div></div></div>
+        <div class="sec-body"><div class="empty"><div class="empty-i"><i class="ti ti-phone"></i></div><div class="empty-t">No phone numbers</div><div class="empty-d">Add Exotel, Ozonetel or Plivo numbers to enable real phone call capabilities. Browser calls work without this.</div></div></div>
+      </div>
+
+      <!-- CAMPAIGNS -->
+      <div id="sec-campaigns" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Campaigns</div><div class="sec-desc">Launch outbound campaigns and automate bulk calling.</div></div><button class="btn btn-outline btn-sm"><i class="ti ti-plus"></i>New campaign</button></div>
+        <div class="sec-body"><div class="empty"><div class="empty-i"><i class="ti ti-speakerphone"></i></div><div class="empty-t">No campaigns yet</div><div class="empty-d">Create campaigns to call multiple leads automatically with Siya.</div></div></div>
+      </div>
+
+      <!-- CALL LOGS -->
+      <div id="sec-calllogs" class="sec">
+        <div class="sec-header">
+          <div><div class="sec-title">Call logs</div><div class="sec-desc">Detailed logs of all conversations with transcripts and sentiment scores.</div></div>
+          <button class="btn btn-outline btn-sm" onclick="buildCallList()"><i class="ti ti-refresh"></i>Refresh</button>
+        </div>
+        <div class="sec-body">
+          <div id="calllogs-wrap">
+            <div class="empty"><div class="empty-i"><i class="ti ti-phone-off"></i></div><div class="empty-t">No calls yet</div><div class="empty-d">Call logs will appear here after your first conversation with Siya. Go to <span style="color:var(--sky);cursor:pointer" onclick="goTo('test')">Test agent</span> to start.</div></div>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:var(--ink2);margin-top:16px;margin-bottom:8px">Execution log</div>
+          <div class="terminal" id="terminal"></div>
           <div class="actions">
-            <button class="btn btn-primary" onclick="saveAgent()"><i class="ti ti-device-floppy"></i>Save config</button>
-            <button class="btn btn-outline" onclick="exportAgent()"><i class="ti ti-download"></i>Export JSON</button>
-            <button class="btn btn-danger" onclick="resetAgent()"><i class="ti ti-rotate"></i>Reset</button>
+            <button class="btn btn-outline btn-sm" onclick="clearLog()"><i class="ti ti-trash"></i>Clear</button>
           </div>
         </div>
       </div>
 
-      <!-- SETUP -->
-      <div id="sec-setup" class="sec">
-        <div class="ph"><div class="ph-t">Setup guide</div><div class="ph-d">VoxPath works instantly. All steps below are optional upgrades.</div></div>
-        <div class="p-body">
-          <div class="step"><div class="stepn">1</div><div><div class="step-t">Click "Call Siya now" — it works immediately</div><div class="step-d">The built-in conversation engine requires zero configuration. Works offline. No API key needed.</div></div></div>
-          <div class="step"><div class="stepn">2</div><div><div class="step-t">Allow microphone in Chrome or Edge</div><div class="step-d">The browser will ask for microphone permission on the first call. Click Allow. Speech-to-text and text-to-speech are built into the browser — no extra setup.</div></div></div>
-          <div class="step"><div class="stepn">3</div><div><div class="step-t">(Optional) Get a free Groq key for smarter AI</div><div class="step-d">Go to <b>console.groq.com</b> → sign up free → create API key → paste in Integrations. Unlocks Llama 3.3 70B for much more natural Hinglish conversation. 14,400 requests/day free.</div><a href="https://console.groq.com/keys" target="_blank" class="btn btn-primary btn-sm" style="margin-top:10px"><i class="ti ti-external-link"></i>Open Groq Console</a></div></div>
-          <div class="step"><div class="stepn">4</div><div><div class="step-t">(Optional) Get a free ElevenLabs key for natural voice</div><div class="step-d">Go to <b>elevenlabs.io</b> → sign up free → Profile → API Keys → Create → paste in Integrations. 10,000 characters/month free. No credit card required.</div><a href="https://elevenlabs.io" target="_blank" class="btn btn-outline btn-sm" style="margin-top:10px"><i class="ti ti-external-link"></i>Open ElevenLabs</a></div></div>
-          <div class="step"><div class="stepn">5</div><div><div class="step-t">Chrome or Edge only for voice calls</div><div class="step-d">The Web Speech API used for speech recognition is only available in Chromium-based browsers. Safari and Firefox are not supported.</div></div></div>
-        </div>
+      <!-- EXECUTION LOGS -->
+      <div id="sec-executionlogs" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Execution logs</div><div class="sec-desc">Step-by-step execution traces for debugging agent flows.</div></div></div>
+        <div class="sec-body"><div class="empty"><div class="empty-i"><i class="ti ti-terminal-2"></i></div><div class="empty-t">No execution logs</div><div class="empty-d">Execution traces will appear here after calls are made.</div></div></div>
       </div>
 
-      <!-- FREE STACK -->
-      <div id="sec-stack" class="sec">
-        <div class="ph"><div class="ph-t">Free stack</div><div class="ph-d">Every component is free — no trial period, no credit card, no hidden limits.</div></div>
-        <div class="p-body">
-          <div class="sgrid">
-            <div class="scard"><div class="scard-icon">🎤</div><div class="scard-n">Chrome Speech API</div><div class="scard-r">Speech to text</div><div class="scard-d">Built into Chrome and Edge. Real-time transcription with no API key or quota.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div></div>
-            <div class="scard"><div class="scard-icon">🧠</div><div class="scard-n">Built-in FSM engine</div><div class="scard-r">Conversation brain</div><div class="scard-d">Siya's conversation logic runs entirely in your browser. Zero API calls. Works offline.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>No API needed</div></div>
-            <div class="scard"><div class="scard-icon">⚡</div><div class="scard-n">Groq + Llama 3.3 70B</div><div class="scard-r">AI upgrade (optional)</div><div class="scard-d">Free Groq account: 14,400 requests/day. Llama 3.3 70B is smarter and faster than Gemini Flash.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>14,400 req/day free</div></div>
-            <div class="scard"><div class="scard-icon">🔊</div><div class="scard-n">Chrome TTS</div><div class="scard-r">Text to speech</div><div class="scard-d">Browser speechSynthesis API. Automatically picks the best available voice on your system.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div></div>
-            <div class="scard"><div class="scard-icon">🎙️</div><div class="scard-n">ElevenLabs TTS</div><div class="scard-r">Natural voice (optional)</div><div class="scard-d">Free tier: 10,000 chars/month. Human-quality voice. No credit card. Optional upgrade over Chrome TTS.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>10K chars/mo free</div></div>
-            <div class="scard"><div class="scard-icon">🌐</div><div class="scard-n">GitHub Pages</div><div class="scard-r">Hosting</div><div class="scard-d">Static hosting with free SSL and global CDN. Zero cost, no server needed.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div></div>
+      <!-- INSIGHTS -->
+      <div id="sec-insights" class="sec">
+        <div class="sec-header"><div><div class="sec-title">Insights</div><div class="sec-desc">Performance analytics across all agents and campaigns.</div></div></div>
+        <div class="sec-body">
+          <div class="chart-card">
+            <div class="chart-head"><span class="chart-title">Call volume over time</span></div>
+            <canvas id="insights-chart" class="chart"></canvas>
+            <div id="insights-empty" style="text-align:center;padding:20px;font-size:12px;color:var(--ink3)">No data yet</div>
           </div>
         </div>
       </div>
 
       <!-- INTEGRATIONS -->
       <div id="sec-integrations" class="sec">
-        <div class="ph"><div class="ph-t">Integrations</div><div class="ph-d">All API keys are stored locally in your browser. Nothing is sent to any server.</div></div>
-        <div class="p-body">
-
+        <div class="sec-header"><div><div class="sec-title">Integrations</div><div class="sec-desc">API keys stored locally in your browser. Nothing sent to any server.</div></div></div>
+        <div class="sec-body">
           <div class="el-banner">
-            <div class="el-banner-icon">🎙️</div>
+            <div class="el-ico">🎙️</div>
             <div style="flex:1">
-              <div class="el-banner-t">ElevenLabs — Natural voice, free tier</div>
-              <div class="el-banner-d">10,000 characters/month free. No credit card. Siya sounds human instead of robotic.</div>
+              <div class="el-t">ElevenLabs — Natural voice, free tier</div>
+              <div class="el-d">10,000 characters/month free. No credit card. Makes Siya sound human instead of robotic.</div>
               <div class="el-steps">
-                <span class="el-step-tag">1. elevenlabs.io → Sign up</span>
-                <span class="el-step-tag">2. Profile → API Keys → Create</span>
-                <span class="el-step-tag">3. Paste below and save</span>
+                <span class="el-step">1. elevenlabs.io → Sign up</span>
+                <span class="el-step">2. Profile → API Keys → Create</span>
+                <span class="el-step">3. Paste below</span>
               </div>
             </div>
-            <a href="https://elevenlabs.io" target="_blank" class="btn btn-outline btn-sm"><i class="ti ti-external-link"></i>Get free key</a>
+            <a href="https://elevenlabs.io" target="_blank" class="btn btn-outline btn-sm"><i class="ti ti-external-link"></i>Get key</a>
           </div>
 
           <div class="two">
             <div class="card">
-              <div class="card-head"><i class="ti ti-wavesaw-tool"></i>ElevenLabs TTS</div>
-              <div class="card-body">
-                <div class="fr"><label class="fl">API Key</label><div class="krow"><input class="ki" id="k-elevenlabs" type="password" placeholder="sk_..."><button class="btn btn-primary btn-sm" onclick="saveKeys()">Save</button></div></div>
-                <div class="fr" style="margin-bottom:8px"><label class="fl">Voice</label>
-                  <select class="fin" id="k-el-voice" style="font-size:12px">
-                    <option value="EXAVITQu4vr4xnSDxMaL">Bella — soft & warm (recommended)</option>
-                    <option value="21m00Tcm4TlvDq8ikWAM">Rachel — clear & natural</option>
-                    <option value="AZnzlk1XvdvUeBnXmlld">Domi — confident</option>
-                    <option value="pNInz6obpgDQGcFmaJgB">Adam — natural male</option>
-                  </select>
-                </div>
-                <button class="btn btn-outline btn-sm" onclick="testVoice()"><i class="ti ti-volume"></i>Test voice</button>
+              <div class="card-h"><i class="ti ti-wavesaw-tool"></i>ElevenLabs TTS</div>
+              <div class="card-b">
+                <div class="fr"><label class="fl">API Key</label><div class="kf"><input class="ki" id="k-elevenlabs" type="password" placeholder="sk_..."><button class="btn btn-sky btn-sm" onclick="saveKeys()">Save</button></div></div>
+                <div class="fr" style="margin:0"><label class="fl">Voice</label><select class="fin" style="font-size:11px" id="k-el-voice"><option value="EXAVITQu4vr4xnSDxMaL">Bella — soft & warm</option><option value="21m00Tcm4TlvDq8ikWAM">Rachel — clear & natural</option><option value="AZnzlk1XvdvUeBnXmlld">Domi — confident</option><option value="pNInz6obpgDQGcFmaJgB">Adam — natural male</option></select></div>
+                <button class="btn btn-outline btn-sm" onclick="testVoice()" style="margin-top:10px"><i class="ti ti-volume"></i>Test voice</button>
               </div>
             </div>
             <div class="card">
-              <div class="card-head"><i class="ti ti-bolt"></i>Groq AI (LLM)</div>
-              <div class="card-body">
-                <div class="fr"><label class="fl">API Key</label><div class="krow"><input class="ki" id="k-groq" type="password" placeholder="gsk_..."><button class="btn btn-primary btn-sm" onclick="saveKeys()">Save</button></div><div style="font-size:11px;color:var(--ink3);margin-top:5px">Free at <a href="https://console.groq.com/keys" target="_blank" style="color:var(--sky-text)">console.groq.com</a> · Llama 3.3 70B · 14,400 req/day</div></div>
+              <div class="card-h"><i class="ti ti-bolt"></i>Groq AI (LLM)</div>
+              <div class="card-b">
+                <div class="fr"><label class="fl">API Key</label><div class="kf"><input class="ki" id="k-groq" type="password" placeholder="gsk_..."><button class="btn btn-sky btn-sm" onclick="saveKeys()">Save</button></div></div>
+                <div style="font-size:10px;color:var(--ink3);margin-top:4px">Free at <a href="https://console.groq.com/keys" target="_blank" style="color:var(--sky)">console.groq.com</a> · Llama 3.3 70B · 14,400 req/day</div>
               </div>
             </div>
             <div class="card">
-              <div class="card-head"><i class="ti ti-brand-google"></i>Gemini (alternative LLM)</div>
-              <div class="card-body">
-                <div class="fr"><label class="fl">API Key</label><div class="krow"><input class="ki" id="k-gemini" type="password" placeholder="AIza..."><button class="btn btn-primary btn-sm" onclick="saveKeys()">Save</button></div><div style="font-size:11px;color:var(--ink3);margin-top:5px">Free at <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--sky-text)">aistudio.google.com</a></div></div>
+              <div class="card-h"><i class="ti ti-brand-google"></i>Gemini (LLM)</div>
+              <div class="card-b">
+                <div class="fr" style="margin:0"><label class="fl">API Key</label><div class="kf"><input class="ki" id="k-gemini" type="password" placeholder="AIza..."><button class="btn btn-sky btn-sm" onclick="saveKeys()">Save</button></div></div>
+                <div style="font-size:10px;color:var(--ink3);margin-top:4px">Free at <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--sky)">aistudio.google.com</a></div>
               </div>
             </div>
             <div class="card">
-              <div class="card-head"><i class="ti ti-brand-google"></i>Google OAuth</div>
-              <div class="card-body">
-                <div class="fr" style="margin-bottom:0"><label class="fl">Client ID</label><div class="krow"><input class="ki" id="k-oauth" type="text" placeholder="123456.apps.googleusercontent.com"><button class="btn btn-primary btn-sm" onclick="saveGCID()">Save</button></div><div style="font-size:11px;color:var(--ink3);margin-top:5px">Restricts login to @leverageedu.com</div></div>
+              <div class="card-h"><i class="ti ti-brand-google"></i>Google OAuth</div>
+              <div class="card-b">
+                <div class="fr" style="margin:0"><label class="fl">Client ID (restrict login to @leverageedu.com)</label><div class="kf"><input class="ki" id="k-oauth" type="text" placeholder="123456.apps.googleusercontent.com"><button class="btn btn-sky btn-sm" onclick="saveGCID()">Save</button></div></div>
               </div>
             </div>
           </div>
           <div class="actions">
             <button class="btn btn-primary" onclick="saveKeys()"><i class="ti ti-device-floppy"></i>Save all</button>
-            <button class="btn btn-danger" onclick="clearKeys()"><i class="ti ti-trash"></i>Clear all keys</button>
+            <button class="btn btn-danger" onclick="clearKeys()"><i class="ti ti-trash"></i>Clear all</button>
           </div>
         </div>
       </div>
 
-      <!-- SETTINGS -->
-      <div id="sec-settings" class="sec">
-        <div class="ph"><div class="ph-t">Settings</div></div>
-        <div class="p-body">
-          <div class="two">
-            <div class="card">
-              <div class="card-head"><i class="ti ti-building"></i>Workspace</div>
-              <div class="card-body">
-                <div class="fr"><label class="fl">Display name</label><input class="fin" id="s-name" placeholder="Your name"></div>
-                <div class="fr" style="margin-bottom:12px"><label class="fl">Organisation</label><input class="fin" id="s-org" value="Leverage Edu"></div>
-                <button class="btn btn-primary btn-sm" onclick="saveSettings()"><i class="ti ti-device-floppy"></i>Save</button>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-head"><i class="ti ti-info-circle"></i>About</div>
-              <div class="card-body" style="font-size:13px;color:var(--ink2);line-height:1.7">
-                <b style="color:var(--ink)">VoxPath v3</b> by Leverage Edu<br>
-                Zero-cost voice AI panel. Built-in FSM engine works offline. Optional Groq + ElevenLabs upgrade for AI quality.<br>
-                <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
-                  <span class="tag">v3.0</span>
-                  <span class="tag" style="color:#16A34A;background:#F0FDF4;border-color:#BBF7D0">₹0/month</span>
-                  <span class="tag" style="color:var(--sky-text);background:var(--sky-bg);border-color:var(--sky-border)">Works offline</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </main>
-  </div>
-</div>
+    </div><!-- /main -->
+  </div><!-- /main-wrap -->
+</div><!-- /app -->
 
 <div class="toast" id="toast"><i class="ti ti-check" id="toast-ic"></i><span id="toast-msg">Saved</span></div>
 
 <script>
 /* ══ AUTH ══ */
 function handleGoogleLogin(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const e=p.email||'';if(!e.endsWith('@leverageedu.com')&&e!=='demo@leverageedu.com'){showLE('Only @leverageedu.com accounts allowed.');return;}doLogin({name:p.name||e.split('@')[0],email:e,avatar:p.picture||''});}catch(e){showLE('Google sign-in failed.');}}
-function handleEmailLogin(){const e=document.getElementById('login-email').value.trim();const p=document.getElementById('login-pass').value;if(!e||!p){showLE('Enter email and password.');return;}if(e==='demo@leverageedu.com'&&p==='leverage2024'){doLogin({name:'Shivam',email:e,avatar:''});return;}if(!e.endsWith('@leverageedu.com')){showLE('Only @leverageedu.com accounts allowed.');return;}showLE('Invalid credentials.');}
+function handleEmailLogin(){const e=document.getElementById('login-email').value.trim();const p=document.getElementById('login-pass').value;if(!e||!p){showLE('Enter email and password.');return;}if(e==='demo@leverageedu.com'&&p==='leverage2024'){doLogin({name:'Shivam',email:e,avatar:''});return;}if(!e.endsWith('@leverageedu.com')){showLE('Only @leverageedu.com allowed.');return;}showLE('Invalid credentials.');}
 function showLE(m){const el=document.getElementById('lerr');el.style.display='block';document.getElementById('lerr-msg').textContent=m;}
 function doLogin(u){localStorage.setItem('voxpath-user',JSON.stringify(u));showApp(u);}
 function showApp(u){
   document.getElementById('login-page').style.display='none';
   document.getElementById('app').classList.add('visible');
   const n=u.name||u.email.split('@')[0];
-  ['user-name-tb','home-name','sb-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n;});
+  ['sb-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n;});
   const se=document.getElementById('sb-email');if(se)se.textContent=u.email;
-  const sn=document.getElementById('s-name');if(sn)sn.value=n;
   if(u.avatar){const img=document.getElementById('user-avatar');img.src=u.avatar;img.style.display='block';document.getElementById('user-av-fb').style.display='none';}
-  const h=new Date().getHours();const el=document.getElementById('greet-time');if(el)el.textContent=h<12?'morning':h<17?'afternoon':'evening';
-  buildWaveform();buildTerminal();loadKeys();detectMode();
-  goTo('home');
+  buildWaveform();buildTerminal();loadKeys();detectMode();initChart();
+  goTo('overview');
 }
 function logout(){localStorage.removeItem('voxpath-user');document.getElementById('app').classList.remove('visible');document.getElementById('login-page').style.display='flex';}
 
 /* ══ NAV ══ */
-const PAGES={home:'Home',calls:'Call logs',agent:'Agent config',setup:'Setup guide',stack:'Free stack',integrations:'Integrations',settings:'Settings'};
-function goTo(name){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.sbi').forEach(s=>s.classList.remove('active'));const sec=document.getElementById('sec-'+name);if(sec)sec.classList.add('active');const nav=document.getElementById('nav-'+name);if(nav)nav.classList.add('active');}
+const PAGE_NAMES={overview:'Overview',agents:'Agents',test:'Test agent',simulation:'Simulation',library:'Library',pronunciation:'Pronunciation',numbers:'Numbers',campaigns:'Campaigns',calllogs:'Call logs',executionlogs:'Execution logs',insights:'Insights',integrations:'Integrations'};
+function goTo(name){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sbi').forEach(s=>s.classList.remove('active'));
+  const sec=document.getElementById('sec-'+name);if(sec)sec.classList.add('active');
+  const nav=document.getElementById('nav-'+name);if(nav)nav.classList.add('active');
+  const tb=document.getElementById('tb-page');if(tb)tb.textContent=PAGE_NAMES[name]||name;
+  if(name==='calllogs')buildCallList();
+  if(name==='overview')redrawChart();
+}
+
+/* ══ CHART ══ */
+let chartData={labels:[],outbound:[],inbound:[],sentiment:[]};
+function initChart(){redrawChart();}
+function redrawChart(){
+  const cv=document.getElementById('overview-chart');const ic=document.getElementById('insights-chart');
+  const empty=document.getElementById('chart-empty');const ie=document.getElementById('insights-empty');
+  if(!callsData.length){if(empty)empty.style.display='block';if(cv)cv.style.display='none';if(ie)ie.style.display='block';if(ic)ic.style.display='none';return;}
+  if(empty)empty.style.display='none';if(cv)cv.style.display='block';if(ie)ie.style.display='none';if(ic)ic.style.display='block';
+  const days=parseInt(document.getElementById('date-range')?.value||'7');
+  const labels=[];for(let i=days-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);labels.push(d.toLocaleDateString('en-IN',{month:'short',day:'numeric'}));}
+  const outArr=labels.map((_,i)=>i===labels.length-1?callsData.filter(c=>c.time==='Just now'||c.time?.includes('min')).length:0);
+  const sentArr=labels.map((_,i)=>i===labels.length-1&&callsData.length?Math.round(callsData.reduce((a,c)=>a+c.score,0)/callsData.length):0);
+  drawLineChart(cv,'#1C9FD4','#22C55E',labels,outArr,sentArr);
+  drawLineChart(ic,'#1C9FD4','#22C55E',labels,outArr,[]);
+}
+function drawLineChart(cv,c1,c2,labels,d1,d2){
+  if(!cv)return;const ctx=cv.getContext('2d');const W=cv.offsetWidth*2;const H=cv.offsetHeight*2;cv.width=W;cv.height=H;
+  const bg='#0D0D0D';const gridC='rgba(255,255,255,.06)';
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  const pad={l:32,r:16,t:12,b:32};const cw=W-pad.l-pad.r;const ch=H-pad.t-pad.b;
+  const n=labels.length;if(n<2)return;
+  // grid
+  for(let i=0;i<=4;i++){const y=pad.t+ch*(i/4);ctx.beginPath();ctx.strokeStyle=gridC;ctx.lineWidth=1;ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();}
+  // labels
+  ctx.fillStyle='rgba(255,255,255,.3)';ctx.font=`${18}px Inter,sans-serif`;
+  labels.forEach((l,i)=>{if(i%Math.ceil(n/5)===0||i===n-1){const x=pad.l+i*(cw/(n-1));ctx.fillText(l,x-8,H-8);}});
+  // line fn
+  function drawLine(data,color){
+    const max=Math.max(...data,1);
+    ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.lineJoin='round';
+    data.forEach((v,i)=>{const x=pad.l+i*(cw/(n-1));const y=pad.t+ch*(1-v/max);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
+    ctx.stroke();
+    // dots
+    data.forEach((v,i)=>{const x=pad.l+i*(cw/(n-1));const y=pad.t+ch*(1-v/max);ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();});
+  }
+  if(d1.some(v=>v>0))drawLine(d1,c1);
+  if(d2&&d2.some(v=>v>0))drawLine(d2,c2);
+}
+function refreshOverview(){updateOverviewStats();redrawChart();showToast('Refreshed');}
+function updateOverviewStats(){
+  const n=callsData.length;
+  const el=id=>document.getElementById(id);
+  if(el('stat-out'))el('stat-out').textContent=n;
+  if(el('stat-in'))el('stat-in').textContent=0;
+  const dur=callsData.filter(c=>c.dur&&c.dur!=='—').map(c=>{const p=c.dur.split(':');return parseInt(p[0])*60+parseInt(p[1]);});
+  const totalMin=Math.round(dur.reduce((a,b)=>a+b,0)/60);
+  if(el('stat-dur'))el('stat-dur').textContent=totalMin+'m';
+  if(n>0){
+    const avg=Math.round(dur.reduce((a,b)=>a+b,0)/n);
+    if(el('stat-out-dur'))el('stat-out-dur').textContent='Avg '+Math.floor(avg/60)+':'+String(avg%60).padStart(2,'0');
+    const sa=callsData.map(c=>c.score).filter(Boolean);
+    const avgS=(sa.reduce((a,b)=>a+b,0)/sa.length/100).toFixed(2);
+    if(el('stat-sent'))el('stat-sent').textContent='+'+avgS;
+    if(el('stat-sent-sub'))el('stat-sent-sub').textContent='Positive';
+    if(el('stat-sent-sub'))el('stat-sent-sub').className='stat-sub up';
+  }
+}
 
 /* ══ WAVEFORM ══ */
-function buildWaveform(){const el=document.getElementById('waveform');if(!el||el.children.length)return;for(let i=0;i<80;i++){const b=document.createElement('div');b.className='wfb idle';b.style.setProperty('--d',(Math.random()*.7+.5).toFixed(2)+'s');b.style.setProperty('--delay',(Math.random()*.9).toFixed(2)+'s');el.appendChild(b);}}
-let audioCtx=null,analyser=null,micStream=null,wfAnim=null;
-async function startMicViz(){
-  try{if(!micStream){micStream=await navigator.mediaDevices.getUserMedia({audio:true});}if(!audioCtx){audioCtx=new AudioContext();}if(audioCtx.state==='suspended')await audioCtx.resume();const src=audioCtx.createMediaStreamSource(micStream);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);const data=new Uint8Array(analyser.frequencyBinCount);const bars=document.querySelectorAll('.wfb');
-  function viz(){if(!callActive){bars.forEach(b=>{b.style.height='';b.classList.add('idle');b.classList.remove('on');});return;}analyser.getByteFrequencyData(data);bars.forEach((b,i)=>{const v=data[Math.floor(i*data.length/bars.length)]/255;b.style.height=Math.max(2,v*44)+'px';b.classList.remove('idle');b.classList.add('on');});wfAnim=requestAnimationFrame(viz);}
-  wfAnim=requestAnimationFrame(viz);}catch(e){addLog('tl-warn','MIC','Waveform unavailable');}
-}
-function stopMicViz(){cancelAnimationFrame(wfAnim);document.querySelectorAll('.wfb').forEach(b=>{b.style.height='';b.classList.add('idle');b.classList.remove('on');});}
+function buildWaveform(){const el=document.getElementById('waveform');if(!el||el.children.length)return;for(let i=0;i<90;i++){const b=document.createElement('div');b.className='wfb idle';b.style.setProperty('--d',(Math.random()*.7+.4).toFixed(2)+'s');b.style.setProperty('--delay',(Math.random()*.9).toFixed(2)+'s');el.appendChild(b);}}
+let audioCtx=null,analyser=null,micStream=null,wfAnimId=null;
+async function startMicViz(){try{if(!micStream){micStream=await navigator.mediaDevices.getUserMedia({audio:true});}if(!audioCtx){audioCtx=new AudioContext();}if(audioCtx.state==='suspended')await audioCtx.resume();const src=audioCtx.createMediaStreamSource(micStream);analyser=audioCtx.createAnalyser();analyser.fftSize=256;src.connect(analyser);const data=new Uint8Array(analyser.frequencyBinCount);const bars=document.querySelectorAll('.wfb');function viz(){if(!callActive){bars.forEach(b=>{b.style.height='';b.classList.add('idle');b.classList.remove('on');});return;}analyser.getByteFrequencyData(data);bars.forEach((b,i)=>{const v=data[Math.floor(i*data.length/bars.length)]/255;b.style.height=Math.max(2,v*40)+'px';b.classList.remove('idle');b.classList.add('on');});wfAnimId=requestAnimationFrame(viz);}wfAnimId=requestAnimationFrame(viz);}catch(e){}}
+function stopMicViz(){cancelAnimationFrame(wfAnimId);document.querySelectorAll('.wfb').forEach(b=>{b.style.height='';b.classList.add('idle');b.classList.remove('on');});}
 
 /* ══ CALL DATA ══ */
 let callsData=[];
 function buildCallList(){
-  const wrap=document.getElementById('call-list-wrap');if(!wrap)return;
-  if(!callsData.length){wrap.innerHTML='<div class="empty"><div class="empty-icon"><i class="ti ti-phone-off"></i></div><div class="empty-t">No calls yet</div><div class="empty-d">Your call history will appear here after you make your first call.</div></div>';const m=document.getElementById('m-calls');if(m)m.style.display='none';return;}
-  wrap.innerHTML=`<div class="table-wrap"><div class="table-head calls-cols"><span>Student</span><span>Duration</span><span>Time</span><span>Score</span><span></span></div>${callsData.map((c,i)=>{const s=c.score>=80?'score-hi':c.score>=60?'score-mi':'score-lo';return`<div class="table-row calls-cols" onclick="toggleDetail(${i})"><div><div style="font-size:13px;font-weight:500;color:var(--ink)">${c.num}</div></div><div style="font-size:12px;color:var(--ink2);font-family:var(--fm)">${c.dur}</div><div style="font-size:11px;color:var(--ink3)">${c.time}</div><div><span class="score-pill ${s}">${c.score}</span></div><div style="color:var(--ink3)"><i class="ti ti-chevron-down" id="ch-${i}" style="font-size:13px;transition:var(--trans)"></i></div></div><div class="row-detail" id="cd-${i}">${c.transcript.map(([r,t])=>`<div><span class="${r==='agent'?'tl-info':'tl-ok'}" style="font-weight:600">${r==='agent'?'Siya':'You'}:</span> <span>${t}</span></div>`).join('')}</div>`;}).join('')}</div>`;
-  const m=document.getElementById('m-calls');if(m){m.textContent=callsData.length;m.style.display='flex';}
-  updateStats();
+  const wrap=document.getElementById('calllogs-wrap');if(!wrap)return;
+  if(!callsData.length){wrap.innerHTML='<div class="empty"><div class="empty-i"><i class="ti ti-phone-off"></i></div><div class="empty-t">No calls yet</div><div class="empty-d">Call logs will appear here after your first conversation. Go to <span style="color:var(--sky);cursor:pointer" onclick="goTo(\'test\')">Test agent</span> to start.</div></div>';const m=document.getElementById('m-calls');if(m)m.textContent='';return;}
+  wrap.innerHTML=`<div class="logs-table"><div class="lt-header cols-calls"><span>Student</span><span>Duration</span><span>Time</span><span>Score</span><span></span></div>${callsData.map((c,i)=>{const s=c.score>=80?'s-hi':c.score>=60?'s-mi':'s-lo';return`<div class="lt-row cols-calls" onclick="toggleRow(${i})"><div><div style="font-size:12px;font-weight:500;color:var(--ink)">${c.num}</div></div><div style="font-size:11px;color:var(--ink2);font-family:var(--fm)">${c.dur}</div><div style="font-size:10px;color:var(--ink3)">${c.time}</div><div><span class="score-tag ${s}">${c.score}</span></div><div><i class="ti ti-chevron-down" id="ch-${i}" style="font-size:12px;color:var(--ink3);transition:var(--trans)"></i></div></div><div class="row-expand" id="cd-${i}">${c.transcript.map(([r,t])=>`<div><span class="${r==='agent'?'tl-info':'tl-ok'}" style="font-weight:600">${r==='agent'?'Siya':'You'}:</span> <span>${t}</span></div>`).join('')}</div>`;}).join('')}</div>`;
+  const m=document.getElementById('m-calls');if(m)m.textContent=callsData.length;
+  updateOverviewStats();redrawChart();
 }
-function toggleDetail(i){const d=document.getElementById('cd-'+i);const ch=document.getElementById('ch-'+i);const o=d.classList.contains('open');d.classList.toggle('open',!o);if(ch)ch.style.transform=o?'':'rotate(180deg)';}
-function updateStats(){
-  const sc=document.getElementById('stat-calls');if(sc)sc.textContent=callsData.length;
-  const today=callsData.filter(c=>c.time==='Just now'||c.time?.includes('min'));
-  const dur=callsData.filter(c=>c.dur&&c.dur!=='—').map(c=>{const p=c.dur.split(':');return parseInt(p[0])*60+parseInt(p[1]);});
-  const sd=document.getElementById('stat-dur');if(sd&&dur.length){const avg=Math.round(dur.reduce((a,b)=>a+b,0)/dur.length);sd.textContent=Math.floor(avg/60)+':'+(avg%60+'').padStart(2,'0');}
-  const senti=callsData.map(c=>c.score).filter(Boolean);
-  const ss=document.getElementById('stat-sent');if(ss&&senti.length)ss.textContent=(senti.reduce((a,b)=>a+b,0)/senti.length/100).toFixed(2);
-}
+function toggleRow(i){const d=document.getElementById('cd-'+i);const ch=document.getElementById('ch-'+i);const o=d.classList.contains('open');d.classList.toggle('open',!o);if(ch)ch.style.transform=o?'':'rotate(180deg)';}
 
 /* ══ TERMINAL ══ */
-function buildTerminal(){[['tl-ok','BOOT','VoxPath v3 ready'],['tl-ok','ENGINE','FSM · Chrome STT · Chrome TTS'],['tl-info','STATUS','Ready — zero API keys required']].forEach(([c,l,m])=>addLog(c,l,m,false));}
+function buildTerminal(){[['tl-ok','BOOT','VoxPath ready · FSM engine active'],['tl-ok','ENGINE','Chrome STT + Chrome TTS + FSM brain'],['tl-info','STATUS','No API keys required · Optional Groq + ElevenLabs upgrade available']].forEach(([c,l,m])=>addLog(c,l,m,false));}
 function addLog(cls,lbl,msg,scroll=true){const t=document.getElementById('terminal');if(!t)return;const now=new Date();const ts=`[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;const d=document.createElement('div');d.innerHTML=`<span class="tl-ts">${ts}</span><span class="${cls} tl-lbl">${lbl}</span><span>${msg}</span>`;t.appendChild(d);if(scroll)t.scrollTop=t.scrollHeight;}
 function clearLog(){document.getElementById('terminal').innerHTML='';showToast('Log cleared');}
 
-/* ══ MODE DETECTION ══ */
+/* ══ MODE DETECT ══ */
 function detectMode(){
   const g=localStorage.getItem('voxpath-key-groq');const gm=localStorage.getItem('voxpath-key-gemini');
-  const mt=document.getElementById('mode-tag');const md=document.getElementById('mode-desc');const ml=document.getElementById('mode-link');
+  const mc=document.getElementById('mode-chip');const md=document.getElementById('mode-desc');const ma=document.getElementById('mode-action');
   const pm=document.getElementById('pill-mode');const pmt=document.getElementById('pill-mode-txt');
-  if(g){if(mt){mt.className='mode-tag ai';mt.textContent='🧠 Groq AI';}if(md)md.textContent='Llama 3.3 70B · 14,400 req/day free.';if(ml)ml.style.display='none';if(pmt)pmt.textContent='Groq';}
-  else if(gm){if(mt){mt.className='mode-tag ai';mt.textContent='🧠 Gemini';}if(md)md.textContent='Gemini 2.0 Flash · free tier.';if(ml)ml.style.display='none';if(pmt)pmt.textContent='Gemini';}
-  else{if(mt){mt.className='mode-tag fsm';mt.textContent='⚡ Built-in';}if(md)md.textContent='Zero-cost FSM engine — works offline.';if(ml)ml.style.display='';if(pmt)pmt.textContent='FSM';}
+  if(g){if(mc){mc.className='mode-chip ai';mc.textContent='🧠 Groq';}if(md)md.textContent='Llama 3.3 70B via Groq';if(ma)ma.style.display='none';if(pmt)pmt.textContent='Groq';}
+  else if(gm){if(mc){mc.className='mode-chip ai';mc.textContent='🧠 Gemini';}if(md)md.textContent='Gemini 2.0 Flash';if(ma)ma.style.display='none';if(pmt)pmt.textContent='Gemini';}
+  else{if(mc){mc.className='mode-chip fsm';mc.textContent='⚡ Built-in';}if(md)md.textContent='Zero-cost FSM — works offline';if(ma)ma.style.display='';if(pmt)pmt.textContent='FSM';}
   const el=localStorage.getItem('voxpath-key-elevenlabs');
-  const pv=document.getElementById('pill-voice');if(pv)pv.innerHTML=`<i class="ti ti-wavesaw-tool" style="font-size:11px"></i>${el?'ElevenLabs':'Chrome TTS'}`;
+  const pv=document.getElementById('pill-voice');if(pv)pv.innerHTML=`<i class="ti ti-wavesaw-tool" style="font-size:10px"></i>${el?'ElevenLabs':'Chrome TTS'}`;
 }
 
-/* ══ SIYA FSM ══ */
+/* ══ FSM ══ */
 class SiyaFSM{
-  constructor(name){this.name=name||'';this.step=0;this.data={};
+  constructor(n){this.name=n||'';this.step=0;this.data={};
     this.flow=[
       ()=>`Namaste${this.name?' '+this.name:''}! Main Siya hoon, Leverage Edu se. Kya aap study abroad plan kar rahe hain?`,
       ()=>'Abhi aap studying hain ya working?',
@@ -696,95 +754,79 @@ class SiyaFSM{
   }
   respond(inp){
     if(/nahi|no\b|not interested|busy/i.test(inp))return 'Koi baat nahi! Agar kabhi zaroorat ho, Leverage Edu hamesha available hai. Have a great day!';
-    if(this.step===0){
-      if(/haan|yes|yeah|sure|plan|interested|want|kar raha/i.test(inp)){this.step=1;return this.flow[1]();}
-      return 'Okay! Future mein consider karein toh zaroor call karein. Koi aur sawaal?';
-    }
-    this.data['q'+this.step]=inp;this.step++;
+    if(this.step===0){if(/haan|yes|yeah|sure|plan|interested|want|kar raha/i.test(inp)){this.step=1;return this.flow[1]();}return 'Okay! Future mein consider karein toh zaroor call karein. Koi aur sawaal?';}
+    this.step++;
     if(this.step<this.flow.length)return this.acks[Math.floor(Math.random()*this.acks.length)]+' '+this.flow[this.step]();
-    return `Perfect! Saari details note ho gayi. Humara counsellor 24 ghante mein call karega. Koi sawaal?`;
+    return 'Perfect! Saari details note ho gayi. Humara counsellor 24 ghante mein call karega!';
   }
 }
 
 /* ══ LLM ══ */
-const SP=`You are Siya, an outbound lead qualification agent for Leverage Edu. Short responses — max 2 sentences. Speak in natural Hinglish. Ask qualification questions ONE at a time: 1.Study/work 2.Qualification 3.Country 4.Intake 5.Program 6.Field 7.Budget 8.English test 9.Passport 10.City. End with counsellor callback booking.`;
+const SP=`You are Siya, outbound lead qualification agent for Leverage Edu. SHORT responses — max 2 sentences. Hinglish. Ask ONE question at a time: study/work, qualification, country, intake, program, field, budget, English test, passport, city. End with counsellor callback.`;
 let aiMsgs=[];
 async function getSiyaReply(inp){
   const gk=localStorage.getItem('voxpath-key-groq');const gmk=localStorage.getItem('voxpath-key-gemini');
   aiMsgs.push({role:'user',content:inp});
-  if(gk){try{const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+gk,'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:SP},...aiMsgs],max_tokens:120,temperature:.8})});const d=await r.json();if(d.error)throw new Error(d.error.message);const rep=d.choices[0].message.content.trim();aiMsgs.push({role:'assistant',content:rep});return rep;}catch(e){addLog('tl-warn','GROQ',e.message);}}
-  if(gmk){try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${gmk}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:SP}]},contents:aiMsgs.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:120,temperature:.8}})});const d=await r.json();if(d.error)throw new Error(d.error.message);const rep=d.candidates?.[0]?.content?.parts?.[0]?.text||'?';aiMsgs.push({role:'assistant',content:rep});return rep;}catch(e){addLog('tl-warn','GEMINI',e.message);}}
+  if(gk){try{const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+gk,'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:SP},...aiMsgs],max_tokens:120,temperature:.8})});const d=await r.json();if(!d.error){const rep=d.choices[0].message.content.trim();aiMsgs.push({role:'assistant',content:rep});return rep;}}catch(e){addLog('tl-warn','GROQ',e.message);}}
+  if(gmk){try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${gmk}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:SP}]},contents:aiMsgs.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:120,temperature:.8}})});const d=await r.json();if(!d.error){const rep=d.candidates?.[0]?.content?.parts?.[0]?.text||'?';aiMsgs.push({role:'assistant',content:rep});return rep;}}catch(e){addLog('tl-warn','GEMINI',e.message);}}
   const rep=siyaFSM.respond(inp);aiMsgs.push({role:'assistant',content:rep});return rep;
 }
 
 /* ══ TTS ══ */
-function getBestVoice(){const vs=window.speechSynthesis.getVoices();if(!vs.length)return null;const p=[v=>/en-IN/i.test(v.lang)&&/neerja|ravi/i.test(v.name),v=>/en-IN/i.test(v.lang)&&/natural|neural|online/i.test(v.name),v=>/en-IN/i.test(v.lang),v=>v.lang.startsWith('en')&&/aria|jenny|natasha|hazel|zira/i.test(v.name),v=>v.lang.startsWith('en')&&/samantha|karen|kate/i.test(v.name),v=>v.lang.startsWith('en')&&/google/i.test(v.name),v=>v.lang.startsWith('en')];for(const f of p){const v=vs.find(f);if(v)return v;}return vs[0];}
-async function speakEL(text,key){const vid=localStorage.getItem('voxpath-el-voice')||'EXAVITQu4vr4xnSDxMaL';const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vid}/stream`,{method:'POST',headers:{'xi-api-key':key,'Content-Type':'application/json'},body:JSON.stringify({text,model_id:'eleven_flash_v2_5',voice_settings:{stability:.45,similarity_boost:.75,style:.15,use_speaker_boost:true}})});if(!res.ok){const e=await res.json();throw new Error(e.detail?.message||'EL '+res.status);}const blob=await res.blob();const url=URL.createObjectURL(blob);return new Promise((res,rej)=>{const a=new Audio(url);a.onended=()=>{URL.revokeObjectURL(url);res();};a.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('Audio failed'));};a.play().catch(rej);});}
-function speakChrome(text,cb){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);const v=getBestVoice();if(v)u.voice=v;u.rate=.88;u.pitch=1.08;u.onend=()=>{isSpeaking=false;if(callActive){setCST('listening');if(cb)cb();}};u.onerror=()=>{isSpeaking=false;if(callActive&&cb)cb();};window.speechSynthesis.speak(u);}
+function getBestVoice(){const vs=window.speechSynthesis.getVoices();if(!vs.length)return null;const p=[v=>/en-IN/i.test(v.lang)&&/neerja|ravi/i.test(v.name),v=>/en-IN/i.test(v.lang)&&/natural|neural|online/i.test(v.name),v=>/en-IN/i.test(v.lang),v=>v.lang.startsWith('en')&&/aria|jenny|natasha|hazel/i.test(v.name),v=>v.lang.startsWith('en')&&/samantha|karen|kate/i.test(v.name),v=>v.lang.startsWith('en')&&/google/i.test(v.name),v=>v.lang.startsWith('en')];for(const f of p){const v=vs.find(f);if(v)return v;}return vs[0];}
+async function speakEL(text,key){const vid=localStorage.getItem('voxpath-el-voice')||'EXAVITQu4vr4xnSDxMaL';const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vid}/stream`,{method:'POST',headers:{'xi-api-key':key,'Content-Type':'application/json'},body:JSON.stringify({text,model_id:'eleven_flash_v2_5',voice_settings:{stability:.45,similarity_boost:.75,style:.15,use_speaker_boost:true}})});if(!res.ok)throw new Error('EL '+res.status);const blob=await res.blob();const url=URL.createObjectURL(blob);return new Promise((res,rej)=>{const a=new Audio(url);a.onended=()=>{URL.revokeObjectURL(url);res();};a.onerror=()=>{URL.revokeObjectURL(url);rej();};a.play().catch(rej);});}
+function speakChrome(text,cb){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);const v=getBestVoice();if(v)u.voice=v;u.rate=.88;u.pitch=1.08;u.onend=()=>{isSpeaking=false;if(callActive){setCS('listening');if(cb)cb();}};u.onerror=()=>{isSpeaking=false;if(callActive&&cb)cb();};window.speechSynthesis.speak(u);}
 async function speakText(text,cb){
-  isSpeaking=true;setCST('speaking');
+  isSpeaking=true;setCS('speaking');
   const elk=localStorage.getItem('voxpath-key-elevenlabs');
-  if(elk){try{await speakEL(text,elk);isSpeaking=false;if(callActive){setCST('listening');if(cb)cb();}return;}catch(e){addLog('tl-warn','EL_TTS','Fallback: '+e.message);}}
+  if(elk){try{await speakEL(text,elk);isSpeaking=false;if(callActive){setCS('listening');if(cb)cb();}return;}catch(e){addLog('tl-warn','EL_TTS','Fallback: '+e.message);}}
   speakChrome(text,cb);
 }
-function testVoice(){const k=localStorage.getItem('voxpath-key-elevenlabs');const s='Namaste! Main Siya hoon, Leverage Edu se. How can I help you today?';if(k){(async()=>{try{await speakEL(s,k);showToast('ElevenLabs voice preview');}catch(e){showToast(e.message);speakChrome(s,null);}})();}else{speakChrome(s,null);showToast('Chrome TTS preview — add ElevenLabs key for natural voice');}}
+function testVoice(){const k=localStorage.getItem('voxpath-key-elevenlabs');const s='Namaste! Main Siya hoon, Leverage Edu se. How can I help you today?';if(k)(async()=>{try{await speakEL(s,k);showToast('ElevenLabs preview ✓');}catch(e){speakChrome(s,null);showToast('EL error — using Chrome TTS');}})();else{speakChrome(s,null);showToast('Chrome TTS preview — add ElevenLabs for better voice');}}
 
 /* ══ CALL ENGINE ══ */
 let callActive=false,callSecs=0,callTimerInt=null,isSpeaking=false;
 let recognition=null,callHistory=[],siyaFSM=null,callName='';
-function setCST(st){
-  const dot=document.getElementById('csdot');const txt=document.getElementById('cstext');const adot=document.getElementById('agent-dot');const orb=document.querySelector('.cmd-header .cmd-agent-name');
-  const map={idle:{d:'',t:'Ready',a:''},connecting:{d:'',t:'Connecting…',a:''},listening:{d:'on',t:'Listening — speak now',a:'live'},thinking:{d:'',t:'Siya is thinking…',a:''},speaking:{d:'speak',t:'Siya is speaking…',a:'speaking'},ended:{d:'',t:'Call ended',a:''}};
-  const s=map[st]||{d:'',t:st,a:''};
-  if(dot){dot.className='cmd-state-dot';if(s.d)dot.classList.add(s.d);}
-  if(txt)txt.textContent=s.t;
-  if(adot){adot.className='agent-dot';if(s.a)adot.classList.add(s.a);}
+function setCS(st){
+  const dot=document.getElementById('cs-dot');const txt=document.getElementById('cs-text');const ap=document.getElementById('agent-pulse');
+  const m={idle:{d:'',t:'Ready',p:''},connecting:{d:'',t:'Connecting…',p:''},listening:{d:'listening',t:'Listening — speak now',p:'live'},thinking:{d:'',t:'Siya is thinking…',p:''},speaking:{d:'speaking',t:'Siya is speaking…',p:'speaking'},ended:{d:'',t:'Call ended',p:''}};
+  const s=m[st]||{d:'',t:st,p:''};
+  if(dot){dot.className='cs-dot';if(s.d)dot.classList.add(s.d);}if(txt)txt.textContent=s.t;
+  if(ap){ap.className='agent-pulse';if(s.p)ap.classList.add(s.p);}
 }
-function addTr(role,text){const el=document.getElementById('transcript');if(!el)return;const ph=el.querySelector('.t-ph');if(ph)ph.remove();const d=document.createElement('div');d.style.marginBottom='4px';d.innerHTML=role==='siya'?`<span class="tl-info" style="font-weight:600">Siya:</span> <span>${text}</span>`:`<span class="tl-ok" style="font-weight:600">You:</span> <span>${text}</span>`;el.appendChild(d);el.scrollTop=el.scrollHeight;}
-function updateTimer(){callSecs++;const m=Math.floor(callSecs/60);const s=String(callSecs%60).padStart(2,'0');const el=document.getElementById('ctimer');if(el)el.textContent=m+':'+s;}
+function addTr(role,text){const el=document.getElementById('transcript');if(!el)return;const ph=el.querySelector('.ts-ph');if(ph)ph.remove();const d=document.createElement('div');d.style.marginBottom='4px';d.innerHTML=role==='siya'?`<span class="ts-siya">Siya:</span> <span>${text}</span>`:`<span class="ts-user">You:</span> <span>${text}</span>`;el.appendChild(d);el.scrollTop=el.scrollHeight;}
 function endCall(){
-  callActive=false;clearInterval(callTimerInt);
-  if(recognition)try{recognition.stop();}catch(e){}window.speechSynthesis.cancel();stopMicViz();setCST('ended');
-  const btn=document.getElementById('callbtn');const ic=document.getElementById('callbtn-icon');
-  if(btn){btn.className='call-btn';btn.childNodes[1].textContent='Call Siya now — free';}if(ic)ic.className='ti ti-phone-outgoing';
-  const tmr=document.getElementById('ctimer');if(tmr)tmr.style.display='none';
-  const ui=document.getElementById('call-ui');if(ui)ui.style.display='none';
+  callActive=false;clearInterval(callTimerInt);if(recognition)try{recognition.stop();}catch(e){}window.speechSynthesis.cancel();stopMicViz();setCS('ended');
+  const btn=document.getElementById('callbtn');const ic=document.getElementById('callbtn-ic');if(btn){btn.className='call-main-btn';if(btn.childNodes[1])btn.childNodes[1].textContent='Start call';}if(ic)ic.className='ti ti-phone-outgoing';
+  document.getElementById('ctimer').style.display='none';document.getElementById('call-ui').style.display='none';
   const dur=Math.floor(callSecs/60)+':'+String(callSecs%60).padStart(2,'0');
   const score=Math.min(95,Math.max(30,callHistory.length*8+30));
   callsData.unshift({num:callName||'Browser call',time:'Just now',dur,score,type:'out',transcript:callHistory.map(h=>[h.role==='siya'?'agent':'user',h.text])});
-  buildCallList();addLog('tl-ok','CALL_END','Duration: '+dur);showToast('Call ended · '+dur);
+  buildCallList();addLog('tl-ok','CALL_END','Duration: '+dur+' · Score: '+score);showToast('Call ended · '+dur);
   callSecs=0;callHistory=[];aiMsgs=[];callName='';siyaFSM=null;
 }
 function startSTT(){
   if(!callActive||isSpeaking)return;
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){showToast('Use Chrome or Edge');return;}
   recognition=new SR();recognition.lang='en-IN';recognition.continuous=false;recognition.interimResults=false;
-  recognition.onstart=()=>setCST('listening');
-  recognition.onresult=async e=>{const t=e.results[0][0].transcript;addTr('user',t);addLog('tl-ok','YOU',t);setCST('thinking');try{const r=await getSiyaReply(t);addTr('siya',r);addLog('tl-info','SIYA',r.slice(0,70)+(r.length>70?'…':''));callHistory.push({role:'user',text:t},{role:'siya',text:r});speakText(r,()=>{if(callActive)startSTT();});}catch(e){addLog('tl-err','ERR',e.message);endCall();}};
+  recognition.onstart=()=>setCS('listening');
+  recognition.onresult=async e=>{const t=e.results[0][0].transcript;addTr('user',t);addLog('tl-ok','YOU',t);setCS('thinking');try{const r=await getSiyaReply(t);addTr('siya',r);addLog('tl-info','SIYA',r.slice(0,70)+(r.length>70?'…':''));callHistory.push({role:'user',text:t},{role:'siya',text:r});speakText(r,()=>{if(callActive)startSTT();});}catch(e){addLog('tl-err','ERR',e.message);endCall();}};
   recognition.onerror=ev=>{if((ev.error==='no-speech'||ev.error==='audio-capture')&&callActive)setTimeout(()=>{if(callActive&&!isSpeaking)startSTT();},600);};
   recognition.onend=()=>{if(callActive&&!isSpeaking)setTimeout(()=>{if(callActive&&!isSpeaking)startSTT();},300);};
   try{recognition.start();}catch(e){}
 }
 async function toggleCall(){
   if(callActive){endCall();return;}
-  callName=document.getElementById('dial-name')?.value.trim()||'';
-  callActive=true;callSecs=0;callHistory=[];aiMsgs=[];
-  siyaFSM=new SiyaFSM(callName);
-  const btn=document.getElementById('callbtn');const ic=document.getElementById('callbtn-icon');
-  if(btn){btn.className='call-btn ending';if(btn.childNodes[1])btn.childNodes[1].textContent='End call';}if(ic)ic.className='ti ti-phone-off';
-  document.getElementById('call-ui').style.display='block';
-  const tmr=document.getElementById('ctimer');if(tmr)tmr.style.display='block';
-  const tr=document.getElementById('transcript');if(tr)tr.innerHTML='<span class="t-ph">Conversation will appear here…</span>';
-  callTimerInt=setInterval(updateTimer,1000);setCST('connecting');
-  addLog('tl-ok','CALL_START','Starting'+(callName?' → '+callName:''));
-  startMicViz();
-  try{const opening=await getSiyaReply(callName?`Student name is ${callName}. Give opening greeting.`:'Give opening greeting.');addTr('siya',opening);addLog('tl-info','SIYA',opening.slice(0,70)+(opening.length>70?'…':''));callHistory.push({role:'siya',text:opening});speakText(opening,()=>{if(callActive)startSTT();});showToast('Call started');}
+  callName=document.getElementById('dial-name')?.value.trim()||'';callActive=true;callSecs=0;callHistory=[];aiMsgs=[];siyaFSM=new SiyaFSM(callName);
+  const btn=document.getElementById('callbtn');const ic=document.getElementById('callbtn-ic');if(btn){btn.className='call-main-btn ending';if(btn.childNodes[1])btn.childNodes[1].textContent='End call';}if(ic)ic.className='ti ti-phone-off';
+  document.getElementById('call-ui').style.display='block';document.getElementById('ctimer').style.display='block';
+  const tr=document.getElementById('transcript');if(tr)tr.innerHTML='<span class="ts-ph">Conversation will appear here…</span>';
+  callTimerInt=setInterval(()=>{callSecs++;const m=Math.floor(callSecs/60);const s=String(callSecs%60).padStart(2,'0');const el=document.getElementById('ctimer');if(el)el.textContent=m+':'+s;},1000);
+  setCS('connecting');addLog('tl-ok','CALL_START','Starting'+(callName?' → '+callName:''));startMicViz();
+  try{const op=await getSiyaReply(callName?`Student name is ${callName}. Give opening greeting.`:'Give opening greeting.');addTr('siya',op);addLog('tl-info','SIYA',op.slice(0,70)+(op.length>70?'…':''));callHistory.push({role:'siya',text:op});speakText(op,()=>{if(callActive)startSTT();});showToast('Call started');}
   catch(e){endCall();addLog('tl-err','ERR',e.message);showToast('Error: '+e.message);}
 }
-function runDemo(){const steps=[()=>addLog('tl-info','SIYA','Namaste! Main Siya hoon, Leverage Edu se. Kya aap study abroad plan kar rahe hain?'),()=>addLog('tl-ok','YOU','Haan, UK mein MBA karna chahta hoon.'),()=>addLog('tl-info','SIYA','Perfect! Abhi aap studying hain ya working?'),()=>addLog('tl-ok','YOU','Working hoon, 2 years ho gaye.'),()=>addLog('tl-info','SIYA','Got it! Budget roughly 10 lakhs se zyada hai?'),()=>addLog('tl-ok','CALL_END','Demo complete · Score: 82')];let i=0;const t=setInterval(()=>{if(i<steps.length)steps[i++]();else clearInterval(t);},1100);showToast('Demo running…');}
-
-/* ══ TOAST ══ */
-function showToast(msg){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);}
+function runDemo(){const steps=[()=>addLog('tl-info','SIYA','Namaste! Main Siya hoon, Leverage Edu se. Study abroad plan hai?'),()=>addLog('tl-ok','YOU','Haan, UK mein MBA karna chahta hoon.'),()=>addLog('tl-info','SIYA','Perfect! Abhi studying hain ya working?'),()=>addLog('tl-ok','YOU','Working hoon, 2 years ho gaye.'),()=>addLog('tl-info','SIYA','Got it! Budget 10 lakhs se zyada hai?'),()=>addLog('tl-ok','CALL_END','Demo · Score: 82')];let i=0;const t=setInterval(()=>{if(i<steps.length)steps[i++]();else clearInterval(t);},1100);showToast('Demo running…');}
 
 /* ══ AGENT ══ */
 function saveAgent(){const n=document.getElementById('a-name')?.value||'Siya';const pn=document.getElementById('agent-preview-name');if(pn)pn.textContent=n;showToast('Agent saved');}
@@ -793,10 +835,12 @@ function resetAgent(){if(document.getElementById('a-opening'))document.getElemen
 
 /* ══ KEYS ══ */
 function saveKeys(){[['k-groq','voxpath-key-groq'],['k-gemini','voxpath-key-gemini'],['k-elevenlabs','voxpath-key-elevenlabs'],['k-oauth','voxpath-key-oauth']].forEach(([id,lk])=>{const v=document.getElementById(id)?.value;if(v)localStorage.setItem(lk,v);});const ev=document.getElementById('k-el-voice')?.value;if(ev)localStorage.setItem('voxpath-el-voice',ev);detectMode();showToast('Keys saved');}
-function clearKeys(){['voxpath-key-groq','voxpath-key-gemini','voxpath-key-elevenlabs','voxpath-key-oauth'].forEach(k=>localStorage.removeItem(k));['k-groq','k-gemini','k-elevenlabs','k-oauth'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});detectMode();showToast('Keys cleared');}
+function clearKeys(){['voxpath-key-groq','voxpath-key-gemini','voxpath-key-elevenlabs','voxpath-key-oauth'].forEach(k=>localStorage.removeItem(k));['k-groq','k-gemini','k-elevenlabs','k-oauth'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});detectMode();showToast('Cleared');}
 function loadKeys(){[['k-groq','voxpath-key-groq'],['k-gemini','voxpath-key-gemini'],['k-elevenlabs','voxpath-key-elevenlabs'],['k-oauth','voxpath-key-oauth']].forEach(([id,lk])=>{const v=localStorage.getItem(lk);const el=document.getElementById(id);if(v&&el)el.value=v;});const ev=localStorage.getItem('voxpath-el-voice');const es=document.getElementById('k-el-voice');if(ev&&es)es.value=ev;}
 function saveGCID(){const v=document.getElementById('k-oauth')?.value;if(v){localStorage.setItem('voxpath-key-oauth',v);showToast('OAuth ID saved');}}
-function saveSettings(){localStorage.setItem('voxpath-settings',JSON.stringify({name:document.getElementById('s-name')?.value,org:document.getElementById('s-org')?.value}));showToast('Settings saved');}
+
+/* ══ TOAST ══ */
+function showToast(msg){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500);}
 
 /* ══ INIT ══ */
 window.addEventListener('load',()=>{
