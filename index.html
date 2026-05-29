@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>VoxPath — Leverage Edu Voice AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -11,1171 +11,529 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* Leverage Edu 2026 Brand */
-  --navy:#1F3C84;
-  --sky:#1C9FD4;
-  --green:#3FB87B;
-  
-  /* Dark panel system */
-  --bg:#070D1A;
-  --bg2:#0C1526;
-  --bg3:#111E34;
-  --bg4:#172340;
-  --surface:rgba(255,255,255,0.04);
-  --surface2:rgba(255,255,255,0.07);
-  --surface3:rgba(255,255,255,0.10);
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.12);
-  
-  /* Sky accent system */
-  --sky-dim:rgba(28,159,212,0.12);
-  --sky-glow:rgba(28,159,212,0.25);
-  --sky-border:rgba(28,159,212,0.30);
-  --green-dim:rgba(63,184,123,0.12);
-  
-  /* Typography */
-  --ink:#F0F4FF;
-  --ink2:#8FA3C8;
-  --ink3:#4E6A94;
-  --ink4:#2E4670;
-  
-  --f:'Sora',sans-serif;
-  --fm:'JetBrains Mono',monospace;
-  
+  --navy:#1F3C84;--sky:#1C9FD4;--green:#3FB87B;
+  --bg:#070D1A;--bg2:#0C1526;--bg3:#111E34;--bg4:#172340;
+  --surface:rgba(255,255,255,.04);--surface2:rgba(255,255,255,.07);--surface3:rgba(255,255,255,.10);
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --sky-dim:rgba(28,159,212,.12);--sky-glow:rgba(28,159,212,.25);--sky-border:rgba(28,159,212,.30);
+  --green-dim:rgba(63,184,123,.12);--green-border:rgba(63,184,123,.30);
+  --ink:#F0F4FF;--ink2:#8FA3C8;--ink3:#4E6A94;--ink4:#2E4670;
+  --f:'Sora',sans-serif;--fm:'JetBrains Mono',monospace;
   --r:10px;--r2:14px;--r3:20px;
   --trans:all .2s cubic-bezier(.4,0,.2,1);
-  --shadow:0 4px 24px rgba(0,0,0,.5);
 }
-
 html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:14px;overflow:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
+/* ── LOGIN ── */
+#login-page{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden}
+#lc{position:absolute;inset:0;width:100%;height:100%}
+.lg{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none}
+.lg1{width:600px;height:600px;background:rgba(28,159,212,.12);top:-15%;left:-10%}
+.lg2{width:500px;height:500px;background:rgba(31,60,132,.18);bottom:-10%;right:-5%}
+.lg3{width:280px;height:280px;background:rgba(63,184,123,.07);top:40%;right:20%}
+.login-card{position:relative;z-index:2;width:420px;background:rgba(12,21,38,.9);border:1px solid var(--border2);border-radius:24px;padding:40px;backdrop-filter:blur(40px);box-shadow:0 32px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);animation:lIn .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes lIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.lb{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.lb-name{font-size:20px;font-weight:700}.lb-name span{color:var(--sky)}
+.lb-badge{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);background:var(--sky-dim);border:1px solid var(--sky-border);padding:3px 9px;border-radius:20px}
+.lh{font-size:26px;font-weight:700;line-height:1.25;margin-bottom:6px}
+.ls{font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.5}
+.ldiv{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--ink3);font-size:11px}
+.ldiv::before,.ldiv::after{content:'';flex:1;height:1px;background:var(--border)}
+.lfg{margin-bottom:14px}
+.lfl{font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:6px;display:block;letter-spacing:.04em;text-transform:uppercase}
+.lfi{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--ink);font-family:var(--f);font-size:13px;transition:var(--trans);outline:none}
+.lfi::placeholder{color:var(--ink4)}.lfi:focus{border-color:var(--sky-border);background:var(--bg4);box-shadow:0 0 0 3px var(--sky-dim)}
+.lbtn{width:100%;padding:12px;background:var(--sky);color:#fff;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:600;cursor:pointer;transition:var(--trans)}
+.lbtn:hover{background:#1ab2ec;box-shadow:0 4px 20px rgba(28,159,212,.4)}
+.lgw{display:flex;justify-content:center;padding:10px 0}
+.lerr{margin-top:12px;padding:10px 14px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:var(--r);font-size:12px;color:#F87171;display:none;align-items:center;gap:8px}
+.lhint{font-size:11px;color:var(--ink3);text-align:center;margin-top:16px;line-height:1.6}.lhint b{color:var(--ink2)}
 
-/* ═══════════════════════════════════════
-   LOGIN PAGE
-═══════════════════════════════════════ */
-#login-page{
-  position:fixed;inset:0;z-index:200;
-  background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-}
-#login-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.6}
-
-.login-glow{
-  position:absolute;
-  border-radius:50%;filter:blur(120px);pointer-events:none;
-}
-.login-glow-1{width:600px;height:600px;background:rgba(28,159,212,0.15);top:-10%;left:-10%}
-.login-glow-2{width:500px;height:500px;background:rgba(31,60,132,0.20);bottom:-10%;right:-5%}
-.login-glow-3{width:300px;height:300px;background:rgba(63,184,123,0.08);top:40%;right:20%}
-
-.login-card{
-  position:relative;z-index:2;
-  width:420px;
-  background:rgba(12,21,38,0.85);
-  border:1px solid var(--border2);
-  border-radius:24px;
-  padding:40px;
-  backdrop-filter:blur(40px);
-  box-shadow:0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(28,159,212,0.08), inset 0 1px 0 rgba(255,255,255,0.06);
-  animation:loginIn .5s cubic-bezier(.34,1.56,.64,1) both;
-}
-@keyframes loginIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
-
-.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:32px}
-.login-brand-logo{width:36px;height:36px}
-.login-brand-name{font-size:20px;font-weight:700;color:var(--ink)}
-.login-brand-name span{color:var(--sky)}
-.login-badge{
-  margin-left:auto;
-  font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--sky);background:var(--sky-dim);border:1px solid var(--sky-border);
-  padding:3px 8px;border-radius:20px;
-}
-
-.login-headline{font-size:26px;font-weight:700;line-height:1.25;margin-bottom:6px}
-.login-sub{font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.5}
-
-.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--ink3);font-size:11px}
-.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-
-.lf-group{margin-bottom:14px}
-.lf-label{font-size:11px;font-weight:600;color:var(--ink2);margin-bottom:6px;display:block;letter-spacing:.04em;text-transform:uppercase}
-.lf-input{
-  width:100%;padding:11px 14px;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:var(--r);color:var(--ink);font-family:var(--f);font-size:13px;
-  transition:var(--trans);outline:none;
-}
-.lf-input::placeholder{color:var(--ink4)}
-.lf-input:focus{border-color:var(--sky-border);background:var(--bg4);box-shadow:0 0 0 3px var(--sky-dim)}
-
-.btn-login-email{
-  width:100%;padding:12px;background:var(--sky);color:#fff;
-  border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:600;
-  cursor:pointer;transition:var(--trans);letter-spacing:.02em;
-}
-.btn-login-email:hover{background:#1ab2ec;box-shadow:0 4px 20px rgba(28,159,212,.4)}
-
-.login-google-wrap{
-  display:flex;justify-content:center;
-  padding:10px 0;
-}
-.login-error{
-  margin-top:12px;padding:10px 14px;
-  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);
-  border-radius:var(--r);font-size:12px;color:#F87171;
-  display:none;align-items:center;gap:8px;
-}
-.login-hint{font-size:11px;color:var(--ink3);text-align:center;margin-top:16px;line-height:1.6}
-.login-hint b{color:var(--ink2)}
-
-/* ═══════════════════════════════════════
-   APP SHELL
-═══════════════════════════════════════ */
+/* ── APP ── */
 #app{display:none;position:fixed;inset:0;flex-direction:column}
 #app.visible{display:flex}
-
-/* TOP BAR */
-.topbar{
-  height:52px;background:var(--bg2);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 20px;gap:16px;
-  flex-shrink:0;z-index:10;
-}
+.topbar{height:52px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;z-index:10}
 .tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-.tb-logo{width:28px;height:28px}
-.tb-name{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
-.tb-name span{color:var(--sky)}
+.tb-name{font-size:14px;font-weight:700;color:var(--ink)}.tb-name span{color:var(--sky)}
 .tb-sep{width:1px;height:20px;background:var(--border);margin:0 4px}
-.tb-breadcrumb{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:6px}
-.tb-breadcrumb b{color:var(--ink2);font-weight:500}
-
+.tb-bc{font-size:12px;color:var(--ink3)}.tb-bc b{color:var(--ink2);font-weight:500}
 .tb-pills{display:flex;align-items:center;gap:6px;margin-left:auto}
-.tb-pill{
-  display:flex;align-items:center;gap:5px;
-  padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;
-  background:var(--surface);border:1px solid var(--border);color:var(--ink3);
-}
-.tb-pill.live{background:var(--green-dim);border-color:rgba(63,184,123,0.3);color:#5DD99A}
-.tb-pill.live::before{content:'';width:6px;height:6px;border-radius:50%;background:#3FB87B;box-shadow:0 0 6px #3FB87B;animation:pulse 2s infinite}
-.tb-pill.model{color:var(--sky)}
-.tb-pill.cost{color:#A78BFA}
-
+.pill{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:var(--surface);border:1px solid var(--border);color:var(--ink3)}
+.pill.live{background:var(--green-dim);border-color:var(--green-border);color:#5DD99A}
+.pill.live::before{content:'';width:6px;height:6px;border-radius:50%;background:#3FB87B;box-shadow:0 0 6px #3FB87B;animation:pulse 2s infinite}
+.pill.sky{color:var(--sky)}.pill.purple{color:#A78BFA}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-.tb-user{
-  display:flex;align-items:center;gap:8px;
-  padding:4px 10px 4px 4px;border-radius:24px;
-  background:var(--surface);border:1px solid var(--border);
-  cursor:pointer;transition:var(--trans);
-}
+.tb-user{display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border-radius:24px;background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:var(--trans)}
 .tb-user:hover{background:var(--surface2)}
-.tb-avatar{width:28px;height:28px;border-radius:50%;background:var(--navy);border:1.5px solid var(--sky-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sky);overflow:hidden}
-.tb-avatar img{width:100%;height:100%;object-fit:cover}
-.tb-uname{font-size:12px;font-weight:500;color:var(--ink2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-av{width:28px;height:28px;border-radius:50%;background:var(--navy);border:1.5px solid var(--sky-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sky);overflow:hidden}
+.tb-av img{width:100%;height:100%;object-fit:cover}
+.tb-un{font-size:12px;font-weight:500;color:var(--ink2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* BODY */
-.shell-body{display:flex;flex:1;overflow:hidden}
+.shell{display:flex;flex:1;overflow:hidden}
+.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding:12px 0}
+.sb-sec{padding:0 10px;margin-bottom:4px}
+.sb-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:8px 10px 4px;display:block}
+.sbi{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r);color:var(--ink3);font-size:12px;font-weight:500;cursor:pointer;transition:var(--trans);border:1px solid transparent;user-select:none;text-decoration:none}
+.sbi i{font-size:17px;flex-shrink:0}.sbi:hover{color:var(--ink);background:var(--surface)}.sbi.active{color:var(--sky);background:var(--sky-dim);border-color:var(--sky-border)}
+.sb-badge{margin-left:auto;min-width:18px;height:18px;padding:0 5px;background:var(--sky);color:#fff;font-size:10px;font-weight:700;border-radius:9px;display:flex;align-items:center;justify-content:center}
+.sb-badge.g{background:var(--green)}
+.sb-bot{margin-top:auto;padding:12px 10px;border-top:1px solid var(--border)}
+.sb-ui{padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px}
+.sb-un{font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:2px}
+.sb-ue{font-size:10px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-lo{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--ink3);font-family:var(--f);font-size:12px;cursor:pointer;transition:var(--trans)}
+.sb-lo:hover{border-color:rgba(239,68,68,.3);color:#F87171;background:rgba(239,68,68,.06)}
 
-/* SIDEBAR */
-.sidebar{
-  width:220px;flex-shrink:0;
-  background:var(--bg2);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow-y:auto;padding:12px 0;
-}
-.sb-section{padding:0 10px;margin-bottom:4px}
-.sb-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:8px 10px 4px;display:block}
-.sb-item{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 10px;border-radius:var(--r);
-  color:var(--ink3);font-size:12px;font-weight:500;
-  cursor:pointer;transition:var(--trans);position:relative;
-  text-decoration:none;border:1px solid transparent;
-  user-select:none;
-}
-.sb-item i{font-size:17px;flex-shrink:0}
-.sb-item:hover{color:var(--ink);background:var(--surface)}
-.sb-item.active{
-  color:var(--sky);background:var(--sky-dim);
-  border-color:var(--sky-border);
-}
-.sb-item.active i{color:var(--sky)}
-.sb-badge{
-  margin-left:auto;min-width:18px;height:18px;padding:0 5px;
-  background:var(--sky);color:#fff;font-size:10px;font-weight:700;
-  border-radius:9px;display:flex;align-items:center;justify-content:center;
-}
-.sb-badge.green{background:var(--green)}
-
-.sb-bottom{margin-top:auto;padding:12px 10px;border-top:1px solid var(--border)}
-.sb-user-info{padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px}
-.sb-user-email{font-size:10px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-user-name{font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:2px}
-.sb-logout{
-  width:100%;display:flex;align-items:center;justify-content:center;gap:6px;
-  padding:8px;background:transparent;border:1px solid var(--border);
-  border-radius:var(--r);color:var(--ink3);font-family:var(--f);font-size:12px;
-  cursor:pointer;transition:var(--trans);
-}
-.sb-logout:hover{border-color:rgba(239,68,68,.3);color:#F87171;background:rgba(239,68,68,.06)}
-
-/* MAIN CONTENT */
 .main{flex:1;overflow-y:auto;background:var(--bg)}
-.sec{display:none;padding:28px 32px;min-height:100%;animation:secIn .25s ease both}
+.sec{display:none;padding:28px 32px;min-height:100%;animation:sIn .25s ease both}
 .sec.active{display:block}
-@keyframes secIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes sIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* PAGE HEADERS */
-.page-eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sky);margin-bottom:8px}
-.page-title{font-size:24px;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:6px}
-.page-desc{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:28px}
+.ey{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sky);margin-bottom:8px}
+.pt{font-size:24px;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:6px}
+.pd{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:24px}
 
-/* STAT CARDS */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-.stat-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);
-  padding:18px 20px;position:relative;overflow:hidden;transition:var(--trans);
-}
-.stat-card::after{content:'';position:absolute;inset:0;background:var(--sky-dim);opacity:0;transition:var(--trans)}
-.stat-card:hover{border-color:var(--sky-border)}
-.stat-card:hover::after{opacity:1}
-.stat-card-inner{position:relative;z-index:1}
-.stat-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
-.stat-val{font-size:28px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
-.stat-val.sky{color:var(--sky)}
-.stat-val.green{color:#3FB87B}
-.stat-val.purple{color:#A78BFA}
-.stat-tag{font-size:10px;color:var(--ink3);display:flex;align-items:center;gap:4px}
-.stat-tag.up{color:#3FB87B}
-.stat-tag.down{color:#F87171}
-.stat-icon{position:absolute;top:16px;right:16px;font-size:20px;color:var(--ink4);opacity:.5}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:18px 20px;position:relative;overflow:hidden;transition:var(--trans)}
+.sc:hover{border-color:var(--sky-border)}.sc i.si{position:absolute;top:16px;right:16px;font-size:20px;color:var(--ink4);opacity:.4}
+.slbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.sv{font-size:28px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.sv.sky{color:var(--sky)}.sv.g{color:#3FB87B}.sv.p{color:#A78BFA}
+.stag{font-size:10px;color:var(--ink3);display:flex;align-items:center;gap:4px}
+.stag.up{color:#3FB87B}.stag.dn{color:#F87171}
 
-/* CALL INTERFACE CARD */
-.call-command{
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);
-  padding:24px;margin-bottom:20px;position:relative;overflow:hidden;
-}
-.call-command::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--sky),transparent);
-  opacity:0;transition:var(--trans);
-}
-.call-command.ringing::before{opacity:1}
-
-.call-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px}
-.agent-orb{
-  width:52px;height:52px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,var(--navy),#0F2050);
-  border:1.5px solid var(--sky-border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;
-  box-shadow:0 0 0 0 var(--sky-glow);
-  transition:box-shadow .3s;
-}
-.agent-orb.speaking{animation:orbPulse 1.2s ease-in-out infinite}
-@keyframes orbPulse{0%,100%{box-shadow:0 0 0 0 var(--sky-glow)}50%{box-shadow:0 0 0 12px transparent}}
-
-.agent-info{flex:1}
-.agent-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:3px}
-.agent-role{font-size:11px;color:var(--ink3)}
-
-.call-timer-badge{
-  font-family:var(--fm);font-size:20px;font-weight:500;
-  color:var(--sky);background:var(--sky-dim);border:1px solid var(--sky-border);
-  padding:6px 14px;border-radius:var(--r);letter-spacing:.04em;
-}
-
-.call-state-row{
-  display:flex;align-items:center;gap:10px;margin-bottom:16px;
-  padding:10px 14px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border);
-}
-.call-state-dot{width:8px;height:8px;border-radius:50%;background:var(--ink4);flex-shrink:0}
-.call-state-dot.active{background:var(--sky);box-shadow:0 0 8px var(--sky);animation:pulse 1.5s infinite}
-.call-state-dot.speaking{background:#3FB87B;box-shadow:0 0 8px #3FB87B;animation:pulse 1s infinite}
-.call-state-text{font-size:12px;color:var(--ink2)}
-
-/* WAVEFORM */
-.waveform{
-  display:flex;align-items:center;gap:2px;height:40px;
-  padding:0 4px;margin-bottom:16px;
-  background:var(--bg3);border-radius:var(--r);
-  overflow:hidden;border:1px solid var(--border);
-}
-.wf-bar{
-  flex:1;max-width:3px;border-radius:2px;background:var(--sky);opacity:.5;
-  transform-origin:center;
-}
-.wf-bar.active{opacity:.9;animation:wfAnim var(--d,.6s) ease-in-out var(--delay,0s) infinite alternate}
-@keyframes wfAnim{from{transform:scaleY(.1)}to{transform:scaleY(1)}}
-
-/* TRANSCRIPT */
-.transcript-box{
-  background:var(--bg);border:1px solid var(--border);border-radius:var(--r);
-  padding:14px;max-height:180px;overflow-y:auto;
-  font-size:12px;line-height:1.8;
-  margin-bottom:16px;font-family:var(--fm);
-}
-.t-siya{color:var(--sky);font-weight:600}
-.t-siya-text{color:rgba(240,244,255,.8)}
-.t-user-name{color:#3FB87B;font-weight:600}
-.t-user-text{color:rgba(240,244,255,.7)}
-.t-placeholder{color:var(--ink4)}
-
-/* FORM CONTROLS */
-.call-form-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:16px}
-.field-input{
-  width:100%;padding:10px 14px;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:var(--r);color:var(--ink);font-family:var(--f);font-size:13px;
-  outline:none;transition:var(--trans);
-}
-.field-input::placeholder{color:var(--ink4)}
-.field-input:focus{border-color:var(--sky-border);box-shadow:0 0 0 3px var(--sky-dim)}
-
-/* BUTTONS */
-.btn{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:9px 18px;border-radius:var(--r);
-  font-family:var(--f);font-size:12px;font-weight:600;
-  border:none;cursor:pointer;transition:var(--trans);letter-spacing:.01em;
-  white-space:nowrap;
-}
-.btn-sky{background:var(--sky);color:#fff}
-.btn-sky:hover{background:#1ab2ec;box-shadow:0 4px 16px rgba(28,159,212,.35)}
-.btn-ghost{background:var(--surface);border:1px solid var(--border);color:var(--ink2)}
-.btn-ghost:hover{background:var(--surface2);border-color:var(--border2)}
-.btn-danger{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#F87171}
-.btn-danger:hover{background:rgba(239,68,68,.25)}
-.btn-green{background:rgba(63,184,123,.15);border:1px solid rgba(63,184,123,.3);color:#3FB87B}
-.btn-green:hover{background:rgba(63,184,123,.25)}
-.btn-sm{padding:6px 12px;font-size:11px}
-
-.btn-call-main{
-  width:100%;padding:13px;font-size:13px;
-  background:linear-gradient(135deg,var(--sky),#0e89be);
-  color:#fff;border:none;border-radius:var(--r2);
-  font-family:var(--f);font-weight:700;cursor:pointer;
-  transition:var(--trans);letter-spacing:.02em;
-  box-shadow:0 4px 20px rgba(28,159,212,.3);
-}
-.btn-call-main:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(28,159,212,.45)}
-.btn-call-main.ending{
-  background:linear-gradient(135deg,#ef4444,#b91c1c);
-  box-shadow:0 4px 20px rgba(239,68,68,.3);
-}
-
-/* CALL HISTORY */
-.call-history-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.call-history-title{font-size:13px;font-weight:600;color:var(--ink2);flex:1}
-.call-row{
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);
-  margin-bottom:8px;overflow:hidden;transition:var(--trans);cursor:pointer;
-}
-.call-row:hover{border-color:var(--sky-border)}
-.call-row-head{
-  display:flex;align-items:center;gap:12px;padding:14px 16px;
-}
-.call-row-icon{
-  width:36px;height:36px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:15px;
-}
-.call-row-icon.in{background:rgba(63,184,123,.12);color:#3FB87B;border:1px solid rgba(63,184,123,.2)}
-.call-row-icon.out{background:var(--sky-dim);color:var(--sky);border:1px solid var(--sky-border)}
-.call-row-name{font-size:13px;font-weight:600;color:var(--ink);flex:1}
-.call-row-meta{font-size:11px;color:var(--ink3)}
-.call-row-dur{font-family:var(--fm);font-size:12px;color:var(--ink2);margin-left:auto;margin-right:10px}
-.call-score{
-  font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;
-}
-.call-score.high{background:rgba(63,184,123,.15);color:#3FB87B;border:1px solid rgba(63,184,123,.2)}
-.call-score.mid{background:var(--sky-dim);color:var(--sky);border:1px solid var(--sky-border)}
-.call-score.low{background:rgba(239,68,68,.1);color:#F87171;border:1px solid rgba(239,68,68,.2)}
-.call-detail{
-  display:none;padding:14px 16px;border-top:1px solid var(--border);
-  background:var(--bg3);font-size:12px;line-height:1.8;
-  font-family:var(--fm);
-}
-.call-detail.open{display:block}
-.t-agent{color:var(--sky);font-weight:600}
-.t-user{color:#3FB87B;font-weight:600}
-
-/* TERMINAL */
-.terminal{
-  background:var(--bg);border:1px solid var(--border);border-radius:var(--r);
-  padding:14px;height:160px;overflow-y:auto;
-  font-family:var(--fm);font-size:11px;line-height:1.8;
-}
-.t-ok{color:#3FB87B}.t-err{color:#F87171}.t-warn{color:#FBBF24}.t-info{color:var(--sky)}
-.t-ts{color:var(--ink4)}
-.t-lbl{font-weight:700;margin:0 6px}
-
-/* TWO-COL GRID */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.full-col{grid-column:1/-1}
-
-/* SECTION CARDS */
-.s-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);
-  padding:20px;margin-bottom:16px;
-}
-.s-card-title{
-  font-size:12px;font-weight:700;color:var(--ink2);
-  display:flex;align-items:center;gap:8px;margin-bottom:16px;
-  padding-bottom:12px;border-bottom:1px solid var(--border);
-}
-.s-card-title i{font-size:16px;color:var(--sky)}
-
-/* FORM FIELDS IN CARDS */
-.f-row{margin-bottom:14px}
-.f-label{font-size:11px;font-weight:600;color:var(--ink3);margin-bottom:5px;display:block;letter-spacing:.04em;text-transform:uppercase}
-.f-input,.f-textarea{
-  width:100%;padding:9px 12px;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:var(--r);color:var(--ink);font-family:var(--f);font-size:12px;
-  outline:none;transition:var(--trans);
-}
-.f-textarea{min-height:80px;resize:vertical;line-height:1.6}
-.f-input:focus,.f-textarea:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-dim)}
-.f-input::placeholder,.f-textarea::placeholder{color:var(--ink4)}
-
-/* TOGGLE */
-.f-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
-.f-toggle-row:last-child{border-bottom:none}
-.f-toggle-label{font-size:12px;font-weight:500;color:var(--ink2)}
-.f-toggle-desc{font-size:10px;color:var(--ink3);margin-top:1px}
-.toggle{position:relative;width:38px;height:20px;flex-shrink:0}
-.toggle input{opacity:0;width:0;height:0}
-.toggle-track{
-  position:absolute;inset:0;border-radius:10px;
-  background:var(--bg4);border:1px solid var(--border2);
-  cursor:pointer;transition:var(--trans);
-}
-.toggle input:checked+.toggle-track{background:var(--sky);border-color:transparent}
-.toggle-track::after{
-  content:'';position:absolute;top:2px;left:2px;
-  width:14px;height:14px;border-radius:50%;background:#fff;
-  transition:var(--trans);
-}
-.toggle input:checked+.toggle-track::after{transform:translateX(18px)}
-
-/* KEY FIELDS */
-.key-field{
-  display:flex;gap:8px;align-items:center;
-}
-.key-input{
-  flex:1;padding:9px 12px;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:var(--r);color:var(--sky);font-family:var(--fm);font-size:11px;
-  outline:none;transition:var(--trans);
-}
-.key-input:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-dim)}
-
-/* FREE STACK CARDS */
-.stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stack-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);
-  padding:18px;transition:var(--trans);
-}
-.stack-card:hover{border-color:var(--sky-border);background:var(--bg3)}
-.stack-icon{font-size:24px;margin-bottom:12px}
-.stack-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px}
-.stack-role{font-size:11px;color:var(--sky);font-weight:600;margin-bottom:6px}
-.stack-desc{font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:12px}
-.stack-tag{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;
-  background:rgba(63,184,123,.1);color:#3FB87B;border:1px solid rgba(63,184,123,.2);
-}
-
-/* SETUP STEPS */
-.step-list{counter-reset:steps}
-.step-item{
-  display:flex;align-items:flex-start;gap:14px;
-  padding:16px;background:var(--bg2);border:1px solid var(--border);
-  border-radius:var(--r2);margin-bottom:10px;transition:var(--trans);
-  counter-increment:steps;
-}
-.step-item:hover{border-color:var(--sky-border)}
-.step-num{
-  width:28px;height:28px;border-radius:50%;flex-shrink:0;
-  background:var(--sky-dim);border:1px solid var(--sky-border);
-  color:var(--sky);font-size:12px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-}
-.step-content{flex:1}
-.step-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
-.step-desc{font-size:12px;color:var(--ink2);line-height:1.5}
-.step-code{
-  display:inline-block;margin-top:6px;padding:3px 8px;
-  background:var(--bg);border:1px solid var(--border);border-radius:6px;
-  font-family:var(--fm);font-size:11px;color:var(--sky);
-}
-.step-check{width:18px;height:18px;border-radius:50%;background:rgba(63,184,123,.15);border:1px solid rgba(63,184,123,.3);color:#3FB87B;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* TOAST */
-.toast{
-  position:fixed;bottom:24px;right:24px;z-index:999;
-  padding:12px 18px;border-radius:var(--r);
-  background:var(--bg3);border:1px solid var(--border2);
-  color:var(--ink);font-size:12px;font-weight:500;
-  box-shadow:var(--shadow);
-  opacity:0;transform:translateY(8px);
-  transition:all .25s ease;pointer-events:none;
-  display:flex;align-items:center;gap:8px;
-}
-.toast.show{opacity:1;transform:none}
-.toast i{color:var(--sky)}
+/* LIVE BANNER */
+.lbanner{background:linear-gradient(135deg,rgba(28,159,212,.07),rgba(31,60,132,.10));border:1px solid var(--sky-border);border-radius:var(--r2);padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.ldot{width:10px;height:10px;border-radius:50%;background:var(--sky);box-shadow:0 0 10px var(--sky);animation:pulse 1.5s infinite;flex-shrink:0}
+.lwave{display:flex;align-items:center;gap:2px;height:24px}
+.lwave span{display:block;width:3px;border-radius:2px;background:var(--sky)}
 
 /* HOME GRID */
-.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-.home-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);
-  padding:20px;transition:var(--trans);cursor:pointer;
-}
-.home-card:hover{border-color:var(--sky-border)}
-.home-card-icon{font-size:28px;margin-bottom:12px;display:block}
-.home-card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px}
-.home-card-desc{font-size:12px;color:var(--ink3);line-height:1.5;margin-bottom:12px}
-.home-card-tags{display:flex;flex-wrap:wrap;gap:5px}
-.home-tag{
-  font-size:10px;padding:2px 8px;border-radius:20px;
-  background:var(--surface2);border:1px solid var(--border);color:var(--ink3);
-}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.hcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;transition:var(--trans);cursor:pointer}
+.hcard:hover{border-color:var(--sky-border)}.hcard-icon{font-size:28px;margin-bottom:12px;display:block}
+.hcard-t{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px}
+.hcard-d{font-size:12px;color:var(--ink3);line-height:1.5;margin-bottom:12px}
+.htags{display:flex;flex-wrap:wrap;gap:5px}
+.htag{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--surface2);border:1px solid var(--border);color:var(--ink3)}
 
-/* LIVE STREAM BANNER */
-.live-banner{
-  background:linear-gradient(135deg,rgba(28,159,212,0.08),rgba(31,60,132,0.12));
-  border:1px solid var(--sky-border);border-radius:var(--r2);
-  padding:14px 20px;margin-bottom:20px;
-  display:flex;align-items:center;gap:14px;
-}
-.live-dot{
-  width:10px;height:10px;border-radius:50%;background:var(--sky);
-  box-shadow:0 0 10px var(--sky);animation:pulse 1.5s infinite;flex-shrink:0;
-}
-.live-text{font-size:13px;font-weight:600;color:var(--ink);flex:1}
-.live-sub{font-size:11px;color:var(--ink3)}
-.live-wave{display:flex;align-items:center;gap:2px;height:24px}
-.live-wave span{display:block;width:3px;border-radius:2px;background:var(--sky)}
+/* ── CALL COMMAND CENTER ── */
+.cmd{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
+.cmd::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--sky),transparent);opacity:0;transition:var(--trans)}
+.cmd.active::before{opacity:1}
 
-/* WARN BOX */
-.warn-box{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:12px 14px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);
-  border-radius:var(--r);font-size:12px;color:#FCD34D;margin-bottom:16px;line-height:1.5;
-}
-.warn-box i{flex-shrink:0;font-size:16px;margin-top:1px}
-.warn-box.hidden{display:none}
+/* MODE BADGE */
+.mode-row{display:flex;align-items:center;gap:8px;margin-bottom:18px;padding:8px 12px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)}
+.mode-badge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.mode-badge.fsm{background:var(--green-dim);border:1px solid var(--green-border);color:#3FB87B}
+.mode-badge.ai{background:var(--sky-dim);border:1px solid var(--sky-border);color:var(--sky)}
+.mode-desc{font-size:11px;color:var(--ink3);flex:1}
+.mode-upgrade{font-size:11px;color:var(--sky);cursor:pointer;white-space:nowrap}
+.mode-upgrade:hover{text-decoration:underline}
 
-/* RESPONSIVE nav hint */
-.sec-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px}
+.agent-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.agent-orb{width:52px;height:52px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#1F3C84,#0F2050);border:2px solid var(--sky-border);display:flex;align-items:center;justify-content:center;font-size:22px;transition:box-shadow .3s;position:relative}
+.agent-orb.speaking{box-shadow:0 0 0 6px rgba(28,159,212,.15),0 0 0 12px rgba(28,159,212,.07);animation:orbPulse 1.2s ease-in-out infinite}
+@keyframes orbPulse{0%,100%{box-shadow:0 0 0 0 var(--sky-glow)}50%{box-shadow:0 0 0 14px transparent}}
+.agent-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.agent-role{font-size:11px;color:var(--ink3)}
+.ctimer{font-family:var(--fm);font-size:20px;font-weight:500;color:var(--sky);background:var(--sky-dim);border:1px solid var(--sky-border);padding:6px 14px;border-radius:var(--r);letter-spacing:.04em;margin-left:auto;display:none}
 
-/* BULK textarea */
-.bulk-textarea{
-  width:100%;min-height:90px;padding:10px 12px;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:var(--r);color:var(--ink);font-family:var(--fm);font-size:11px;
-  outline:none;resize:vertical;line-height:1.6;transition:var(--trans);
-}
-.bulk-textarea:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-dim)}
+/* STATE ROW */
+.cstate{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)}
+.csdot{width:8px;height:8px;border-radius:50%;background:var(--ink4);flex-shrink:0;transition:var(--trans)}
+.csdot.listening{background:var(--sky);box-shadow:0 0 8px var(--sky);animation:pulse 1.5s infinite}
+.csdot.speaking{background:#3FB87B;box-shadow:0 0 8px #3FB87B;animation:pulse 1s infinite}
+.cstext{font-size:12px;color:var(--ink2)}
 
-/* ── HOME WAVEFORM CANVAS ── */
-#home-canvas-wrap{
-  height:80px;background:var(--bg2);border:1px solid var(--border);
-  border-radius:var(--r2);margin-bottom:20px;overflow:hidden;position:relative;
-}
-#home-canvas-wrap canvas{width:100%;height:100%}
-.home-canvas-label{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--ink3);display:flex;align-items:center;gap:8px}
+/* WAVEFORM — real mic viz */
+.waveform{height:52px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:1.5px;padding:0 8px}
+.wfb{width:3px;min-width:3px;border-radius:2px;background:var(--sky);opacity:.6;transition:height .05s ease}
+.wfb.idle{height:4px;animation:wfIdle var(--d,.8s) ease-in-out var(--delay,0s) infinite alternate}
+@keyframes wfIdle{from{height:4px}to{height:10px}}
+.wfb.active{opacity:.9}
 
-/* AGENT CONFIG special */
-.voice-preview{
-  display:flex;align-items:center;gap:12px;
-  padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:16px;
-}
-.voice-orb{
-  width:44px;height:44px;border-radius:50%;
-  background:linear-gradient(135deg,var(--sky),var(--navy));
-  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
-  box-shadow:0 0 16px var(--sky-glow);
-}
+/* TRANSCRIPT */
+.transcript{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;max-height:160px;overflow-y:auto;font-size:11.5px;line-height:1.9;margin-bottom:14px;font-family:var(--fm)}
+.t-s{color:var(--sky);font-weight:600}.t-u{color:#3FB87B;font-weight:600}
+.t-ph{color:var(--ink4)}
+
+/* INPUT ROW */
+.cinput{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:14px}
+.fi{width:100%;padding:10px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--ink);font-family:var(--f);font-size:13px;outline:none;transition:var(--trans)}
+.fi::placeholder{color:var(--ink4)}.fi:focus{border-color:var(--sky-border);box-shadow:0 0 0 3px var(--sky-dim)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r);font-family:var(--f);font-size:12px;font-weight:600;border:none;cursor:pointer;transition:var(--trans);letter-spacing:.01em;white-space:nowrap}
+.btn-sky{background:var(--sky);color:#fff}.btn-sky:hover{background:#1ab2ec;box-shadow:0 4px 16px rgba(28,159,212,.35)}
+.btn-ghost{background:var(--surface);border:1px solid var(--border);color:var(--ink2)}.btn-ghost:hover{background:var(--surface2);border-color:var(--border2)}
+.btn-danger{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#F87171}.btn-danger:hover{background:rgba(239,68,68,.25)}
+.btn-sm{padding:6px 12px;font-size:11px}
+
+.callbtn{width:100%;padding:14px;font-size:14px;background:linear-gradient(135deg,var(--sky),#0e89be);color:#fff;border:none;border-radius:var(--r2);font-family:var(--f);font-weight:700;cursor:pointer;transition:var(--trans);letter-spacing:.02em;box-shadow:0 4px 20px rgba(28,159,212,.3)}
+.callbtn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(28,159,212,.45)}
+.callbtn.ending{background:linear-gradient(135deg,#ef4444,#b91c1c);box-shadow:0 4px 20px rgba(239,68,68,.3)}
+.callbtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* CALL HISTORY */
+.crow{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:8px;overflow:hidden;transition:var(--trans);cursor:pointer}
+.crow:hover{border-color:var(--sky-border)}
+.crow-h{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.crow-ico{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+.crow-ico.out{background:var(--sky-dim);color:var(--sky);border:1px solid var(--sky-border)}
+.crow-ico.in{background:var(--green-dim);color:#3FB87B;border:1px solid var(--green-border)}
+.crow-name{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+.crow-meta{font-size:11px;color:var(--ink3)}
+.crow-dur{font-family:var(--fm);font-size:12px;color:var(--ink2);margin-left:auto;margin-right:10px}
+.cscore{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.cscore.hi{background:rgba(63,184,123,.15);color:#3FB87B;border:1px solid rgba(63,184,123,.2)}
+.cscore.mi{background:var(--sky-dim);color:var(--sky);border:1px solid var(--sky-border)}
+.cscore.lo{background:rgba(239,68,68,.1);color:#F87171;border:1px solid rgba(239,68,68,.2)}
+.crow-d{display:none;padding:14px 16px;border-top:1px solid var(--border);background:var(--bg3);font-size:11px;line-height:1.9;font-family:var(--fm)}
+.crow-d.open{display:block}
+.ta{color:var(--sky);font-weight:600}.tu{color:#3FB87B;font-weight:600}
+
+/* TERMINAL */
+.terminal{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;height:140px;overflow-y:auto;font-family:var(--fm);font-size:11px;line-height:1.8}
+.to{color:#3FB87B}.te{color:#F87171}.tw{color:#FBBF24}.ti{color:var(--sky)}
+.tts{color:var(--ink4)}.tlb{font-weight:700;margin:0 6px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;margin-bottom:16px}
+.card-t{font-size:12px;font-weight:700;color:var(--ink2);display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.card-t i{font-size:16px;color:var(--sky)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.fr{margin-bottom:14px}
+.fl{font-size:11px;font-weight:600;color:var(--ink3);margin-bottom:5px;display:block;letter-spacing:.04em;text-transform:uppercase}
+.fin,.fta{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--ink);font-family:var(--f);font-size:12px;outline:none;transition:var(--trans)}
+.fta{min-height:80px;resize:vertical;line-height:1.6}
+.fin:focus,.fta:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-dim)}
+.fin::placeholder,.fta::placeholder{color:var(--ink4)}
+
+.tog-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.tog-row:last-child{border-bottom:none}
+.tog-l{font-size:12px;font-weight:500;color:var(--ink2)}
+.tog-d{font-size:10px;color:var(--ink3);margin-top:1px}
+.tog{position:relative;width:38px;height:20px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0}
+.tog-t{position:absolute;inset:0;border-radius:10px;background:var(--bg4);border:1px solid var(--border2);cursor:pointer;transition:var(--trans)}
+.tog input:checked+.tog-t{background:var(--sky);border-color:transparent}
+.tog-t::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:var(--trans)}
+.tog input:checked+.tog-t::after{transform:translateX(18px)}
+
+.kf{display:flex;gap:8px;align-items:center}
+.ki{flex:1;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--sky);font-family:var(--fm);font-size:11px;outline:none;transition:var(--trans)}
+.ki:focus{border-color:var(--sky-border);box-shadow:0 0 0 2px var(--sky-dim)}
+
+/* GROQ BANNER */
+.groq-banner{background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(31,60,132,.12));border:1px solid rgba(168,85,247,.25);border-radius:var(--r2);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.groq-icon{font-size:28px;flex-shrink:0}
+.groq-t{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.groq-d{font-size:11px;color:var(--ink3);line-height:1.5}
+.groq-steps{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.gs{font-size:10px;padding:3px 9px;border-radius:20px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);color:#C4B5FD}
+
+/* STACK GRID */
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:18px;transition:var(--trans)}
+.scard:hover{border-color:var(--sky-border)}
+.scard-icon{font-size:24px;margin-bottom:10px}
+.scard-n{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.scard-r{font-size:11px;color:var(--sky);font-weight:600;margin-bottom:6px}
+.scard-d{font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px}
+.free-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;background:var(--green-dim);color:#3FB87B;border:1px solid var(--green-border)}
+
+/* STEPS */
+.step{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px;transition:var(--trans)}
+.step:hover{border-color:var(--sky-border)}
+.stepn{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:var(--sky-dim);border:1px solid var(--sky-border);color:var(--sky);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step-t{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.step-d{font-size:12px;color:var(--ink2);line-height:1.5}
+.step-ck{width:18px;height:18px;border-radius:50%;background:rgba(63,184,123,.15);border:1px solid rgba(63,184,123,.3);color:#3FB87B;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* VOICE PREVIEW */
+.vp{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:16px}
+.vo{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--navy));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 0 16px var(--sky-glow)}
+
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px}
+.warn{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:var(--r);font-size:12px;color:#FCD34D;margin-bottom:14px;line-height:1.5}
+.warn i{flex-shrink:0;font-size:16px;margin-top:1px}.warn.hidden{display:none}
+
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;padding:12px 18px;border-radius:var(--r);background:var(--bg3);border:1px solid var(--border2);color:var(--ink);font-size:12px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.5);opacity:0;transform:translateY(8px);transition:all .25s ease;pointer-events:none;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:none}
+.toast i{color:var(--sky)}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════ LOGIN ═══════════════════ -->
+<!-- LOGIN -->
 <div id="login-page">
-  <canvas id="login-canvas"></canvas>
-  <div class="login-glow login-glow-1"></div>
-  <div class="login-glow login-glow-2"></div>
-  <div class="login-glow login-glow-3"></div>
-
+  <canvas id="lc"></canvas>
+  <div class="lg lg1"></div><div class="lg lg2"></div><div class="lg lg3"></div>
   <div class="login-card">
-    <div class="login-brand">
-      <svg class="login-brand-logo" viewBox="0 0 36 36" fill="none">
-        <rect width="36" height="36" rx="10" fill="#1F3C84"/>
-        <path d="M10 26V12l5 8 5-8 5 8" stroke="#1C9FD4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="25" cy="11" r="2.5" fill="#3FB87B"/>
-      </svg>
-      <div>
-        <div class="login-brand-name">Vox<span>Path</span></div>
-      </div>
-      <div class="login-badge">Voice AI</div>
+    <div class="lb">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="10" fill="#1F3C84"/><path d="M9 24V11l5 8 5-8 5 8" stroke="#1C9FD4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="24" cy="11" r="2.5" fill="#3FB87B"/></svg>
+      <div class="lb-name">Vox<span>Path</span></div>
+      <div class="lb-badge">Voice AI</div>
     </div>
-
-    <div class="login-headline">Welcome back,<br>let's start calling.</div>
-    <div class="login-sub">Sign in with your Leverage Edu account to access the AI outbound panel.</div>
-
-    <div class="login-google-wrap">
+    <div class="lh">Welcome back,<br>let's start calling.</div>
+    <div class="ls">Sign in with your Leverage Edu account to access the AI outbound panel.</div>
+    <div class="lgw">
       <div id="g_id_onload" data-client_id="" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
-      <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="continue_with" data-shape="rectangular" data-logo_alignment="left" data-width="340"></div>
+      <div class="g_id_signin" data-type="standard" data-theme="outline" data-text="continue_with" data-shape="rectangular" data-width="340"></div>
     </div>
-
-    <div class="login-divider">or continue with email</div>
-
-    <div class="lf-group">
-      <label class="lf-label">Email</label>
-      <input class="lf-input" id="login-email" type="email" placeholder="you@leverageedu.com" autocomplete="email">
-    </div>
-    <div class="lf-group">
-      <label class="lf-label">Password</label>
-      <input class="lf-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <button class="btn-login-email" onclick="handleEmailLogin()">Sign in</button>
-
-    <div class="login-error" id="login-error">
-      <i class="ti ti-alert-circle"></i><span id="login-error-msg">Invalid credentials</span>
-    </div>
-    <div class="login-hint">Demo access: <b>demo@leverageedu.com</b> / <b>leverage2024</b></div>
+    <div class="ldiv">or continue with email</div>
+    <div class="lfg"><label class="lfl">Email</label><input class="lfi" id="login-email" type="email" placeholder="you@leverageedu.com" autocomplete="email"></div>
+    <div class="lfg"><label class="lfl">Password</label><input class="lfi" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="lbtn" onclick="handleEmailLogin()">Sign in</button>
+    <div class="lerr" id="lerr"><i class="ti ti-alert-circle"></i><span id="lerr-msg">Invalid credentials</span></div>
+    <div class="lhint">Demo: <b>demo@leverageedu.com</b> / <b>leverage2024</b></div>
   </div>
 </div>
 
-<!-- ═══════════════════ APP ═══════════════════ -->
+<!-- APP -->
 <div id="app">
-
-  <!-- TOP BAR -->
   <div class="topbar">
-    <a class="tb-brand" href="#">
-      <svg class="tb-logo" viewBox="0 0 28 28" fill="none">
-        <rect width="28" height="28" rx="8" fill="#1F3C84"/>
-        <path d="M7 20V10l4 6 4-6 4 6" stroke="#1C9FD4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <circle cx="19" cy="9" r="2" fill="#3FB87B"/>
-      </svg>
-      <span class="tb-name">Vox<span>Path</span></span>
-    </a>
+    <a class="tb-brand" href="#"><svg width="26" height="26" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="10" fill="#1F3C84"/><path d="M9 24V11l5 8 5-8 5 8" stroke="#1C9FD4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="24" cy="11" r="2.5" fill="#3FB87B"/></svg><span class="tb-name">Vox<span>Path</span></span></a>
     <div class="tb-sep"></div>
-    <div class="tb-breadcrumb">by <b>leverage edu</b></div>
-
+    <div class="tb-bc">by <b id="tb-page">Home</b></div>
     <div class="tb-pills">
-      <div class="tb-pill model"><i class="ti ti-brain" style="font-size:12px"></i>Gemini Flash</div>
-      <div class="tb-pill live"><span>Agent live</span></div>
-      <div class="tb-pill cost">₹0 / mo</div>
+      <div class="pill sky" id="pill-mode"><i class="ti ti-cpu" style="font-size:12px"></i><span id="pill-mode-txt">FSM Mode</span></div>
+      <div class="pill live"><span>Agent live</span></div>
+      <div class="pill purple">₹0 / mo</div>
     </div>
-
     <div class="tb-user" onclick="logout()">
-      <div class="tb-avatar">
-        <img id="user-avatar" style="display:none">
-        <span id="user-ava-fallback">S</span>
-      </div>
-      <span class="tb-uname" id="user-name-display">Shivam</span>
+      <div class="tb-av"><img id="user-avatar" style="display:none"><span id="user-av-fb">S</span></div>
+      <span class="tb-un" id="user-name-tb">Shivam</span>
     </div>
   </div>
 
-  <!-- SHELL BODY -->
-  <div class="shell-body">
-
-    <!-- SIDEBAR -->
+  <div class="shell">
     <nav class="sidebar">
-      <div class="sb-section">
-        <span class="sb-label">Dashboards</span>
-        <a class="sb-item active" onclick="goTo('home')" id="nav-home">
-          <i class="ti ti-home"></i>Home
-        </a>
-        <a class="sb-item" onclick="goTo('calls')" id="nav-calls">
-          <i class="ti ti-phone-outgoing"></i>Call logs
-          <span class="sb-badge" id="m-calls">0</span>
-        </a>
+      <div class="sb-sec">
+        <span class="sb-lbl">Dashboards</span>
+        <a class="sbi active" id="nav-home" onclick="goTo('home')"><i class="ti ti-home"></i>Home</a>
+        <a class="sbi" id="nav-calls" onclick="goTo('calls')"><i class="ti ti-phone-outgoing"></i>Call logs<span class="sb-badge" id="m-calls">3</span></a>
       </div>
-      <div class="sb-section">
-        <span class="sb-label">Configure</span>
-        <a class="sb-item" onclick="goTo('agent')" id="nav-agent">
-          <i class="ti ti-robot"></i>Agent config
-        </a>
-        <a class="sb-item" onclick="goTo('setup')" id="nav-setup">
-          <i class="ti ti-book"></i>Setup guide
-          <span class="sb-badge green" id="setup-badge">7</span>
-        </a>
+      <div class="sb-sec">
+        <span class="sb-lbl">Configure</span>
+        <a class="sbi" id="nav-agent" onclick="goTo('agent')"><i class="ti ti-robot"></i>Agent config</a>
+        <a class="sbi" id="nav-setup" onclick="goTo('setup')"><i class="ti ti-book"></i>Setup guide<span class="sb-badge g">7</span></a>
       </div>
-      <div class="sb-section">
-        <span class="sb-label">Connect</span>
-        <a class="sb-item" onclick="goTo('stack')" id="nav-stack">
-          <i class="ti ti-stack-2"></i>Free stack
-        </a>
-        <a class="sb-item" onclick="goTo('integrations')" id="nav-integrations">
-          <i class="ti ti-plug"></i>Integrations
-        </a>
+      <div class="sb-sec">
+        <span class="sb-lbl">Connect</span>
+        <a class="sbi" id="nav-stack" onclick="goTo('stack')"><i class="ti ti-stack-2"></i>Free stack</a>
+        <a class="sbi" id="nav-integrations" onclick="goTo('integrations')"><i class="ti ti-plug"></i>Integrations</a>
       </div>
-      <div class="sb-section">
-        <span class="sb-label">Account</span>
-        <a class="sb-item" onclick="goTo('settings')" id="nav-settings">
-          <i class="ti ti-settings"></i>Settings
-        </a>
+      <div class="sb-sec">
+        <span class="sb-lbl">Account</span>
+        <a class="sbi" id="nav-settings" onclick="goTo('settings')"><i class="ti ti-settings"></i>Settings</a>
       </div>
-
-      <div class="sb-bottom">
-        <div class="sb-user-info">
-          <div class="sb-user-name" id="sb-user-name">Shivam</div>
-          <div class="sb-user-email" id="sb-user-email">demo@leverageedu.com</div>
-        </div>
-        <button class="sb-logout" onclick="logout()"><i class="ti ti-logout"></i>Sign out</button>
+      <div class="sb-bot">
+        <div class="sb-ui"><div class="sb-un" id="sb-name">Shivam</div><div class="sb-ue" id="sb-email">demo@leverageedu.com</div></div>
+        <button class="sb-lo" onclick="logout()"><i class="ti ti-logout"></i>Sign out</button>
       </div>
     </nav>
 
-    <!-- MAIN -->
     <main class="main">
 
-      <!-- ── HOME ── -->
+      <!-- HOME -->
       <div id="sec-home" class="sec">
-        <div class="page-eyebrow">Voice AI Platform</div>
-        <div class="page-title">Good <span id="greeting-time">morning</span>, <span id="home-uname">Shivam</span>.</div>
-        <div class="page-desc">Here are all your VoxPath dashboards.</div>
-
-        <div class="live-banner">
-          <div class="live-dot"></div>
-          <div>
-            <div class="live-text">Live audio stream</div>
-            <div class="live-sub" id="live-ticker">Agent is listening · Gemini Flash ready</div>
+        <div class="ey">Voice AI Platform</div>
+        <div class="pt">Good <span id="greet-time">morning</span>, <span id="home-name">Shivam</span>.</div>
+        <div class="pd">Your VoxPath outbound AI panel — fully free, zero API credits needed.</div>
+        <div class="lbanner">
+          <div class="ldot"></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--ink)">Live audio stream</div>
+            <div style="font-size:11px;color:var(--ink3)" id="live-ticker">Agent is listening · Zero-cost engine ready</div>
           </div>
-          <div class="live-wave" id="live-wave"></div>
+          <div class="lwave" id="live-wave"></div>
         </div>
-
-        <div class="stats-row">
-          <div class="stat-card">
-            <i class="ti ti-phone stat-icon"></i>
-            <div class="stat-card-inner">
-              <div class="stat-label">Calls Today</div>
-              <div class="stat-val sky">14</div>
-              <div class="stat-tag up"><i class="ti ti-arrow-up" style="font-size:10px"></i>3 vs yesterday</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <i class="ti ti-clock stat-icon"></i>
-            <div class="stat-card-inner">
-              <div class="stat-label">Avg Duration</div>
-              <div class="stat-val">2:34</div>
-              <div class="stat-tag">mins per call</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <i class="ti ti-currency-rupee stat-icon"></i>
-            <div class="stat-card-inner">
-              <div class="stat-label">Monthly Cost</div>
-              <div class="stat-val green">₹0</div>
-              <div class="stat-tag">Free tier</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <i class="ti ti-mood-smile stat-icon"></i>
-            <div class="stat-card-inner">
-              <div class="stat-label">Sentiment Avg</div>
-              <div class="stat-val purple">+0.81</div>
-              <div class="stat-tag up">Positive</div>
-            </div>
-          </div>
+        <div class="stats">
+          <div class="sc"><i class="ti ti-phone si"></i><div class="slbl">Calls Today</div><div class="sv sky">14</div><div class="stag up"><i class="ti ti-arrow-up" style="font-size:10px"></i>3 vs yesterday</div></div>
+          <div class="sc"><i class="ti ti-clock si"></i><div class="slbl">Avg Duration</div><div class="sv">2:34</div><div class="stag">mins per call</div></div>
+          <div class="sc"><i class="ti ti-currency-rupee si"></i><div class="slbl">Monthly Cost</div><div class="sv g">₹0</div><div class="stag">Free forever</div></div>
+          <div class="sc"><i class="ti ti-mood-smile si"></i><div class="slbl">Sentiment Avg</div><div class="sv p">+0.81</div><div class="stag up">Positive</div></div>
         </div>
-
-        <div class="home-grid">
-          <div class="home-card" onclick="goTo('calls')">
-            <span class="home-card-icon">📞</span>
-            <div class="home-card-title">Call logs</div>
-            <div class="home-card-desc">Live outbound history, sentiment scores and real-time agent activity feed.</div>
-            <div class="home-card-tags">
-              <span class="home-tag">Outbound</span>
-              <span class="home-tag">Sentiment</span>
-              <span class="home-tag">Live</span>
-            </div>
-          </div>
-          <div class="home-card" onclick="goTo('agent')">
-            <span class="home-card-icon">🤖</span>
-            <div class="home-card-title">Agent config</div>
-            <div class="home-card-desc">Edit Siya's persona, voice, behaviour controls and webhook endpoints.</div>
-            <div class="home-card-tags">
-              <span class="home-tag">Editable</span>
-              <span class="home-tag">Gemini</span>
-              <span class="home-tag">WaveNet</span>
-            </div>
-          </div>
-          <div class="home-card" onclick="goTo('setup')">
-            <span class="home-card-icon">🚀</span>
-            <div class="home-card-title">Setup guide</div>
-            <div class="home-card-desc">7-step quickstart to go from zero to first live call in under 15 minutes.</div>
-            <div class="home-card-tags">
-              <span class="home-tag">Quickstart</span>
-              <span class="home-tag">Free</span>
-            </div>
-          </div>
-          <div class="home-card" onclick="goTo('integrations')">
-            <span class="home-card-icon">🔌</span>
-            <div class="home-card-title">Integrations</div>
-            <div class="home-card-desc">Connect Gemini API, Google Sheets, and configure your OAuth client.</div>
-            <div class="home-card-tags">
-              <span class="home-tag">API keys</span>
-              <span class="home-tag">Sheets</span>
-              <span class="home-tag">OAuth</span>
-            </div>
-          </div>
+        <div class="hgrid">
+          <div class="hcard" onclick="goTo('calls')"><span class="hcard-icon">📞</span><div class="hcard-t">Call logs</div><div class="hcard-d">Outbound history, sentiment scores and real-time feed.</div><div class="htags"><span class="htag">Live</span><span class="htag">Free</span><span class="htag">No API key</span></div></div>
+          <div class="hcard" onclick="goTo('agent')"><span class="hcard-icon">🤖</span><div class="hcard-t">Agent config</div><div class="hcard-d">Edit Siya's persona, questions and behavior.</div><div class="htags"><span class="htag">Hinglish</span><span class="htag">Custom</span></div></div>
+          <div class="hcard" onclick="goTo('integrations')"><span class="hcard-icon">⚡</span><div class="hcard-t">Upgrade to Groq AI</div><div class="hcard-d">Free Groq key unlocks Llama 3.3 70B. 14,400 req/day. 30 seconds to set up.</div><div class="htags"><span class="htag">Optional</span><span class="htag">Free</span><span class="htag">Better AI</span></div></div>
+          <div class="hcard" onclick="goTo('stack')"><span class="hcard-icon">🚀</span><div class="hcard-t">Free stack</div><div class="hcard-d">See every technology powering VoxPath — all ₹0/month.</div><div class="htags"><span class="htag">Zero cost</span><span class="htag">Open</span></div></div>
         </div>
       </div>
 
-      <!-- ── CALL LOGS ── -->
+      <!-- CALL LOGS -->
       <div id="sec-calls" class="sec">
-        <div class="page-eyebrow">Outbound Calls</div>
-        <div class="page-title">Talk to <b>Siya</b> right now.</div>
-        <div class="page-desc">Uses Gemini Flash + Chrome's built-in voice engine. 100% free — no Vapi, no credits needed.</div>
+        <div class="ey">Outbound Calls</div>
+        <div class="pt">Talk to <b>Siya</b> right now.</div>
+        <div class="pd">Works instantly — no API key needed. Add a free Groq key for smarter AI responses.</div>
 
-        <div class="call-command" id="call-command-card">
-          <div class="call-top">
-            <div class="agent-orb" id="agent-orb">🤖</div>
-            <div class="agent-info">
-              <div class="agent-name">Siya — Study Abroad Advisor</div>
-              <div class="agent-role">Leverage Edu · AI Lead Qualification Agent</div>
-            </div>
-            <div class="call-timer-badge" id="call-timer" style="display:none">0:00</div>
+        <div class="cmd" id="cmd-card">
+          <!-- MODE INDICATOR -->
+          <div class="mode-row">
+            <div class="mode-badge fsm" id="mode-badge">⚡ FSM Mode</div>
+            <div class="mode-desc" id="mode-desc">Running on built-in engine — no API key needed, works offline.</div>
+            <span class="mode-upgrade" onclick="goTo('integrations')" id="mode-upgrade">+ Add Groq key →</span>
           </div>
 
-          <div class="warn-box hidden" id="gemini-warn">
-            <i class="ti ti-alert-triangle"></i>
-            <span>Gemini API key not set. Go to <b>Integrations</b> and paste your Gemini key first.</span>
+          <div class="agent-row">
+            <div class="agent-orb" id="agent-orb">🤖</div>
+            <div style="flex:1">
+              <div class="agent-name">Siya — Study Abroad Advisor</div>
+              <div class="agent-role">Leverage Edu · Lead Qualification Agent</div>
+            </div>
+            <div class="ctimer" id="ctimer">0:00</div>
           </div>
 
           <div id="call-ui" style="display:none">
-            <div class="call-state-row">
-              <div class="call-state-dot" id="call-state-dot"></div>
-              <div class="call-state-text" id="call-state-label">Connecting...</div>
+            <div class="cstate">
+              <div class="csdot" id="csdot"></div>
+              <div class="cstext" id="cstext">Connecting...</div>
             </div>
-            <div class="waveform" id="call-wave"></div>
-            <div class="transcript-box" id="call-transcript">
-              <span class="t-placeholder">Conversation will appear here...</span>
-            </div>
+            <div class="waveform" id="waveform"></div>
+            <div class="transcript" id="transcript"><span class="t-ph">Conversation will appear here...</span></div>
           </div>
 
-          <div class="call-form-row">
-            <input class="field-input" id="dial-name" placeholder="Student name (optional)">
-            <button class="btn btn-ghost btn-sm" onclick="triggerSimulatedCall()"><i class="ti ti-player-play"></i>Demo</button>
+          <div class="cinput">
+            <input class="fi" id="dial-name" placeholder="Student name (optional)">
+            <button class="btn btn-ghost btn-sm" onclick="runDemo()"><i class="ti ti-player-play"></i>Demo</button>
           </div>
 
-          <button class="btn-call-main" id="call-btn" onclick="startBrowserCall()">
-            <i class="ti ti-phone-outgoing"></i>&nbsp; Call Siya now — free
+          <button class="callbtn" id="callbtn" onclick="toggleCall()">
+            <i class="ti ti-phone-outgoing"></i>&nbsp;&nbsp;Call Siya now — free
           </button>
           <div style="font-size:10px;color:var(--ink4);margin-top:8px;text-align:center">
-            Chrome Speech API + Gemini Flash + Chrome TTS &nbsp;·&nbsp; Chrome/Edge only &nbsp;·&nbsp; Allow microphone
+            Chrome built-in STT + TTS · No API key · Works in Chrome/Edge
           </div>
         </div>
 
-        <div class="s-card">
-          <div class="s-card-title"><i class="ti ti-list"></i>Bulk call list</div>
-          <textarea class="bulk-textarea" id="bulk-numbers" placeholder="Rahul Sharma, UK MBA inquiry&#10;Priya Singh, Canada MS&#10;Arjun Mehta, Australia undergrad"></textarea>
-          <div style="font-size:10px;color:var(--ink3);margin-top:6px">Browser calls are one at a time. Each call opens after the previous ends.</div>
-        </div>
-
-        <div class="call-history-head">
-          <span class="call-history-title">Call history</span>
-          <button class="btn btn-ghost btn-sm" onclick="buildCallList()"><i class="ti ti-refresh"></i></button>
+        <div style="font-size:12px;font-weight:600;color:var(--ink3);margin-bottom:10px;margin-top:8px;display:flex;align-items:center;gap:8px">
+          Call history <button class="btn btn-ghost btn-sm" onclick="buildCallList()"><i class="ti ti-refresh"></i></button>
         </div>
         <div id="call-list"></div>
-
-        <div style="margin-top:16px;font-size:12px;font-weight:600;color:var(--ink3);margin-bottom:8px">System log</div>
+        <div style="font-size:12px;font-weight:600;color:var(--ink3);margin-top:16px;margin-bottom:8px">System log</div>
         <div class="terminal" id="terminal"></div>
-        <div class="sec-actions">
-          <button class="btn btn-ghost btn-sm" onclick="clearLog()"><i class="ti ti-trash"></i>Clear log</button>
-          <a class="btn btn-ghost btn-sm" href="https://sheets.google.com" target="_blank"><i class="ti ti-table"></i>Google Sheets</a>
+        <div class="actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearLog()"><i class="ti ti-trash"></i>Clear</button>
         </div>
       </div>
 
-      <!-- ── AGENT CONFIG ── -->
+      <!-- AGENT CONFIG -->
       <div id="sec-agent" class="sec">
-        <div class="page-eyebrow">Agent Config</div>
-        <div class="page-title">Configure <b>Siya</b></div>
-        <div class="page-desc">Edit your AI agent's persona, voice settings and behavior controls.</div>
-
-        <div class="voice-preview">
-          <div class="voice-orb">🤖</div>
-          <div style="flex:1">
-            <div style="font-size:14px;font-weight:700;color:var(--ink)" id="agent-preview-name">Siya</div>
-            <div style="font-size:11px;color:var(--sky)">Study Abroad Advisor · Leverage Edu</div>
-          </div>
+        <div class="ey">Agent Config</div>
+        <div class="pt">Configure <b>Siya</b></div>
+        <div class="pd">Customize your AI agent's persona, qualification flow and behavior.</div>
+        <div class="vp">
+          <div class="vo">🤖</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--ink)" id="agent-preview-name">Siya</div><div style="font-size:11px;color:var(--sky)">Study Abroad Advisor · Leverage Edu</div></div>
           <button class="btn btn-sky btn-sm" onclick="saveAgent()"><i class="ti ti-device-floppy"></i>Save</button>
           <button class="btn btn-ghost btn-sm" onclick="exportAgent()"><i class="ti ti-download"></i>Export</button>
         </div>
-
-        <div class="two-col">
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-user"></i>Identity</div>
-            <div class="f-row"><label class="f-label">Agent Name</label><input class="f-input" id="a-name" value="Siya"></div>
-            <div class="f-row"><label class="f-label">Role</label><input class="f-input" id="a-role" value="Study Abroad Advisor"></div>
-            <div class="f-row"><label class="f-label">Language</label>
-              <select class="f-input" id="a-lang">
-                <option value="hinglish" selected>Hinglish (Hindi + English)</option>
-                <option value="english">English</option>
-                <option value="hindi">Hindi</option>
-              </select>
-            </div>
+        <div class="two">
+          <div class="card">
+            <div class="card-t"><i class="ti ti-user"></i>Identity</div>
+            <div class="fr"><label class="fl">Agent Name</label><input class="fin" id="a-name" value="Siya"></div>
+            <div class="fr"><label class="fl">Role</label><input class="fin" id="a-role" value="Study Abroad Advisor"></div>
+            <div class="fr"><label class="fl">Language</label><select class="fin" id="a-lang"><option value="hinglish" selected>Hinglish (Hindi + English)</option><option value="english">English</option><option value="hindi">Hindi</option></select></div>
           </div>
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-wavesaw-tool"></i>Voice</div>
-            <div class="f-row"><label class="f-label">TTS Engine</label>
-              <select class="f-input" id="a-voice">
-                <option value="chrome">Chrome TTS (free)</option>
-                <option value="google">Google Cloud WaveNet</option>
-              </select>
-            </div>
-            <div class="f-row"><label class="f-label">Speech Rate</label><input class="f-input" id="a-rate" type="range" min="0.5" max="1.5" step="0.05" value="0.92"></div>
-            <div class="f-toggle-row">
-              <div><div class="f-toggle-label">Enable interruption</div><div class="f-toggle-desc">Agent stops if user speaks</div></div>
-              <label class="toggle"><input type="checkbox" checked id="a-interrupt"><div class="toggle-track"></div></label>
-            </div>
+          <div class="card">
+            <div class="card-t"><i class="ti ti-settings-2"></i>Behavior</div>
+            <div class="tog-row"><div><div class="tog-l">Auto-qualify leads</div><div class="tog-d">Score leads 0–100 after call</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
+            <div class="tog-row"><div><div class="tog-l">Save transcripts</div><div class="tog-d">Store full call transcript</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
+            <div class="tog-row"><div><div class="tog-l">Gender-aware Hindi</div><div class="tog-d">Siya adapts grammar</div></div><label class="tog"><input type="checkbox" checked><div class="tog-t"></div></label></div>
           </div>
         </div>
-
-        <div class="s-card">
-          <div class="s-card-title"><i class="ti ti-message-dots"></i>System Prompt</div>
-          <textarea class="f-textarea" id="a-prompt" style="min-height:160px" placeholder="Enter Siya's system prompt...">You are Siya, an outbound lead qualification agent for Leverage Edu. Speak in Hinglish. Be warm and concise. Ask qualification questions one at a time: study/work status, qualification, target country, intake, program, field, budget, English test, passport, city. End by booking a counsellor callback.</textarea>
-        </div>
-
-        <div class="s-card">
-          <div class="s-card-title"><i class="ti ti-settings-2"></i>Behavior Toggles</div>
-          <div class="f-toggle-row">
-            <div><div class="f-toggle-label">Auto-qualify leads</div><div class="f-toggle-desc">Score leads 0–100 after call</div></div>
-            <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div></label>
-          </div>
-          <div class="f-toggle-row">
-            <div><div class="f-toggle-label">Save transcripts</div><div class="f-toggle-desc">Store full call transcript</div></div>
-            <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div></label>
-          </div>
-          <div class="f-toggle-row">
-            <div><div class="f-toggle-label">Send to Google Sheets</div><div class="f-toggle-desc">Auto-log calls to your sheet</div></div>
-            <label class="toggle"><input type="checkbox" id="sheets-toggle"><div class="toggle-track"></div></label>
-          </div>
-          <div class="f-toggle-row">
-            <div><div class="f-toggle-label">Gender-aware Hindi</div><div class="f-toggle-desc">Siya adapts gender grammar</div></div>
-            <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div></label>
-          </div>
-        </div>
-
-        <div class="sec-actions">
-          <button class="btn btn-sky" onclick="saveAgent()"><i class="ti ti-device-floppy"></i>Save config</button>
-          <button class="btn btn-ghost" onclick="exportAgent()"><i class="ti ti-download"></i>Export JSON</button>
-          <button class="btn btn-danger" onclick="resetAgent()"><i class="ti ti-rotate"></i>Reset to default</button>
-        </div>
+        <div class="card"><div class="card-t"><i class="ti ti-message-dots"></i>Opening line (FSM mode)</div><input class="fin" id="a-opening" value="Namaste! Main Siya hoon, Leverage Edu se. Kya aap study abroad plan kar rahe hain?"></div>
+        <div class="actions"><button class="btn btn-sky" onclick="saveAgent()"><i class="ti ti-device-floppy"></i>Save</button><button class="btn btn-danger" onclick="resetAgent()"><i class="ti ti-rotate"></i>Reset</button></div>
       </div>
 
-      <!-- ── SETUP GUIDE ── -->
+      <!-- SETUP -->
       <div id="sec-setup" class="sec">
-        <div class="page-eyebrow">Setup Guide</div>
-        <div class="page-title">Go live in <b>15 minutes</b></div>
-        <div class="page-desc">Everything you need to launch your first AI outbound call. Completely free.</div>
-
-        <div class="step-list">
-          <div class="step-item">
-            <div class="step-num">1</div>
-            <div class="step-content">
-              <div class="step-title">Get a free Gemini API key</div>
-              <div class="step-desc">Go to <b>aistudio.google.com/apikey</b> → Create API Key → copy it. This powers Siya's brain.</div>
-              <a href="https://aistudio.google.com/apikey" target="_blank" class="btn btn-sky btn-sm" style="margin-top:8px"><i class="ti ti-external-link"></i>Open AI Studio</a>
-            </div>
-            <div class="step-check"><i class="ti ti-check"></i></div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">2</div>
-            <div class="step-content">
-              <div class="step-title">Paste key in Integrations</div>
-              <div class="step-desc">Go to <b>Integrations → Gemini API key</b> and paste it. Keys are saved locally in your browser.</div>
-            </div>
-            <div class="step-check"><i class="ti ti-check"></i></div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">3</div>
-            <div class="step-content">
-              <div class="step-title">Open Call logs → Call Siya</div>
-              <div class="step-desc">Click <b>Call Siya now — free</b>. Chrome will ask for microphone permission — click Allow.</div>
-            </div>
-            <div class="step-check"><i class="ti ti-check"></i></div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">4</div>
-            <div class="step-content">
-              <div class="step-title">Speak naturally</div>
-              <div class="step-desc">Siya will greet you in Hinglish, then ask qualification questions. You respond by voice.</div>
-            </div>
-            <div class="step-check"><i class="ti ti-check"></i></div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">5</div>
-            <div class="step-content">
-              <div class="step-title">(Optional) Connect Google Sheets</div>
-              <div class="step-desc">Add your Sheets webhook URL in Integrations to auto-log every call with transcript + score.</div>
-              <span class="step-code">POST → your webhook → JSON payload</span>
-            </div>
-            <div class="step-check"><i class="ti ti-check"></i></div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">6</div>
-            <div class="step-content">
-              <div class="step-title">(Optional) Edit Siya's prompt</div>
-              <div class="step-desc">Go to <b>Agent config</b> to customise Siya's opening line, qualification questions, and tone.</div>
-            </div>
-            <div class="step-check"><i class="ti ti-check"></i></div>
-          </div>
-          <div class="step-item">
-            <div class="step-num">7</div>
-            <div class="step-content">
-              <div class="step-title">Use Chrome or Edge only</div>
-              <div class="step-desc">The <code style="font-size:11px;color:var(--sky)">SpeechRecognition API</code> used for STT is only available in Chromium-based browsers. Safari will not work.</div>
-            </div>
-            <div class="step-check"><i class="ti ti-check"></i></div>
-          </div>
-        </div>
+        <div class="ey">Setup Guide</div>
+        <div class="pt">Go live in <b>2 minutes</b></div>
+        <div class="pd">VoxPath works instantly with zero setup. Steps below are all optional upgrades.</div>
+        <div class="step"><div class="stepn">1</div><div><div class="step-t">Just click "Call Siya now"</div><div class="step-d">The portal works out of the box. Siya uses a built-in conversation engine. No API key needed. Works completely offline.</div></div><div class="step-ck"><i class="ti ti-check"></i></div></div>
+        <div class="step"><div class="stepn">2</div><div><div class="step-t">Allow microphone in Chrome</div><div class="step-d">Chrome will ask for microphone permission the first time. Click Allow. That's it — STT and TTS are built into the browser.</div></div><div class="step-ck"><i class="ti ti-check"></i></div></div>
+        <div class="step"><div class="stepn">3</div><div><div class="step-t">(Optional) Get free Groq key for smarter AI</div><div class="step-d">Go to <b>console.groq.com</b> → sign up free → create API key → paste in Integrations. Unlocks Llama 3.3 70B: much more natural Hinglish conversation.</div><a href="https://console.groq.com/keys" target="_blank" class="btn btn-sky btn-sm" style="margin-top:8px"><i class="ti ti-external-link"></i>Open Groq Console</a></div><div class="step-ck"><i class="ti ti-check"></i></div></div>
+        <div class="step"><div class="stepn">4</div><div><div class="step-t">(Optional) Connect Google Sheets</div><div class="step-d">Auto-log call transcripts and lead scores to a Google Sheet via Apps Script webhook.</div></div><div class="step-ck"><i class="ti ti-check"></i></div></div>
+        <div class="step"><div class="stepn">5</div><div><div class="step-t">Use Chrome or Edge only</div><div class="step-d">The Web Speech API is only available in Chromium-based browsers. Safari and Firefox won't work for voice calls.</div></div><div class="step-ck"><i class="ti ti-check"></i></div></div>
       </div>
 
-      <!-- ── FREE STACK ── -->
+      <!-- FREE STACK -->
       <div id="sec-stack" class="sec">
-        <div class="page-eyebrow">Free Stack</div>
-        <div class="page-title">Everything runs at <b>₹0 / month</b></div>
-        <div class="page-desc">VoxPath uses only free-tier or built-in browser APIs. No hidden costs.</div>
-
-        <div class="stack-grid">
-          <div class="stack-card">
-            <div class="stack-icon">🎤</div>
-            <div class="stack-name">Chrome Speech API</div>
-            <div class="stack-role">Speech-to-Text</div>
-            <div class="stack-desc">Built into Chrome and Edge. Transcribes speech in real time with no API key needed.</div>
-            <div class="stack-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div>
-          </div>
-          <div class="stack-card">
-            <div class="stack-icon">🧠</div>
-            <div class="stack-name">Gemini 2.0 Flash</div>
-            <div class="stack-role">Language Model</div>
-            <div class="stack-desc">Google's fastest model. Free tier includes 1,500 requests/day — enough for ~100 calls/day.</div>
-            <div class="stack-tag"><i class="ti ti-check" style="font-size:11px"></i>1,500 req/day free</div>
-          </div>
-          <div class="stack-card">
-            <div class="stack-icon">🔊</div>
-            <div class="stack-name">Chrome TTS</div>
-            <div class="stack-role">Text-to-Speech</div>
-            <div class="stack-desc">Built-in browser speech synthesis. Available in all Chromium browsers with no setup needed.</div>
-            <div class="stack-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div>
-          </div>
-          <div class="stack-card">
-            <div class="stack-icon">📄</div>
-            <div class="stack-name">GitHub Pages</div>
-            <div class="stack-role">Hosting</div>
-            <div class="stack-desc">Static hosting for the VoxPath panel. Zero cost, SSL included, global CDN.</div>
-            <div class="stack-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div>
-          </div>
-          <div class="stack-card">
-            <div class="stack-icon">📊</div>
-            <div class="stack-name">Google Sheets</div>
-            <div class="stack-role">Call Logging</div>
-            <div class="stack-desc">Log every call transcript and lead score automatically via a webhook. Free.</div>
-            <div class="stack-tag"><i class="ti ti-check" style="font-size:11px"></i>Free with Google</div>
-          </div>
-          <div class="stack-card">
-            <div class="stack-icon">🔐</div>
-            <div class="stack-name">Google OAuth</div>
-            <div class="stack-role">Authentication</div>
-            <div class="stack-desc">Restrict login to @leverageedu.com accounts. Free Google Identity Services.</div>
-            <div class="stack-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div>
-          </div>
+        <div class="ey">Free Stack</div>
+        <div class="pt">Runs at <b>₹0 / month forever</b></div>
+        <div class="pd">Every component is free — no trial, no credit card, no limits that matter.</div>
+        <div class="sgrid">
+          <div class="scard"><div class="scard-icon">🎤</div><div class="scard-n">Chrome Speech API</div><div class="scard-r">Speech-to-Text</div><div class="scard-d">Built into Chrome/Edge. Transcribes speech in real time. No API key, no quota, never.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div></div>
+          <div class="scard"><div class="scard-icon">🧠</div><div class="scard-n">Built-in FSM</div><div class="scard-r">Conversation Engine</div><div class="scard-d">Siya's brain runs entirely in your browser as a finite state machine. Zero API calls, works offline.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Zero API</div></div>
+          <div class="scard"><div class="scard-icon">⚡</div><div class="scard-n">Groq + Llama 3.3 70B</div><div class="scard-r">AI Upgrade (Optional)</div><div class="scard-d">Free Groq account gives 14,400 requests/day. Llama 3.3 70B is faster and smarter than Gemini Flash.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>14,400 req/day free</div></div>
+          <div class="scard"><div class="scard-icon">🔊</div><div class="scard-n">Chrome TTS</div><div class="scard-r">Text-to-Speech</div><div class="scard-d">Browser speechSynthesis API. Uses the best available voice on your system. No quota.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div></div>
+          <div class="scard"><div class="scard-icon">📊</div><div class="scard-n">Web Audio API</div><div class="scard-r">Real Mic Waveform</div><div class="scard-d">Live waveform from actual microphone input using AudioContext. No library needed.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Built-in browser</div></div>
+          <div class="scard"><div class="scard-icon">🌐</div><div class="scard-n">GitHub Pages</div><div class="scard-r">Hosting</div><div class="scard-d">Static hosting, free SSL, global CDN, custom domain support.</div><div class="free-tag"><i class="ti ti-check" style="font-size:11px"></i>Free forever</div></div>
         </div>
       </div>
 
-      <!-- ── INTEGRATIONS ── -->
+      <!-- INTEGRATIONS -->
       <div id="sec-integrations" class="sec">
-        <div class="page-eyebrow">Integrations</div>
-        <div class="page-title">API Keys &amp; <b>Connections</b></div>
-        <div class="page-desc">All keys are stored locally in your browser. Nothing is sent to any server.</div>
+        <div class="ey">Integrations</div>
+        <div class="pt">API Keys &amp; <b>Connections</b></div>
 
-        <div class="two-col">
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-brand-google"></i>Gemini API (Required)</div>
-            <div class="f-row">
-              <label class="f-label">Gemini API Key</label>
-              <div class="key-field">
-                <input class="key-input" id="k-gemini" type="password" placeholder="AIza...">
-                <button class="btn btn-sky btn-sm" onclick="saveKeys()"><i class="ti ti-device-floppy"></i>Save</button>
-              </div>
-              <div style="font-size:10px;color:var(--ink3);margin-top:5px">Get free key at <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--sky)">aistudio.google.com</a></div>
+        <div class="groq-banner">
+          <div class="groq-icon">⚡</div>
+          <div style="flex:1">
+            <div class="groq-t">Upgrade Siya's brain with Groq — completely free</div>
+            <div class="groq-d">Groq's free tier gives 14,400 requests/day of Llama 3.3 70B. Faster than Gemini. No credit card. Takes 30 seconds.</div>
+            <div class="groq-steps">
+              <span class="gs">1. console.groq.com → Sign up</span>
+              <span class="gs">2. API Keys → Create key</span>
+              <span class="gs">3. Paste below → Save</span>
             </div>
           </div>
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-table"></i>Google Sheets Webhook</div>
-            <div class="f-row">
-              <label class="f-label">Apps Script URL</label>
-              <div class="key-field">
-                <input class="key-input" id="k-sheets" type="text" placeholder="https://script.google.com/macros/...">
-                <button class="btn btn-sky btn-sm" onclick="saveKeys()"><i class="ti ti-device-floppy"></i>Save</button>
-              </div>
-            </div>
-          </div>
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-brand-google"></i>Google OAuth</div>
-            <div class="f-row">
-              <label class="f-label">OAuth Client ID</label>
-              <div class="key-field">
-                <input class="key-input" id="k-oauth" type="text" placeholder="123456.apps.googleusercontent.com">
-                <button class="btn btn-sky btn-sm" onclick="saveGoogleClientId()"><i class="ti ti-device-floppy"></i>Save</button>
-              </div>
-              <div style="font-size:10px;color:var(--ink3);margin-top:5px">Restricts login to @leverageedu.com</div>
-            </div>
-          </div>
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-phone"></i>Vapi (Optional)</div>
-            <div class="f-row">
-              <label class="f-label">Public Key</label>
-              <input class="key-input" id="k-vapi-pub" type="password" placeholder="vapi public key..." style="width:100%;margin-bottom:8px">
-              <label class="f-label">Assistant ID</label>
-              <input class="key-input" id="k-vapi-asst" type="text" placeholder="vapi assistant id..." style="width:100%">
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="saveKeys()" style="margin-top:8px"><i class="ti ti-device-floppy"></i>Save Vapi keys</button>
-          </div>
+          <a href="https://console.groq.com/keys" target="_blank" class="btn btn-sky btn-sm"><i class="ti ti-external-link"></i>Get free key</a>
         </div>
 
-        <div class="sec-actions">
-          <button class="btn btn-sky" onclick="saveKeys()"><i class="ti ti-device-floppy"></i>Save all keys</button>
-          <button class="btn btn-danger" onclick="clearKeys()"><i class="ti ti-trash"></i>Clear all keys</button>
+        <div class="two">
+          <div class="card">
+            <div class="card-t"><i class="ti ti-bolt"></i>Groq API (Recommended Free Upgrade)</div>
+            <div class="fr">
+              <label class="fl">Groq API Key</label>
+              <div class="kf"><input class="ki" id="k-groq" type="password" placeholder="gsk_..."><button class="btn btn-sky btn-sm" onclick="saveKeys()"><i class="ti ti-device-floppy"></i>Save</button></div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:5px">Free at <a href="https://console.groq.com/keys" target="_blank" style="color:var(--sky)">console.groq.com</a> · Llama 3.3 70B · 14,400 req/day</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-t"><i class="ti ti-brand-google"></i>Gemini API (Alternative)</div>
+            <div class="fr">
+              <label class="fl">Gemini API Key</label>
+              <div class="kf"><input class="ki" id="k-gemini" type="password" placeholder="AIza..."><button class="btn btn-sky btn-sm" onclick="saveKeys()"><i class="ti ti-device-floppy"></i>Save</button></div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:5px">Free at <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--sky)">aistudio.google.com</a></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-t"><i class="ti ti-table"></i>Google Sheets Webhook</div>
+            <div class="fr"><label class="fl">Apps Script URL</label><div class="kf"><input class="ki" id="k-sheets" type="text" placeholder="https://script.google.com/macros/..."><button class="btn btn-sky btn-sm" onclick="saveKeys()">Save</button></div></div>
+          </div>
+          <div class="card">
+            <div class="card-t"><i class="ti ti-brand-google"></i>Google OAuth</div>
+            <div class="fr"><label class="fl">OAuth Client ID</label><div class="kf"><input class="ki" id="k-oauth" type="text" placeholder="123456.apps.googleusercontent.com"><button class="btn btn-sky btn-sm" onclick="saveGCID()">Save</button></div></div>
+          </div>
         </div>
+        <div class="actions"><button class="btn btn-sky" onclick="saveKeys()"><i class="ti ti-device-floppy"></i>Save all keys</button><button class="btn btn-danger" onclick="clearKeys()"><i class="ti ti-trash"></i>Clear all</button></div>
       </div>
 
-      <!-- ── SETTINGS ── -->
+      <!-- SETTINGS -->
       <div id="sec-settings" class="sec">
-        <div class="page-eyebrow">Account</div>
-        <div class="page-title">Settings</div>
-        <div class="page-desc">Manage your VoxPath workspace preferences.</div>
-
-        <div class="two-col">
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-building"></i>Workspace</div>
-            <div class="f-row"><label class="f-label">Display Name</label><input class="f-input" id="s-name" placeholder="Your name"></div>
-            <div class="f-row"><label class="f-label">Organisation</label><input class="f-input" id="s-org" placeholder="Leverage Edu" value="Leverage Edu"></div>
-            <button class="btn btn-sky btn-sm" onclick="saveSettings()" style="margin-top:4px"><i class="ti ti-device-floppy"></i>Save</button>
-          </div>
-          <div class="s-card">
-            <div class="s-card-title"><i class="ti ti-info-circle"></i>About VoxPath</div>
-            <div style="font-size:12px;color:var(--ink2);line-height:1.8">
-              <div style="margin-bottom:6px"><b style="color:var(--ink)">VoxPath</b> by Leverage Edu</div>
-              <div style="color:var(--ink3)">Free voice AI panel using Chrome Speech API + Gemini Flash. No Vapi. No monthly cost.</div>
-              <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-                <span style="padding:3px 8px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--ink3)">v2.0</span>
-                <span style="padding:3px 8px;background:var(--sky-dim);border:1px solid var(--sky-border);border-radius:20px;font-size:10px;color:var(--sky)">Gemini 2.0 Flash</span>
-                <span style="padding:3px 8px;background:var(--green-dim);border:1px solid rgba(63,184,123,.3);border-radius:20px;font-size:10px;color:#3FB87B">₹0/mo</span>
-              </div>
-            </div>
-          </div>
+        <div class="ey">Account</div><div class="pt">Settings</div>
+        <div class="two">
+          <div class="card"><div class="card-t"><i class="ti ti-building"></i>Workspace</div><div class="fr"><label class="fl">Name</label><input class="fin" id="s-name" placeholder="Your name"></div><div class="fr"><label class="fl">Organisation</label><input class="fin" id="s-org" value="Leverage Edu"></div><button class="btn btn-sky btn-sm" onclick="saveSettings()" style="margin-top:4px"><i class="ti ti-device-floppy"></i>Save</button></div>
+          <div class="card"><div class="card-t"><i class="ti ti-info-circle"></i>About VoxPath</div><div style="font-size:12px;color:var(--ink2);line-height:1.8"><div style="margin-bottom:6px"><b style="color:var(--ink)">VoxPath v3.0</b> by Leverage Edu</div><div style="color:var(--ink3)">Zero-cost voice AI panel. Built-in FSM engine works offline. Optional Groq upgrade for AI quality.</div><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><span style="padding:3px 8px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--ink3)">v3.0</span><span style="padding:3px 8px;background:var(--green-dim);border:1px solid var(--green-border);border-radius:20px;font-size:10px;color:#3FB87B">₹0/mo</span><span style="padding:3px 8px;background:var(--sky-dim);border:1px solid var(--sky-border);border-radius:20px;font-size:10px;color:var(--sky)">Works offline</span></div></div></div>
         </div>
       </div>
 
@@ -1183,402 +541,428 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f)
   </div>
 </div>
 
-<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg">Saved</span></div>
+<div class="toast" id="toast"><i class="ti ti-check" id="toast-ic"></i><span id="toast-msg">Saved</span></div>
 
 <script>
-/* ─── LOGIN CANVAS ─── */
-(function(){
-  const c=document.getElementById('login-canvas');
-  if(!c)return;
-  const ctx=c.getContext('2d');
-  let W,H,pts=[];
-  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;pts=Array.from({length:50},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*2+1}))}
+/* ══════════════════════════════════════════════════
+   LOGIN CANVAS
+══════════════════════════════════════════════════ */
+!function(){
+  const c=document.getElementById('lc');if(!c)return;
+  const ctx=c.getContext('2d');let W,H,pts=[];
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;pts=Array.from({length:55},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.8+.8}))}
   resize();window.addEventListener('resize',resize);
   function draw(){
     ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(28,159,212,0.4)';ctx.fill();
-    });
-    pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
-      const d=Math.hypot(a.x-b.x,a.y-b.y);
-      if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(28,159,212,${.15*(1-d/120)})`;ctx.stroke()}
-    }));
+    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(28,159,212,.5)';ctx.fill()});
+    pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<110){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle=`rgba(28,159,212,${.18*(1-d/110)})`;ctx.stroke()}}));
     requestAnimationFrame(draw);
   }
   draw();
-})();
+}();
 
-/* ─── LIVE BANNER WAVE ─── */
-function buildLiveWave(){
-  const el=document.getElementById('live-wave');if(!el)return;
-  for(let i=0;i<12;i++){
-    const s=document.createElement('span');
-    const h=Math.random()*16+4;
-    s.style.cssText=`height:${h}px;background:var(--sky);border-radius:2px;animation:wfAnim ${(Math.random()*.6+.5).toFixed(2)}s ease-in-out ${(Math.random()*.5).toFixed(2)}s infinite alternate;opacity:.7`;
-    el.appendChild(s);
-  }
-}
-
-/* ─── AUTH ─── */
-const DEMO_EMAIL='demo@leverageedu.com';
-const DEMO_PASS='leverage2024';
-const ALLOWED_DOMAIN='leverageedu.com';
-
-function handleGoogleLogin(response){
-  try{
-    const p=JSON.parse(atob(response.credential.split('.')[1]));
-    const email=p.email||'';
-    if(!email.endsWith('@'+ALLOWED_DOMAIN)&&email!==DEMO_EMAIL){showLoginError('Only @leverageedu.com accounts allowed.');return;}
-    doLogin({name:p.name||email.split('@')[0],email,avatar:p.picture||''});
-  }catch(e){showLoginError('Google sign-in failed.');}
+/* ══════════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════════ */
+function handleGoogleLogin(r){
+  try{const p=JSON.parse(atob(r.credential.split('.')[1]));const e=p.email||'';if(!e.endsWith('@leverageedu.com')&&e!=='demo@leverageedu.com'){showLoginErr('Only @leverageedu.com accounts allowed.');return;}doLogin({name:p.name||e.split('@')[0],email:e,avatar:p.picture||''});}catch(e){showLoginErr('Google sign-in failed.');}
 }
 function handleEmailLogin(){
-  const email=document.getElementById('login-email').value.trim();
-  const pass=document.getElementById('login-pass').value;
-  if(!email||!pass){showLoginError('Enter email and password.');return;}
-  if(email===DEMO_EMAIL&&pass===DEMO_PASS){doLogin({name:'Shivam',email,avatar:''});return;}
-  if(!email.endsWith('@'+ALLOWED_DOMAIN)){showLoginError('Only @leverageedu.com accounts allowed.');return;}
-  showLoginError('Invalid credentials. Try demo@leverageedu.com / leverage2024');
+  const e=document.getElementById('login-email').value.trim();
+  const p=document.getElementById('login-pass').value;
+  if(!e||!p){showLoginErr('Enter email and password.');return;}
+  if(e==='demo@leverageedu.com'&&p==='leverage2024'){doLogin({name:'Shivam',email:e,avatar:''});return;}
+  if(!e.endsWith('@leverageedu.com')){showLoginErr('Only @leverageedu.com accounts allowed.');return;}
+  showLoginErr('Invalid credentials. Try demo@leverageedu.com / leverage2024');
 }
-function doLogin(user){
-  localStorage.setItem('voxpath-user',JSON.stringify(user));
-  showApp(user);
-}
-function showApp(user){
+function doLogin(u){localStorage.setItem('voxpath-user',JSON.stringify(u));showApp(u);}
+function showApp(u){
   document.getElementById('login-page').style.display='none';
-  const app=document.getElementById('app');app.classList.add('visible');
+  document.getElementById('app').classList.add('visible');
+  const n=u.name||u.email.split('@')[0];
+  ['user-name-tb','home-name','sb-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n;});
+  const se=document.getElementById('sb-email');if(se)se.textContent=u.email;
+  if(u.avatar){const img=document.getElementById('user-avatar');img.src=u.avatar;img.style.display='block';document.getElementById('user-av-fb').style.display='none';}
+  const h=new Date().getHours();const el=document.getElementById('greet-time');if(el)el.textContent=h<12?'morning':h<17?'afternoon':'evening';
+  buildLiveWave();buildWaveform();buildCallList();buildTerminal();loadKeys();detectMode();startLiveTicker();
+  goTo('home');
+}
+function showLoginErr(m){const e=document.getElementById('lerr');const em=document.getElementById('lerr-msg');e.style.display='flex';if(em)em.textContent=m;}
+function logout(){localStorage.removeItem('voxpath-user');document.getElementById('app').classList.remove('visible');document.getElementById('login-page').style.display='flex';}
 
-  const n=document.getElementById('user-name-display');if(n)n.textContent=user.name||user.email.split('@')[0];
-  const hn=document.getElementById('home-uname');if(hn)hn.textContent=user.name||user.email.split('@')[0];
-  const sn=document.getElementById('sb-user-name');if(sn)sn.textContent=user.name||'';
-  const se=document.getElementById('sb-user-email');if(se)se.textContent=user.email||'';
-  if(user.avatar){const img=document.getElementById('user-avatar');img.src=user.avatar;img.style.display='block';document.getElementById('user-ava-fallback').style.display='none';}
-
-  setGreeting();buildTerminal();buildCallList();loadKeys();buildLiveWave();
-  startLiveTicker();makeWaveformBars();goTo('home');
-}
-function showLoginError(msg){
-  const el=document.getElementById('login-error');
-  const em=document.getElementById('login-error-msg');
-  el.style.display='flex';if(em)em.textContent=msg;
-}
-function logout(){
-  localStorage.removeItem('voxpath-user');
-  document.getElementById('app').classList.remove('visible');
-  document.getElementById('login-page').style.display='flex';
-}
-function setGreeting(){
-  const h=new Date().getHours();
-  const g=h<12?'morning':h<17?'afternoon':'evening';
-  const el=document.getElementById('greeting-time');if(el)el.textContent=g;
-}
-
-/* ─── NAV ─── */
-const crumbs={home:'Home',calls:'Call logs',agent:'Agent config',setup:'Setup guide',stack:'Free stack',integrations:'Integrations',settings:'Settings'};
+/* ══════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════ */
+const NAV_LABELS={home:'Home',calls:'Call logs',agent:'Agent config',setup:'Setup guide',stack:'Free stack',integrations:'Integrations',settings:'Settings'};
 function goTo(name){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sbi').forEach(s=>s.classList.remove('active'));
   const sec=document.getElementById('sec-'+name);if(sec)sec.classList.add('active');
   const nav=document.getElementById('nav-'+name);if(nav)nav.classList.add('active');
-  const bb=document.querySelector('.tb-breadcrumb b');if(bb)bb.textContent=crumbs[name]||name;
+  const tb=document.getElementById('tb-page');if(tb)tb.textContent=NAV_LABELS[name]||name;
 }
 
-/* ─── WAVEFORM BARS ─── */
-function makeWaveformBars(){
-  const el=document.getElementById('call-wave');if(!el||el.children.length)return;
-  for(let i=0;i<60;i++){
-    const b=document.createElement('div');b.className='wf-bar';
-    b.style.setProperty('--d',(Math.random()*.6+.4).toFixed(2)+'s');
-    b.style.setProperty('--delay',(Math.random()*.8).toFixed(2)+'s');
-    el.appendChild(b);
-  }
+/* ══════════════════════════════════════════════════
+   WAVEFORM BARS
+══════════════════════════════════════════════════ */
+function buildLiveWave(){
+  const el=document.getElementById('live-wave');if(!el||el.children.length)return;
+  for(let i=0;i<14;i++){const s=document.createElement('span');const h=Math.random()*16+4;s.style.cssText=`height:${h}px;animation:wfIdle ${(.5+Math.random()*.6).toFixed(2)}s ease-in-out ${(Math.random()*.5).toFixed(2)}s infinite alternate;opacity:.75`;el.appendChild(s);}
+}
+function buildWaveform(){
+  const el=document.getElementById('waveform');if(!el||el.children.length)return;
+  for(let i=0;i<80;i++){const b=document.createElement('div');b.className='wfb idle';b.style.setProperty('--d',(Math.random()*.7+.5).toFixed(2)+'s');b.style.setProperty('--delay',(Math.random()*.9).toFixed(2)+'s');el.appendChild(b);}
 }
 
-/* ─── CALL DATA ─── */
-const CALLS=[
-  {num:'Rahul Sharma',time:'2 mins ago',dur:'3:24',score:88,type:'out',tags:['UK','MBA'],transcript:[['agent','Namaste! Main Siya bol rahi hoon Leverage Edu se. Kya aap study abroad plan kar rahe hain?'],['user',"Haan, main UK mein MBA karna chahta hoon."]]},
-  {num:'Priya Singh',time:'18 mins ago',dur:'4:10',score:72,type:'out',tags:['Canada','MS'],transcript:[['agent','Hi, main Siya hoon! Aapka abroad plan kya hai?'],['user','Canada mein Masters karna chahti hoon.']]},
-  {num:'Arjun Mehta',time:'1 hr ago',dur:'1:55',score:45,type:'in',tags:['Australia'],transcript:[['agent','Leverage Edu se Siya bol rahi hoon. Kaise help kar sakti hoon?'],['user','Australia ke baare mein jaanna tha.']]},
+/* Real microphone waveform via Web Audio API */
+let audioCtx=null,analyser=null,micStream=null,wfAnimId=null;
+async function startMicViz(){
+  try{
+    if(!micStream){micStream=await navigator.mediaDevices.getUserMedia({audio:true});}
+    if(!audioCtx){audioCtx=new AudioContext();}
+    if(audioCtx.state==='suspended')await audioCtx.resume();
+    const src=audioCtx.createMediaStreamSource(micStream);
+    analyser=audioCtx.createAnalyser();analyser.fftSize=256;
+    src.connect(analyser);
+    const data=new Uint8Array(analyser.frequencyBinCount);
+    const bars=document.querySelectorAll('.wfb');
+    function viz(){
+      if(!callActive){bars.forEach(b=>{b.classList.add('idle');b.style.height='';b.classList.remove('active')});return;}
+      analyser.getByteFrequencyData(data);
+      bars.forEach((b,i)=>{
+        const v=data[Math.floor(i*data.length/bars.length)]/255;
+        const h=Math.max(3,v*46);
+        b.style.height=h+'px';b.classList.remove('idle');b.classList.add('active');
+      });
+      wfAnimId=requestAnimationFrame(viz);
+    }
+    wfAnimId=requestAnimationFrame(viz);
+  }catch(e){addLog('t-w','MIC','Mic visualizer unavailable: '+e.message);}
+}
+function stopMicViz(){cancelAnimationFrame(wfAnimId);const bars=document.querySelectorAll('.wfb');bars.forEach(b=>{b.classList.add('idle');b.style.height='';b.classList.remove('active')});}
+
+/* ══════════════════════════════════════════════════
+   CALL DATA
+══════════════════════════════════════════════════ */
+const SAMPLE_CALLS=[
+  {num:'Rahul Sharma',time:'2 min ago',dur:'3:24',score:88,type:'out',transcript:[['agent','Namaste Rahul! Main Siya hoon, Leverage Edu se. Kya aap study abroad plan kar rahe hain?'],['user','Haan, UK mein MBA karna chahta hoon.']]},
+  {num:'Priya Singh',time:'20 min ago',dur:'4:10',score:72,type:'out',transcript:[['agent','Namaste! Main Siya hoon. Study abroad plan hai?'],['user','Canada mein Masters karna chahti hoon.']]},
+  {num:'Arjun Mehta',time:'1 hr ago',dur:'1:55',score:45,type:'in',transcript:[['agent','Leverage Edu se Siya bol rahi hoon. Kaise help karoon?'],['user','Australia ke baare mein jaanna tha.']]}
 ];
-let callsData=[...CALLS];
-
+let callsData=[...SAMPLE_CALLS];
 function buildCallList(){
-  const wrap=document.getElementById('call-list');if(!wrap)return;
-  wrap.innerHTML='';
+  const wrap=document.getElementById('call-list');if(!wrap)return;wrap.innerHTML='';
   callsData.forEach((c,i)=>{
-    const s=c.score>=80?'high':c.score>=60?'mid':'low';
-    const row=document.createElement('div');row.className='call-row';
-    row.innerHTML=`<div class="call-row-head" onclick="toggleDetail(${i})">
-      <div class="call-row-icon ${c.type}"><i class="ti ti-phone-${c.type==='out'?'outgoing':'incoming'}"></i></div>
-      <div><div class="call-row-name">${c.num}</div><div class="call-row-meta">${c.time}</div></div>
-      <div class="call-row-dur">${c.dur}</div>
-      <div class="call-score ${s}">${c.score}</div>
-      <i class="ti ti-chevron-down" id="chev-${i}" style="font-size:14px;color:var(--ink3);margin-left:6px;transition:var(--trans)"></i>
-    </div>
-    <div class="call-detail" id="detail-${i}">
-      ${c.transcript.map(([r,t])=>`<div><span class="${r==='agent'?'t-agent':'t-user'}">${r==='agent'?'Siya':'Caller'}:</span> <span style="color:var(--ink2)">${t}</span></div>`).join('')}
-    </div>`;
+    const s=c.score>=80?'hi':c.score>=60?'mi':'lo';
+    const row=document.createElement('div');row.className='crow';
+    row.innerHTML=`<div class="crow-h" onclick="toggleDetail(${i})"><div class="crow-ico ${c.type}"><i class="ti ti-phone-${c.type==='out'?'outgoing':'incoming'}"></i></div><div><div class="crow-name">${c.num}</div><div class="crow-meta">${c.time}</div></div><div class="crow-dur">${c.dur}</div><div class="cscore ${s}">${c.score}</div><i class="ti ti-chevron-down" id="ch-${i}" style="font-size:13px;color:var(--ink3);margin-left:6px;transition:var(--trans)"></i></div><div class="crow-d" id="cd-${i}">${c.transcript.map(([r,t])=>`<div><span class="${r==='agent'?'ta':'tu'}">${r==='agent'?'Siya':'Caller'}:</span> <span style="color:var(--ink2)">${t}</span></div>`).join('')}</div>`;
     wrap.appendChild(row);
   });
   const m=document.getElementById('m-calls');if(m)m.textContent=callsData.length;
 }
-function toggleDetail(i){
-  const d=document.getElementById('detail-'+i);
-  const cv=document.getElementById('chev-'+i);
-  const open=d.classList.contains('open');
-  d.classList.toggle('open',!open);
-  if(cv)cv.style.transform=open?'':'rotate(180deg)';
-}
+function toggleDetail(i){const d=document.getElementById('cd-'+i);const ch=document.getElementById('ch-'+i);const o=d.classList.contains('open');d.classList.toggle('open',!o);if(ch)ch.style.transform=o?'':'rotate(180deg)';}
 
-/* ─── TERMINAL ─── */
-const INIT_LOGS=[
-  ['t-ok','BOOT','VoxPath v2 initialised'],
-  ['t-ok','ENGINE','Gemini 2.0 Flash · Chrome STT · Chrome TTS'],
-  ['t-info','STATUS','Ready for outbound calls'],
-];
+/* ══════════════════════════════════════════════════
+   TERMINAL
+══════════════════════════════════════════════════ */
 function buildTerminal(){
-  const t=document.getElementById('terminal');if(!t)return;
-  INIT_LOGS.forEach(([c,l,m])=>addLog(c,l,m,false));
+  [['to','BOOT','VoxPath v3.0 · Zero-cost voice AI engine'],['to','ENGINE','FSM brain active · Chrome STT · Chrome TTS · Web Audio'],['ti','STATUS','Ready — no API key needed · Optional Groq upgrade available']].forEach(([c,l,m])=>addLog(c,l,m,false));
 }
-function addLog(cls,label,msg,scroll=true){
+function addLog(cls,lbl,msg,scroll=true){
   const t=document.getElementById('terminal');if(!t)return;
-  const now=new Date();
-  const ts=`[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
-  const d=document.createElement('div');
-  d.innerHTML=`<span class="t-ts">${ts}</span><span class="${cls} t-lbl">${label}</span><span style="color:var(--ink2)">${msg}</span>`;
+  const now=new Date();const ts=`[${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}]`;
+  const d=document.createElement('div');d.innerHTML=`<span class="tts">${ts}</span><span class="${cls} tlb">${lbl}</span><span style="color:var(--ink2)">${msg}</span>`;
   t.appendChild(d);if(scroll)t.scrollTop=t.scrollHeight;
 }
 function clearLog(){document.getElementById('terminal').innerHTML='';showToast('Log cleared');}
 
-/* ─── LIVE TICKER ─── */
-const TICKER_MSGS=['Agent is listening · Gemini Flash ready','STT active · Chrome SpeechRecognition','TTS ready · Chrome SpeechSynthesis','Free tier · 1,500 req/day remaining'];
-let tickerIdx=0;
+/* ══════════════════════════════════════════════════
+   LIVE TICKER + MODE DETECTION
+══════════════════════════════════════════════════ */
+const TICKERS=['Zero-cost engine active · Chrome STT + FSM brain + Chrome TTS','No API key needed · Works offline · Works forever free','Optional: Add Groq key for Llama 3.3 70B AI quality','Siya is ready to qualify your study abroad leads'];
+let tickIdx=0;
 function startLiveTicker(){
   const el=document.getElementById('live-ticker');if(!el)return;
-  setInterval(()=>{el.style.opacity='0';setTimeout(()=>{el.textContent=TICKER_MSGS[tickerIdx++%TICKER_MSGS.length];el.style.opacity='1';},300)},3500);
   el.style.transition='opacity .3s';
+  setInterval(()=>{el.style.opacity='0';setTimeout(()=>{el.textContent=TICKERS[tickIdx++%TICKERS.length];el.style.opacity='1';},300);},3500);
+}
+function detectMode(){
+  const groq=localStorage.getItem('voxpath-key-groq');
+  const gemini=localStorage.getItem('voxpath-key-gemini');
+  const mb=document.getElementById('mode-badge');
+  const md=document.getElementById('mode-desc');
+  const mu=document.getElementById('mode-upgrade');
+  const pm=document.getElementById('pill-mode');
+  const pmt=document.getElementById('pill-mode-txt');
+  if(groq){
+    if(mb){mb.className='mode-badge ai';mb.textContent='🧠 Groq AI Mode';}
+    if(md)md.textContent='Running Llama 3.3 70B via Groq · 14,400 free req/day.';
+    if(mu)mu.style.display='none';
+    if(pm)pm.className='pill sky';if(pmt)pmt.textContent='Groq Llama 3.3';
+  } else if(gemini){
+    if(mb){mb.className='mode-badge ai';mb.textContent='🧠 Gemini AI Mode';}
+    if(md)md.textContent='Running Gemini 2.0 Flash · Free tier.';
+    if(mu)mu.style.display='none';
+    if(pm)pm.className='pill sky';if(pmt)pmt.textContent='Gemini Flash';
+  } else {
+    if(mb){mb.className='mode-badge fsm';mb.textContent='⚡ Built-in Mode';}
+    if(md)md.textContent='Zero-cost FSM engine — works offline, no API key needed.';
+    if(mu)mu.style.display='';
+    if(pm)pm.className='pill';if(pmt)pmt.textContent='FSM Mode';
+  }
 }
 
-/* ─── TOAST ─── */
-function showToast(msg,icon='ti-check'){
-  const t=document.getElementById('toast');
-  const m=document.getElementById('toast-msg');
-  const ic=t.querySelector('i');
-  if(m)m.textContent=msg;if(ic)ic.className=`ti ${icon}`;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+/* ══════════════════════════════════════════════════
+   SIYA — SMART FSM (zero API, works offline)
+══════════════════════════════════════════════════ */
+class SiyaFSM{
+  constructor(name){
+    this.name=name||'';
+    this.step=0;
+    this.data={};
+    this.flow=[
+      {q:()=>`Namaste${this.name?(' '+this.name):''}! Main Siya hoon, Leverage Edu se — India ka number one study abroad platform. Kya aap abroad padhne ka plan kar rahe hain?`,key:'intent'},
+      {q:()=>'Bahut accha! Abhi aap studying hain ya working?',key:'status'},
+      {q:()=>'Okay! Aapki highest qualification kya hai — 12th, graduation, ya postgrad?',key:'qualification'},
+      {q:()=>'Great! Kaun sa country prefer karoge — UK, USA, Canada, Australia, Germany, Ireland, ya Dubai?',key:'country'},
+      {q:()=>'Perfect! Kaunsa intake — September 2025, January 2026, ya September 2026?',key:'intake'},
+      {q:()=>"Bachelor's, Master's, ya MBA — kaunsa program?",key:'program'},
+      {q:()=>'Kaunsa field ya subject hai — Engineering, Business, Healthcare, Law, ya kuch aur?',key:'field'},
+      {q:()=>'Budget ke baare mein — roughly 10 lakhs se zyada available hai na?',key:'budget'},
+      {q:()=>'English test diya hai koi — IELTS, TOEFL, ya PTE?',key:'english_test'},
+      {q:()=>'Valid passport hai aapke paas?',key:'passport'},
+      {q:()=>'Aur last question — aap kaun se city mein hain?',key:'city'},
+    ];
+    this.acks=['Got it!','Perfect!','Accha!','Bilkul!','Samajh gaya!','Wonderful!','Great!','Noted!'];
+  }
+  ack(){return this.acks[Math.floor(Math.random()*this.acks.length)];}
+  respond(input){
+    const inp=input.toLowerCase().trim();
+    if(/nahi|no\b|not interested|busy|mat baat|baad mein/i.test(inp)){
+      return 'Koi baat nahi! Agar kabhi study abroad consider karein toh Leverage Edu zaroor yaad rakhein. Hum hamesha available hain. Have a great day!';
+    }
+    if(this.step===0){
+      if(/haan|yes|yeah|sure|kar raha|karunga|interested|plan|soch|want/i.test(inp)){
+        this.step=1;return this.flow[1].q();
+      }
+      return 'Okay! Agar future mein consider karein toh hum hamesha available hain. Koi aur sawaal hai?';
+    }
+    if(this.step<this.flow.length){this.data[this.flow[this.step].key]=input;}
+    this.step++;
+    if(this.step<this.flow.length){return this.ack()+' '+this.flow[this.step].q();}
+    const c=this.data.country||'abroad';const p=this.data.program||'program';
+    return `Perfect! Aapki saari details note ho gayi — ${c} mein ${p}. Humara expert counsellor 24 ghante mein call karega. Koi aur sawaal hai?`;
+  }
 }
 
-/* ─── AGENT CONFIG ─── */
-function saveAgent(){
-  const name=document.getElementById('a-name')?.value||'Siya';
-  const pn=document.getElementById('agent-preview-name');if(pn)pn.textContent=name;
-  showToast('Agent config saved');addLog('t-ok','AGENT','Config saved: '+name);
-}
-function exportAgent(){
-  const cfg={name:document.getElementById('a-name')?.value,role:document.getElementById('a-role')?.value,lang:document.getElementById('a-lang')?.value,prompt:document.getElementById('a-prompt')?.value};
-  const b=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(b),download:'siya-config.json'});
-  a.click();showToast('Config exported');
-}
-function resetAgent(){
-  const p=document.getElementById('a-prompt');
-  if(p)p.value='You are Siya, an outbound lead qualification agent for Leverage Edu. Speak in Hinglish. Be warm and concise. Ask qualification questions one at a time: study/work status, qualification, target country, intake, program, field, budget, English test, passport, city. End by booking a counsellor callback.';
-  showToast('Reset to default');
-}
-
-/* ─── KEYS ─── */
-function saveKeys(){
-  ['k-gemini','k-sheets','k-oauth','k-vapi-pub','k-vapi-asst'].forEach(id=>{
-    const v=document.getElementById(id)?.value;
-    if(v!==undefined){const key='voxpath-key-'+id.replace('k-','');if(v)localStorage.setItem(key,v);}
+/* ══════════════════════════════════════════════════
+   LLM BACKENDS
+══════════════════════════════════════════════════ */
+async function callGroq(messages, sysPrompt){
+  const key=localStorage.getItem('voxpath-key-groq');
+  if(!key)throw new Error('no-groq-key');
+  const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
+    body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sysPrompt},...messages],max_tokens:120,temperature:0.8})
   });
-  showToast('Keys saved locally');addLog('t-ok','KEYS','API keys updated');
+  const d=await res.json();
+  if(d.error)throw new Error(d.error.message);
+  return d.choices[0].message.content.trim();
 }
-function clearKeys(){
-  ['gemini','sheets','oauth','vapi-pub','vapi-asst'].forEach(k=>localStorage.removeItem('voxpath-key-'+k));
-  ['k-gemini','k-sheets','k-oauth','k-vapi-pub','k-vapi-asst'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  showToast('Keys cleared');
-}
-function loadKeys(){
-  [['k-gemini','voxpath-key-gemini'],['k-sheets','voxpath-key-sheets'],['k-oauth','voxpath-key-oauth'],['k-vapi-pub','voxpath-key-vapi-pub'],['k-vapi-asst','voxpath-key-vapi-asst']].forEach(([id,lk])=>{
-    const v=localStorage.getItem(lk);const el=document.getElementById(id);if(v&&el)el.value=v;
-  });
-}
-function saveGoogleClientId(){
-  const v=document.getElementById('k-oauth')?.value;
-  if(v){localStorage.setItem('voxpath-key-oauth',v);const meta=document.querySelector('#g_id_onload');if(meta)meta.setAttribute('data-client_id',v);showToast('OAuth client ID saved — refresh to apply');}
-}
-function saveSettings(){
-  localStorage.setItem('voxpath-settings',JSON.stringify({name:document.getElementById('s-name')?.value,org:document.getElementById('s-org')?.value}));
-  showToast('Settings saved');
-}
-
-/* ─── SIMULATE ─── */
-function simulateCall(){
-  const steps=[
-    ()=>addLog('t-info','SIYA','Namaste! Main Siya bol rahi hoon Leverage Edu se. Study abroad plan hai aapka?'),
-    ()=>addLog('t-info','USER','Haan, UK mein MBA karna chahta hoon.'),
-    ()=>addLog('t-info','SIYA','Great! Abhi aap working hain ya studying?'),
-    ()=>addLog('t-info','USER','Working hoon, 2 years experience hai.'),
-    ()=>addLog('t-info','SIYA','Perfect. Aapka budget roughly kitna hai — 10 lakh se zyada?'),
-    ()=>addLog('t-ok','CALL_END','Demo call ended — score: 85'),
-  ];
-  let i=0;
-  const t=setInterval(()=>{if(i<steps.length){steps[i]();}else clearInterval(t);i++;},1200);
-  showToast('Demo call running...');
-}
-function triggerSimulatedCall(){simulateCall();}
-
-/* ─── VOICE ENGINE — Gemini + Web Speech ─── */
-let callActive=false,callTimer=null,callSeconds=0,recognition=null,conversationHistory=[],isSpeaking=false,callName='';
-
-const SIYA_PROMPT=`You are Siya, an outbound lead qualification agent for Leverage Edu, India's leading study abroad platform. 
-
-Keep every response SHORT — maximum 2 sentences. This is a phone call.
-Speak in Hinglish (natural mix of Hindi and English). Be warm and human.
-
-Start by greeting the student and introducing yourself as Siya from Leverage Edu, then ask if they are planning to study abroad.
-
-Ask these questions ONE AT A TIME (do not list them):
-1. Studying or working currently?
-2. Highest qualification?
-3. Target country — UK, USA, Canada, Australia, Germany, Ireland, Dubai?
-4. Intake — March, May, or September 2026?
-5. Program — Bachelor's, Master's, MBA?
-6. Field/subject?
-7. Budget (minimum 10 lakhs)?
-8. English test — IELTS/TOEFL/PTE?
-9. Valid passport?
-10. City?
-
-End by saying a counsellor will call them back. Be concise — never list questions.`;
-
-function addToTranscript(role,text){
-  const el=document.getElementById('call-transcript');if(!el)return;
-  const ph=el.querySelector('.t-placeholder');if(ph)ph.remove();
-  const d=document.createElement('div');
-  d.style.marginBottom='4px';
-  if(role==='siya')d.innerHTML=`<span class="t-siya">Siya: </span><span class="t-siya-text">${text}</span>`;
-  else d.innerHTML=`<span class="t-user-name">You: </span><span class="t-user-text">${text}</span>`;
-  el.appendChild(d);el.scrollTop=el.scrollHeight;
-}
-function setCallState(state){
-  const label=document.getElementById('call-state-label');
-  const dot=document.getElementById('call-state-dot');
-  const orb=document.getElementById('agent-orb');
-  const states={connecting:{text:'⏳ Connecting...',dot:'',orb:''},listening:{text:'🎤 Listening — speak now',dot:'active',orb:''},thinking:{text:'🧠 Siya is thinking...',dot:'',orb:''},speaking:{text:'🔊 Siya is speaking...',dot:'speaking',orb:'speaking'},ended:{text:'📵 Call ended',dot:'',orb:''}};
-  const s=states[state]||{text:state,dot:'',orb:''};
-  if(label)label.textContent=s.text;
-  if(dot){dot.className='call-state-dot';if(s.dot)dot.classList.add(s.dot);}
-  if(orb){orb.className='agent-orb';if(s.orb)orb.classList.add(s.orb);}
-}
-function activateWaveform(on){
-  document.querySelectorAll('.wf-bar').forEach(b=>{if(on)b.classList.add('active');else b.classList.remove('active');});
-}
-function updateTimer(){
-  callSeconds++;
-  const el=document.getElementById('call-timer');
-  if(el)el.textContent=Math.floor(callSeconds/60)+':'+String(callSeconds%60).padStart(2,'0');
-}
-async function getSiyaResponse(msg){
+async function callGemini(messages, sysPrompt){
   const key=localStorage.getItem('voxpath-key-gemini');
-  if(!key)throw new Error('Gemini API key not set');
-  conversationHistory.push({role:'user',parts:[{text:msg}]});
+  if(!key)throw new Error('no-gemini-key');
   const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,{
     method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({system_instruction:{parts:[{text:SIYA_PROMPT+(callName?`\n\nStudent name: ${callName}`:'')}]},contents:conversationHistory,generationConfig:{maxOutputTokens:100,temperature:0.8}})
+    body:JSON.stringify({system_instruction:{parts:[{text:sysPrompt}]},contents:messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:120,temperature:0.8}})
   });
-  const data=await res.json();
-  if(data.error)throw new Error(data.error.message);
-  const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||"Sorry, could you repeat that?";
-  conversationHistory.push({role:'model',parts:[{text:reply}]});
-  return reply;
+  const d=await res.json();if(d.error)throw new Error(d.error.message);
+  return d.candidates?.[0]?.content?.parts?.[0]?.text||'Sorry?';
 }
+
+const SIYA_AI_PROMPT=`You are Siya, an outbound lead qualification agent for Leverage Edu, India's #1 study abroad platform.
+Keep responses SHORT — max 2 sentences. This is a phone call.
+Speak naturally in Hinglish (mix of Hindi and English). Be warm, friendly, human.
+Greet the student, introduce yourself as Siya from Leverage Edu, then ask qualification questions ONE AT A TIME:
+1. Studying or working? 2. Highest qualification? 3. Target country? 4. Intake? 5. Program? 6. Field? 7. Budget (10L+)? 8. English test? 9. Passport? 10. City?
+End by booking a counsellor callback. Never list all questions at once.`;
+
+/* ══════════════════════════════════════════════════
+   VOICE ENGINE — CALL MANAGER
+══════════════════════════════════════════════════ */
+let callActive=false,callSecs=0,callTimerInterval=null;
+let recognition=null,isSpeaking=false,callHistory=[];
+let siyaFSM=null,aiMessages=[];
+let callName='';
+
+function setCallState(state){
+  const dot=document.getElementById('csdot');const txt=document.getElementById('cstext');const orb=document.getElementById('agent-orb');
+  const states={idle:{d:'',t:'Ready',o:''},connecting:{d:'',t:'⏳ Connecting...',o:''},listening:{d:'listening',t:'🎤 Listening — speak now',o:''},thinking:{d:'',t:'🧠 Siya is thinking...',o:''},speaking:{d:'speaking',t:'🔊 Siya is speaking...',o:'speaking'},ended:{d:'',t:'📵 Call ended',o:''}};
+  const s=states[state]||{d:'',t:state,o:''};
+  if(dot){dot.className='csdot';if(s.d)dot.classList.add(s.d);}
+  if(txt)txt.textContent=s.t;
+  if(orb){orb.className='agent-orb';if(s.o)orb.classList.add(s.o);}
+}
+function addTranscript(role,text){
+  const el=document.getElementById('transcript');if(!el)return;
+  const ph=el.querySelector('.t-ph');if(ph)ph.remove();
+  const d=document.createElement('div');d.style.marginBottom='5px';
+  d.innerHTML=role==='siya'?`<span class="t-s">Siya: </span><span style="color:rgba(240,244,255,.85)">${text}</span>`:`<span class="t-u">You: </span><span style="color:rgba(240,244,255,.7)">${text}</span>`;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function updateCallTimer(){
+  callSecs++;const m=Math.floor(callSecs/60);const s=String(callSecs%60).padStart(2,'0');
+  const el=document.getElementById('ctimer');if(el)el.textContent=m+':'+s;
+}
+
+async function getSiyaReply(userInput){
+  /* Try Groq → Gemini → FSM fallback */
+  const groqKey=localStorage.getItem('voxpath-key-groq');
+  const geminiKey=localStorage.getItem('voxpath-key-gemini');
+  aiMessages.push({role:'user',content:userInput});
+  if(groqKey){
+    try{const r=await callGroq(aiMessages,SIYA_AI_PROMPT);aiMessages.push({role:'assistant',content:r});return r;}
+    catch(e){if(e.message!=='no-groq-key'){addLog('te','GROQ_ERR',e.message);}}
+  }
+  if(geminiKey){
+    try{const r=await callGemini(aiMessages,SIYA_AI_PROMPT);aiMessages.push({role:'assistant',content:r});return r;}
+    catch(e){if(e.message!=='no-gemini-key'){addLog('te','GEMINI_ERR',e.message);}}
+  }
+  /* FSM fallback */
+  const r=siyaFSM.respond(userInput);aiMessages.push({role:'assistant',content:r});return r;
+}
+
 function speakText(text,onDone){
   window.speechSynthesis.cancel();
-  isSpeaking=true;setCallState('speaking');activateWaveform(true);
+  isSpeaking=true;setCallState('speaking');
   const u=new SpeechSynthesisUtterance(text);
   const voices=window.speechSynthesis.getVoices();
-  const v=voices.find(v=>v.lang==='en-IN')||voices.find(v=>v.lang.startsWith('en')&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang.startsWith('en'))||voices[0];
-  if(v)u.voice=v;u.rate=.92;u.pitch=1.05;
-  u.onend=()=>{isSpeaking=false;activateWaveform(false);if(callActive){setCallState('listening');if(onDone)onDone();}};
-  u.onerror=()=>{isSpeaking=false;activateWaveform(false);if(callActive&&onDone)onDone();};
+  const v=voices.find(v=>v.lang==='en-IN')||voices.find(v=>v.lang.startsWith('en')&&/female|woman|zira|hazel|susan|kate|serena|samantha|victoria|fiona/i.test(v.name))||voices.find(v=>v.lang.startsWith('en'))||voices[0];
+  if(v)u.voice=v;u.rate=.9;u.pitch=1.05;u.volume=1;
+  u.onend=()=>{isSpeaking=false;if(callActive){setCallState('listening');if(onDone)onDone();}};
+  u.onerror=()=>{isSpeaking=false;if(callActive&&onDone)onDone();};
   window.speechSynthesis.speak(u);
 }
-function startListening(){
+
+function startSTT(){
   if(!callActive||isSpeaking)return;
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){showToast('Use Chrome or Edge for voice calls','ti-alert-triangle');return;}
-  recognition=new SR();
-  recognition.lang='en-IN';recognition.continuous=false;recognition.interimResults=false;recognition.maxAlternatives=1;
+  if(!SR){showToast('Use Chrome or Edge for voice','ti-alert-triangle');return;}
+  recognition=new SR();recognition.lang='en-IN';recognition.continuous=false;recognition.interimResults=false;recognition.maxAlternatives=1;
   recognition.onstart=()=>setCallState('listening');
   recognition.onresult=async e=>{
     const t=e.results[0][0].transcript;
-    addToTranscript('user',t);addLog('t-info','STT','You: '+t);setCallState('thinking');
-    try{const r=await getSiyaResponse(t);addToTranscript('siya',r);addLog('t-info','SIYA',r.slice(0,60)+'…');speakText(r,()=>{if(callActive)startListening();});}
-    catch(err){addLog('t-err','ERROR',err.message);showToast('Error: '+err.message,'ti-alert-triangle');endCall();}
+    addTranscript('user',t);addLog('ti','YOU',t);setCallState('thinking');
+    try{
+      const reply=await getSiyaReply(t);
+      addTranscript('siya',reply);addLog('ti','SIYA',reply.slice(0,70)+(reply.length>70?'…':''));
+      callHistory.push({role:'user',text:t},{role:'siya',text:reply});
+      speakText(reply,()=>{if(callActive)startSTT();});
+    }catch(e){addLog('te','ERROR',e.message);endCallInternal();}
   };
-  recognition.onerror=e=>{if(e.error==='no-speech'&&callActive)setTimeout(()=>{if(callActive&&!isSpeaking)startListening();},500);};
-  recognition.onend=()=>{if(callActive&&!isSpeaking)setTimeout(()=>{if(callActive&&!isSpeaking)startListening();},300);};
+  recognition.onerror=ev=>{if((ev.error==='no-speech'||ev.error==='audio-capture')&&callActive)setTimeout(()=>{if(callActive&&!isSpeaking)startSTT();},600);};
+  recognition.onend=()=>{if(callActive&&!isSpeaking)setTimeout(()=>{if(callActive&&!isSpeaking)startSTT();},300);};
   try{recognition.start();}catch(e){}
 }
-function endCall(){
-  callActive=false;clearInterval(callTimer);
-  if(recognition)recognition.stop();
-  window.speechSynthesis.cancel();
-  activateWaveform(false);setCallState('ended');
-  const btn=document.getElementById('call-btn');
-  if(btn){btn.innerHTML='<i class="ti ti-phone-outgoing"></i>&nbsp; Call Siya now — free';btn.className='btn-call-main';}
-  const timer=document.getElementById('call-timer');if(timer)timer.style.display='none';
+
+function endCallInternal(){
+  callActive=false;clearInterval(callTimerInterval);
+  if(recognition)try{recognition.stop();}catch(e){}
+  window.speechSynthesis.cancel();stopMicViz();setCallState('ended');
+  const btn=document.getElementById('callbtn');
+  if(btn){btn.innerHTML='<i class="ti ti-phone-outgoing"></i>&nbsp;&nbsp;Call Siya now — free';btn.className='callbtn';}
+  const tmr=document.getElementById('ctimer');if(tmr)tmr.style.display='none';
   const ui=document.getElementById('call-ui');if(ui)ui.style.display='none';
-  const dur=Math.floor(callSeconds/60)+':'+String(callSeconds%60).padStart(2,'0');
-  callsData.unshift({num:callName||'Browser call',time:'Just now',dur,score:conversationHistory.length>4?85:60,type:'out',tags:['Web','Gemini','Free'],transcript:conversationHistory.map(m=>[m.role==='model'?'agent':'user',m.parts[0].text])});
-  buildCallList();addLog('t-ok','CALL_END','Duration: '+dur+' · '+Math.floor(conversationHistory.length/2)+' turns');
-  showToast('Call ended — '+dur);
-  conversationHistory=[];callSeconds=0;callName='';
+  const card=document.getElementById('cmd-card');if(card)card.classList.remove('active');
+  const dur=Math.floor(callSecs/60)+':'+String(callSecs%60).padStart(2,'0');
+  const score=callHistory.length>6?82:callHistory.length>4?65:callHistory.length>2?45:30;
+  callsData.unshift({num:callName||'Browser call',time:'Just now',dur,score,type:'out',transcript:callHistory.map(h=>[h.role==='siya'?'agent':'user',h.text])});
+  buildCallList();
+  addLog('to','CALL_END','Duration: '+dur+' · '+Math.ceil(callHistory.length/2)+' turns');
+  showToast('Call ended · '+dur);
+  callSecs=0;callHistory=[];aiMessages=[];callName='';siyaFSM=null;
 }
-async function startBrowserCall(){
-  const key=localStorage.getItem('voxpath-key-gemini');
-  const warn=document.getElementById('gemini-warn');
-  if(!key){if(warn)warn.classList.remove('hidden');return;}
-  if(warn)warn.classList.add('hidden');
-  if(!window.SpeechRecognition&&!window.webkitSpeechRecognition){showToast('Use Chrome or Edge for voice calls','ti-alert-triangle');return;}
-  if(callActive){endCall();return;}
+
+async function toggleCall(){
+  if(callActive){endCallInternal();return;}
   callName=document.getElementById('dial-name')?.value.trim()||'';
-  callActive=true;conversationHistory=[];callSeconds=0;
-  const btn=document.getElementById('call-btn');
-  if(btn){btn.innerHTML='<i class="ti ti-phone-off"></i>&nbsp; End call';btn.className='btn-call-main ending';}
+  callActive=true;callSecs=0;callHistory=[];aiMessages=[];
+  siyaFSM=new SiyaFSM(callName);
+  const btn=document.getElementById('callbtn');
+  if(btn){btn.innerHTML='<i class="ti ti-phone-off"></i>&nbsp;&nbsp;End call';btn.className='callbtn ending';}
   const ui=document.getElementById('call-ui');if(ui)ui.style.display='block';
-  const timer=document.getElementById('call-timer');if(timer)timer.style.display='block';
-  callTimer=setInterval(updateTimer,1000);
-  callsData.unshift({num:callName||'Browser call',time:'Just now',dur:'—',score:0,type:'out',tags:['Live','Gemini'],transcript:[]});
-  buildCallList();addLog('t-ok','CALL_START','Browser call started'+(callName?' → '+callName:''));
+  const tmr=document.getElementById('ctimer');if(tmr)tmr.style.display='block';
+  const card=document.getElementById('cmd-card');if(card)card.classList.add('active');
+  const tr=document.getElementById('transcript');if(tr)tr.innerHTML='<span class="t-ph">Conversation will appear here...</span>';
+  callTimerInterval=setInterval(updateCallTimer,1000);
+  setCallState('connecting');
+  addLog('to','CALL_START','Starting call'+(callName?' → '+callName:'')+'…');
+  /* Start mic visualization */
+  startMicViz();
+  /* Get opening from Siya */
   try{
-    const opening=await getSiyaResponse(callName?`The student's name is ${callName}. Start the call.`:'Start the call with your opening greeting.');
-    addToTranscript('siya',opening);addLog('t-info','SIYA',opening.slice(0,60)+'…');
-    speakText(opening,()=>{if(callActive)startListening();});
+    const opening=await getSiyaReply(callName?`Student name is ${callName}. Give opening greeting.`:'Give opening greeting.');
+    addTranscript('siya',opening);addLog('ti','SIYA',opening.slice(0,70)+(opening.length>70?'…':''));
+    callHistory.push({role:'siya',text:opening});
+    speakText(opening,()=>{if(callActive)startSTT();});
     showToast('Call started!');
-  }catch(err){endCall();addLog('t-err','ERROR',err.message);showToast('Error: '+err.message,'ti-alert-triangle');}
+  }catch(e){endCallInternal();addLog('te','ERROR',e.message);showToast('Error: '+e.message,'ti-alert-triangle');}
 }
 
-/* ─── BULK CALLS ─── */
-async function triggerBulkCalls(){
-  const lines=document.getElementById('bulk-numbers')?.value.split('\n').filter(Boolean)||[];
-  if(!lines.length){showToast('Add names to bulk list first','ti-alert-triangle');return;}
-  showToast(`${lines.length} calls queued — starting first...`);
+/* ══════════════════════════════════════════════════
+   DEMO
+══════════════════════════════════════════════════ */
+function runDemo(){
+  const steps=[
+    ()=>addLog('ti','SIYA','Namaste! Main Siya hoon, Leverage Edu se. Kya aap abroad padhne ka plan hai?'),
+    ()=>addLog('ti','YOU','Haan, UK mein MBA karna chahta hoon.'),
+    ()=>addLog('ti','SIYA','Perfect! Abhi aap studying hain ya working?'),
+    ()=>addLog('ti','YOU','Working hoon, 2 years ho gaye.'),
+    ()=>addLog('ti','SIYA','Accha! Aapka budget roughly 10 lakhs se zyada hai?'),
+    ()=>addLog('ti','YOU','Haan, around 20 lakhs budget hai.'),
+    ()=>addLog('to','CALL_END','Demo complete · Score: 85 · Qualified for UK MBA counselling'),
+  ];
+  let i=0;const t=setInterval(()=>{if(i<steps.length){steps[i]();}else clearInterval(t);i++;},1100);
+  showToast('Demo running...');
 }
 
-/* ─── INIT ─── */
+/* ══════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════ */
+function showToast(msg,icon='ti-check'){
+  const t=document.getElementById('toast');const m=document.getElementById('toast-msg');const ic=document.getElementById('toast-ic');
+  if(m)m.textContent=msg;if(ic)ic.className='ti '+icon;
+  t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ══════════════════════════════════════════════════
+   AGENT CONFIG
+══════════════════════════════════════════════════ */
+function saveAgent(){const n=document.getElementById('a-name')?.value||'Siya';const pn=document.getElementById('agent-preview-name');if(pn)pn.textContent=n;showToast('Agent saved');addLog('to','AGENT','Config saved: '+n);}
+function exportAgent(){const cfg={name:document.getElementById('a-name')?.value,role:document.getElementById('a-role')?.value,opening:document.getElementById('a-opening')?.value};const b=new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});Object.assign(document.createElement('a'),{href:URL.createObjectURL(b),download:'siya-config.json'}).click();showToast('Exported');}
+function resetAgent(){if(document.getElementById('a-opening'))document.getElementById('a-opening').value='Namaste! Main Siya hoon, Leverage Edu se. Kya aap study abroad plan kar rahe hain?';showToast('Reset to default');}
+
+/* ══════════════════════════════════════════════════
+   KEYS + SETTINGS
+══════════════════════════════════════════════════ */
+function saveKeys(){
+  [['k-groq','voxpath-key-groq'],['k-gemini','voxpath-key-gemini'],['k-sheets','voxpath-key-sheets'],['k-oauth','voxpath-key-oauth']].forEach(([id,lk])=>{const v=document.getElementById(id)?.value;if(v)localStorage.setItem(lk,v);});
+  detectMode();showToast('Keys saved');addLog('to','KEYS','API keys updated');
+}
+function clearKeys(){['voxpath-key-groq','voxpath-key-gemini','voxpath-key-sheets','voxpath-key-oauth'].forEach(k=>localStorage.removeItem(k));['k-groq','k-gemini','k-sheets','k-oauth'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});detectMode();showToast('Keys cleared');}
+function loadKeys(){[['k-groq','voxpath-key-groq'],['k-gemini','voxpath-key-gemini'],['k-sheets','voxpath-key-sheets'],['k-oauth','voxpath-key-oauth']].forEach(([id,lk])=>{const v=localStorage.getItem(lk);const el=document.getElementById(id);if(v&&el)el.value=v;});}
+function saveGCID(){const v=document.getElementById('k-oauth')?.value;if(v){localStorage.setItem('voxpath-key-oauth',v);showToast('OAuth client ID saved');}}
+function saveSettings(){localStorage.setItem('voxpath-settings',JSON.stringify({name:document.getElementById('s-name')?.value,org:document.getElementById('s-org')?.value}));showToast('Settings saved');}
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
 window.addEventListener('load',()=>{
-  const u=localStorage.getItem('voxpath-user');
-  if(u){try{showApp(JSON.parse(u));}catch(e){}}
-  const clientId=localStorage.getItem('voxpath-key-oauth');
-  if(clientId)document.querySelector('#g_id_onload')?.setAttribute('data-client_id',clientId);
+  const u=localStorage.getItem('voxpath-user');if(u)try{showApp(JSON.parse(u));}catch(e){}
+  const cid=localStorage.getItem('voxpath-key-oauth');if(cid)document.querySelector('#g_id_onload')?.setAttribute('data-client_id',cid);
   document.getElementById('login-pass')?.addEventListener('keydown',e=>{if(e.key==='Enter')handleEmailLogin();});
+  /* preload voices */
+  window.speechSynthesis.getVoices();window.speechSynthesis.addEventListener('voiceschanged',()=>{});
 });
 </script>
 </body>
